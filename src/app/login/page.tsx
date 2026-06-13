@@ -227,7 +227,7 @@ export default function LoginPage() {
               background: '#FF3B3010', color: '#FF3B30',
               fontSize: 13, marginBottom: 16,
             }}>
-              {error.replace('Firebase: ', '').replace(/\(auth\/.*\)/, '')}
+              {error.replace('Firebase: ', '')}
             </div>
           )}
 
