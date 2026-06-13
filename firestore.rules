@@ -1,0 +1,30 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Users collection
+    match /users/{userId} {
+      // Users can read/write their own document
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+      // Allow reading for leaderboard (only public fields)
+      allow read: if request.auth != null;
+    }
+
+    // Questions collection
+    match /questions/{questionId} {
+      // Only server-side (admin SDK) should write questions
+      // Authenticated users can read
+      allow read: if request.auth != null;
+      allow write: if false; // Only server-side writes
+    }
+
+    // Attempts collection
+    match /attempts/{attemptId} {
+      // Users can read their own attempts
+      allow read: if request.auth != null && resource.data.user_id == request.auth.uid;
+      // Only server creates attempts
+      allow write: if false;
+    }
+  }
+}
