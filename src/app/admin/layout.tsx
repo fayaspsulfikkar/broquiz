@@ -18,10 +18,14 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   const [sidebarOpen, setSidebarOpen] = useState(true);
 
   useEffect(() => {
-    if (!loading && !user) router.push('/login');
-    // For now, allow any authenticated user to access admin
-    // In production, check profile?.is_admin
-  }, [user, loading, router]);
+    if (!loading) {
+      if (!user) {
+        router.push('/login');
+      } else if (!profile?.is_admin) {
+        router.push('/dashboard');
+      }
+    }
+  }, [user, profile, loading, router]);
 
   if (loading) {
     return <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}><p>Loading...</p></div>;

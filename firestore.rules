@@ -2,28 +2,30 @@ rules_version = '2';
 
 service cloud.firestore {
   match /databases/{database}/documents {
+    
+    function isAdmin() {
+      return request.auth != null && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.is_admin == true;
+    }
 
     // Users collection
     match /users/{userId} {
-      // Users can read/write their own document
-      allow read, write: if request.auth != null && request.auth.uid == userId;
-      // Allow reading for leaderboard (only public fields)
-      allow read: if request.auth != null;
+      // Users can read/write their own document, admins can read all
+      allow read: if request.auth != null && (request.auth.uid == userId || isAdmin() || resource == null);
+      allow write: if request.auth != null && request.auth.uid == userId;
+      // Allow reading for leaderboard (only public fields) - handled by application logic over open read
+      allow list: if request.auth != null; // Everyone can list users for leaderboard
     }
 
     // Questions collection
     match /questions/{questionId} {
-      // Only server-side (admin SDK) should write questions
-      // Authenticated users can read
       allow read: if request.auth != null;
-      allow write: if false; // Only server-side writes
+      allow write: if isAdmin(); // Server-side or admins
     }
 
     // Attempts collection
     match /attempts/{attemptId} {
-      // Users can read their own attempts
-      allow read: if request.auth != null && resource.data.user_id == request.auth.uid;
-      // Only server creates attempts
+      allow read: if request.auth != null && (resource.data.user_id == request.auth.uid || isAdmin());
+      allow list: if isAdmin(); // Only admins can list all attempts
       allow write: if false;
     }
   }
