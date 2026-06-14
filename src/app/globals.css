@@ -155,9 +155,9 @@
     gap: 8px;
     height: 44px;
     padding: 0 24px;
-    background: rgba(40, 5, 15, 0.7);
+    background: rgba(220, 30, 60, 0.4);
     color: #FFFFFF;
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.3);
     border-radius: var(--radius-md);
     font-size: 15px;
     font-weight: 500;
@@ -166,13 +166,13 @@
     white-space: nowrap;
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
   }
 
   .btn-primary:hover {
-    background: rgba(60, 10, 25, 0.8);
+    background: rgba(240, 40, 80, 0.5);
     transform: translateY(-1px);
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
   }
 
   .btn-primary:active {
@@ -464,7 +464,7 @@
 }
 
 .bg-liquid-mesh {
-  background: linear-gradient(135deg, #fbc2eb 0%, #a6c1ee 25%, #fdcbf1 50%, #e6dee9 75%, #fbc2eb 100%);
+  background: linear-gradient(135deg, #050002 0%, #2a0008 25%, #0f0004 50%, #3d0010 75%, #050002 100%);
   background-size: 400% 400%;
   animation: liquidGradient 15s ease infinite;
   min-height: 100vh;
@@ -477,13 +477,13 @@
 }
 
 .glass {
-  background: rgba(40, 5, 15, 0.55); /* Dark red/black tint for high contrast */
+  background: rgba(200, 20, 50, 0.15); /* Translucent bright red tint */
   backdrop-filter: blur(24px) saturate(150%);
   -webkit-backdrop-filter: blur(24px) saturate(150%);
   border: 1px solid rgba(255, 255, 255, 0.15);
   border-top: 1px solid rgba(255, 255, 255, 0.3);
   border-left: 1px solid rgba(255, 255, 255, 0.3);
-  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.4);
   color: #FFFFFF;
 }
 
