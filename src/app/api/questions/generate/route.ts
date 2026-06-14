@@ -38,15 +38,18 @@ export async function POST(request: NextRequest) {
       // Sort globally by difficulty (easiest to hardest)
       allQuestions.sort((a, b) => (a.difficulty || 1) - (b.difficulty || 1));
 
-      // Calculate round index (loops back every 26 rounds)
+      // Calculate round index
       const roundsPlayed = profile.total_rounds_played || 0;
-      const roundIndex = roundsPlayed % 26;
+      const startIndex = roundsPlayed * QUESTIONS_PER_LEVEL;
       
-      const startIndex = roundIndex * QUESTIONS_PER_LEVEL;
-      const endIndex = startIndex + QUESTIONS_PER_LEVEL;
-
-      // Slice the exact 10 questions for this round
-      questions = allQuestions.slice(startIndex, endIndex);
+      // Select exactly 10 questions using modulo wrapping
+      const questionsCount = allQuestions.length;
+      if (questionsCount > 0) {
+        for (let i = 0; i < QUESTIONS_PER_LEVEL; i++) {
+          const wrappedIndex = (startIndex + i) % questionsCount;
+          questions.push(allQuestions[wrappedIndex]);
+        }
+      }
     } catch (e) {
       console.error('Error fetching cached questions:', e);
     }
