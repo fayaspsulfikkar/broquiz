@@ -22,7 +22,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       if (!user) {
         router.push('/login');
       } else if (!profile?.is_admin) {
-        router.push('/dashboard');
+        router.push('/');
       }
     }
   }, [user, profile, loading, router]);
@@ -74,7 +74,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
         <div style={{ padding: '0 8px' }}>
           <button
-            onClick={() => router.push('/dashboard')}
+            onClick={() => router.push('/')}
             style={{
               display: 'flex', alignItems: 'center', gap: 10, width: '100%',
               padding: '10px 16px', borderRadius: 8, border: 'none', cursor: 'pointer',
