@@ -181,8 +181,13 @@ function QuizContent() {
         padding: '12px 24px', display: 'flex', alignItems: 'center', justifyContent: 'space-between',
         position: 'sticky', top: 0, zIndex: 50,
       }}>
-        <div style={{ fontSize: 14, fontWeight: 600, color: '#1D1D1F' }}>
-          Global Progress
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 2, minWidth: 100 }}>
+          <div style={{ fontSize: 15, fontWeight: 700, color: '#1D1D1F' }}>
+            Round {(profile?.total_rounds_played || 0) + 1}
+          </div>
+          <div style={{ fontSize: 11, color: '#86868B', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+            Global Progress
+          </div>
         </div>
 
         {/* Global Progress */}
@@ -196,8 +201,11 @@ function QuizContent() {
           </div>
         </div>
 
-        <div style={{ fontSize: 14, color: '#6E6E73' }}>
-          {totalSeen} / {totalAvailable}
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 2, minWidth: 100 }}>
+          <div style={{ fontSize: 14, fontWeight: 600, color: '#1D1D1F' }}>
+            {totalSeen} / {totalAvailable}
+          </div>
+          <div style={{ fontSize: 11, color: '#86868B' }}>Mastered</div>
         </div>
       </div>
 
