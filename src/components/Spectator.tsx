@@ -126,8 +126,9 @@ export default function Spectator() {
       }}
       onUpdate={(latest) => {
         // Track current position for orientation calculations
-        if (typeof latest.x === 'number') {
-          setPosition(prev => ({ ...prev, x: latest.x }));
+        const currentX = latest.x;
+        if (typeof currentX === 'number') {
+          setPosition(prev => ({ ...prev, x: currentX as number }));
         }
       }}
     >
