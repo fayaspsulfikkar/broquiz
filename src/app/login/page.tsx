@@ -37,7 +37,7 @@ export default function LoginPage() {
       if (!profile.name || profile.name.trim() === '') {
         setShowNameInput(true);
       } else {
-        router.push('/quiz');
+        router.push('/');
       }
     }
   }, [user, profile, router]);
@@ -50,7 +50,7 @@ export default function LoginPage() {
       const { doc, updateDoc } = await import('firebase/firestore');
       const { db } = await import('@/lib/firebase');
       await updateDoc(doc(db, 'users', user.uid), { name: name.trim() });
-      router.push('/quiz');
+      router.push('/');
     } catch (err) {
       console.error(err);
     } finally {
