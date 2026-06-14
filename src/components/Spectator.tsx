@@ -35,9 +35,12 @@ export default function Spectator() {
       setState('moving');
 
       setTimeout(() => {
-        if (state !== 'suspicious' && state !== 'angry') {
-          setState('idle');
-        }
+        setState((currentState) => {
+          if (currentState !== 'suspicious' && currentState !== 'angry') {
+            return 'idle';
+          }
+          return currentState;
+        });
       }, 3000); // Wait until movement finishes to go idle
 
     }, 5000); // Pick a new target every 5 seconds
