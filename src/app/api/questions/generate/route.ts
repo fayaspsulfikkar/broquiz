@@ -12,7 +12,7 @@ import type { Question, ClientQuestion } from '@/types';
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { userId, profile } = body;
+    const { userId, profile, targetRoundIndex } = body;
 
     if (!userId || !profile) {
       return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
@@ -40,7 +40,8 @@ export async function POST(request: NextRequest) {
 
       // Calculate round index
       const roundsPlayed = profile.total_rounds_played || 0;
-      const startIndex = roundsPlayed * QUESTIONS_PER_LEVEL;
+      const roundToPlay = targetRoundIndex !== undefined ? targetRoundIndex : roundsPlayed;
+      const startIndex = roundToPlay * QUESTIONS_PER_LEVEL;
       
       // Select exactly 10 questions using modulo wrapping
       const questionsCount = allQuestions.length;

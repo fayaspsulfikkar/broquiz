@@ -17,6 +17,8 @@ interface QuizState {
   results: QuizResults | null;
   totalAvailable: number;
   error: string | null;
+  isRetry: boolean;
+  targetRoundIndex?: number;
 
   // Actions
   startQuiz: (questions: ClientQuestion[], totalAvailable: number) => void;
@@ -29,6 +31,7 @@ interface QuizState {
   setSubmitting: (submitting: boolean) => void;
   setLoading: (loading: boolean) => void;
   setError: (error: string | null) => void;
+  setRetryMode: (isRetry: boolean, roundIndex?: number) => void;
   reset: () => void;
 
   // Computed
@@ -49,6 +52,8 @@ export const useQuizStore = create<QuizState>((set, get) => ({
   results: null,
   totalAvailable: 260,
   error: null,
+  isRetry: false,
+  targetRoundIndex: undefined,
 
   startQuiz: (questions, totalAvailable) =>
     set({
@@ -110,6 +115,9 @@ export const useQuizStore = create<QuizState>((set, get) => ({
   setError: (error) =>
     set({ error }),
 
+  setRetryMode: (isRetry, roundIndex) =>
+    set({ isRetry, targetRoundIndex: roundIndex }),
+
   reset: () =>
     set({
       questions: [],
@@ -122,6 +130,8 @@ export const useQuizStore = create<QuizState>((set, get) => ({
       results: null,
       totalAvailable: 260,
       error: null,
+      isRetry: false,
+      targetRoundIndex: undefined,
     }),
 
   getCurrentQuestion: () => {

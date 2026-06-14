@@ -5,7 +5,9 @@ import { useRouter } from 'next/navigation';
 import { useAuth } from '@/lib/auth-context';
 import { collection, getDocs, query, orderBy, limit } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
+import { useQuizStore } from '@/store/quiz-store';
+import type { Attempt, Question } from '@/types';
 
 const MAX_QUESTIONS = 260;
 
@@ -26,6 +28,14 @@ export default function LandingPage() {
   
   const [topUsers, setTopUsers] = useState<LeaderboardUser[]>([]);
   const [loadingLeaderboard, setLoadingLeaderboard] = useState(false);
+  
+  const [attempts, setAttempts] = useState<Attempt[]>([]);
+  const [loadingAttempts, setLoadingAttempts] = useState(false);
+  const [expandedAttemptId, setExpandedAttemptId] = useState<string | null>(null);
+  const [attemptQuestions, setAttemptQuestions] = useState<Record<string, Question>>({});
+  const [loadingQuestions, setLoadingQuestions] = useState<Record<string, boolean>>({});
+
+  const { setRetryMode } = useQuizStore();
 
   useEffect(() => {
     setMounted(true);
@@ -34,6 +44,7 @@ export default function LandingPage() {
   useEffect(() => {
     if (user && profile) {
       fetchTopLeaderboard();
+      fetchAttempts();
     }
   }, [user, profile]);
 
@@ -64,11 +75,71 @@ export default function LandingPage() {
     }
   };
 
+  const fetchAttempts = async () => {
+    if (!user) return;
+    setLoadingAttempts(true);
+    try {
+      const q = query(
+        collection(db, 'attempts'),
+        where('user_id', '==', user.uid),
+        orderBy('timestamp', 'desc')
+      );
+      const snapshot = await getDocs(q);
+      const data: Attempt[] = [];
+      snapshot.forEach((doc) => {
+        data.push({ id: doc.id, ...doc.data() } as Attempt);
+      });
+      setAttempts(data);
+    } catch (e) {
+      console.error('Error fetching attempts:', e);
+    } finally {
+      setLoadingAttempts(false);
+    }
+  };
+
+  const handleExpandAttempt = async (attempt: Attempt) => {
+    if (expandedAttemptId === attempt.id) {
+      setExpandedAttemptId(null);
+      return;
+    }
+    setExpandedAttemptId(attempt.id);
+
+    // Fetch questions if not already loaded
+    if (!loadingQuestions[attempt.id]) {
+      setLoadingQuestions(prev => ({ ...prev, [attempt.id]: true }));
+      try {
+        const { getDoc, doc } = await import('firebase/firestore');
+        const qData: Record<string, Question> = {};
+        for (const answer of attempt.answers) {
+          if (!attemptQuestions[answer.question_id]) {
+            const qDoc = await getDoc(doc(db, 'questions', answer.question_id));
+            if (qDoc.exists()) {
+              qData[answer.question_id] = { id: qDoc.id, ...qDoc.data() } as Question;
+            }
+          }
+        }
+        setAttemptQuestions(prev => ({ ...prev, ...qData }));
+      } catch (e) {
+        console.error('Error fetching attempt questions:', e);
+      } finally {
+        setLoadingQuestions(prev => ({ ...prev, [attempt.id]: false }));
+      }
+    }
+  };
+
+  const handleRetryRound = (roundIndex: number) => {
+    if (user && profile) {
+      setRetryMode(true, roundIndex);
+      router.push('/quiz');
+    }
+  };
+
   const handleStart = () => {
     if (user && profile) {
       if (!profile.name || profile.name.trim() === '') {
         router.push('/login');
       } else {
+        setRetryMode(false, undefined);
         router.push('/quiz');
       }
     } else {
@@ -259,6 +330,123 @@ export default function LandingPage() {
                   </div>
                 </div>
               ))}
+            </div>
+          )}
+        </motion.div>
+
+        {/* Round History */}
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5 }} style={{
+          background: '#fff', borderRadius: 20, padding: 24, border: '1px solid #E8E8ED', marginTop: 32
+        }}>
+          <h3 style={{ fontSize: 18, fontWeight: 600, color: '#1D1D1F', marginBottom: 20 }}>Round History</h3>
+
+          {loadingAttempts ? (
+            <div style={{ padding: 20, textAlign: 'center', color: '#6E6E73' }}>Loading history...</div>
+          ) : attempts.length === 0 ? (
+            <div style={{ padding: 20, textAlign: 'center', color: '#6E6E73' }}>No rounds played yet.</div>
+          ) : (
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+              {attempts.map((attempt) => {
+                const isExpanded = expandedAttemptId === attempt.id;
+                const roundNum = attempt.round_index !== undefined ? attempt.round_index + 1 : 'Unknown';
+                const date = new Date(attempt.timestamp).toLocaleDateString();
+                
+                return (
+                  <div key={attempt.id} style={{ 
+                    border: '1px solid #E8E8ED', borderRadius: 16, overflow: 'hidden'
+                  }}>
+                    {/* Header Row */}
+                    <div 
+                      onClick={() => handleExpandAttempt(attempt)}
+                      style={{ 
+                        padding: '16px 20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                        background: isExpanded ? '#F0F7FF' : '#fff', cursor: 'pointer', transition: 'background 0.2s'
+                      }}
+                    >
+                      <div>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4 }}>
+                          <span style={{ fontSize: 16, fontWeight: 700, color: '#1D1D1F' }}>Round {roundNum}</span>
+                          {attempt.is_retry && <span style={{ fontSize: 11, fontWeight: 700, background: '#E8E8ED', color: '#6E6E73', padding: '2px 6px', borderRadius: 6 }}>RETRY</span>}
+                        </div>
+                        <div style={{ fontSize: 13, color: '#86868B' }}>{date} • {attempt.duration_seconds}s</div>
+                      </div>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 24 }}>
+                        <div style={{ textAlign: 'right' }}>
+                          <div style={{ fontSize: 15, fontWeight: 700, color: '#34C759' }}>{attempt.score} / {attempt.answers.length}</div>
+                          <div style={{ fontSize: 11, color: '#86868B' }}>Score</div>
+                        </div>
+                        <button 
+                          onClick={(e) => { e.stopPropagation(); handleRetryRound(attempt.round_index || 0); }}
+                          style={{ 
+                            background: '#0071E3', color: '#fff', border: 'none', borderRadius: 8, 
+                            padding: '8px 16px', fontSize: 13, fontWeight: 600, cursor: 'pointer' 
+                          }}
+                        >
+                          Retry Round
+                        </button>
+                      </div>
+                    </div>
+
+                    {/* Expanded Questions */}
+                    <AnimatePresence>
+                      {isExpanded && (
+                        <motion.div
+                          initial={{ height: 0, opacity: 0 }}
+                          animate={{ height: 'auto', opacity: 1 }}
+                          exit={{ height: 0, opacity: 0 }}
+                          style={{ borderTop: '1px solid #E8E8ED', background: '#FBFBFD' }}
+                        >
+                          <div style={{ padding: 20 }}>
+                            {loadingQuestions[attempt.id] ? (
+                              <div style={{ textAlign: 'center', color: '#6E6E73', fontSize: 14 }}>Loading questions...</div>
+                            ) : (
+                              <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
+                                {attempt.answers.map((ans, i) => {
+                                  const q = attemptQuestions[ans.question_id];
+                                  if (!q) return <div key={i}>Loading...</div>;
+                                  return (
+                                    <div key={i} style={{ paddingBottom: 24, borderBottom: i < attempt.answers.length - 1 ? '1px solid #E8E8ED' : 'none' }}>
+                                      <div style={{ display: 'flex', gap: 12, marginBottom: 12 }}>
+                                        <div style={{ 
+                                          width: 24, height: 24, borderRadius: 12, display: 'flex', alignItems: 'center', justifyContent: 'center',
+                                          background: ans.is_correct ? '#E3F8E9' : '#FFEBEA',
+                                          color: ans.is_correct ? '#34C759' : '#FF3B30',
+                                          fontSize: 14, fontWeight: 700, flexShrink: 0
+                                        }}>
+                                          {ans.is_correct ? '✓' : '×'}
+                                        </div>
+                                        <div style={{ fontSize: 15, color: '#1D1D1F', fontWeight: 500, lineHeight: 1.5 }}>
+                                          {q.question}
+                                        </div>
+                                      </div>
+                                      
+                                      <div style={{ paddingLeft: 36, display: 'flex', flexDirection: 'column', gap: 8 }}>
+                                        <div style={{ fontSize: 14, color: '#6E6E73' }}>
+                                          <strong>Your Answer:</strong> <span style={{ color: ans.is_correct ? '#34C759' : '#FF3B30' }}>{Array.isArray(ans.user_answer) ? ans.user_answer.join(', ') : ans.user_answer}</span>
+                                        </div>
+                                        {!ans.is_correct && (
+                                          <div style={{ fontSize: 14, color: '#6E6E73' }}>
+                                            <strong>Correct Answer:</strong> {Array.isArray(q.correct_answer) ? q.correct_answer.join(', ') : q.correct_answer}
+                                          </div>
+                                        )}
+                                        {q.explanation && (
+                                          <div style={{ fontSize: 14, color: '#86868B', marginTop: 4, padding: 12, background: '#E8E8ED50', borderRadius: 8 }}>
+                                            💡 {q.explanation}
+                                          </div>
+                                        )}
+                                      </div>
+                                    </div>
+                                  );
+                                })}
+                              </div>
+                            )}
+                          </div>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </div>
+                );
+              })}
             </div>
           )}
         </motion.div>

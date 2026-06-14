@@ -103,6 +103,8 @@ export interface Attempt {
   id: string;
   user_id: string;
   level: number;
+  round_index: number;
+  is_retry: boolean;
   timestamp: string;
   duration_seconds: number;
   score: number;

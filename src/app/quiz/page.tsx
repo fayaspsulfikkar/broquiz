@@ -13,7 +13,7 @@ function QuizContent() {
   const { user, profile } = useAuth();
   const {
     questions, currentIndex, answers, flaggedQuestions, totalAvailable,
-    timeStarted, isLoading, isSubmitting,
+    timeStarted, isLoading, isSubmitting, isRetry, targetRoundIndex,
     startQuiz, setAnswer, toggleFlag, nextQuestion,
     goToQuestion, setLoading, setSubmitting, setResults, setError, error,
     getCurrentQuestion, getProgress, isAllAnswered, getAnswerForQuestion,
@@ -51,7 +51,7 @@ function QuizContent() {
       const res = await fetch('/api/questions/generate', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ userId: user?.uid, profile }),
+        body: JSON.stringify({ userId: user?.uid, profile, targetRoundIndex: isRetry ? targetRoundIndex : undefined }),
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || 'Failed to load questions');
@@ -81,6 +81,7 @@ function QuizContent() {
           answers: answerArray,
           durationSeconds: duration,
           userProfile: profile, // Pass profile for streak eval
+          isRetry,
         }),
       });
       const data = await res.json();
@@ -94,21 +95,32 @@ function QuizContent() {
         
         const userRef = doc(db, 'users', user.uid);
         
-        await updateDoc(userRef, {
-          seen_question_ids: arrayUnion(...clientUpdateData.questionIds),
-          total_time_seconds: increment(duration),
-          total_rounds_played: increment(1),
-          total_correct_answers: increment(clientUpdateData.score),
-          last_active: new Date().toISOString(),
-          last_activity_date: new Date().toISOString().split('T')[0],
-          streak_count: clientUpdateData.newStreak,
-          longest_streak: clientUpdateData.newLongestStreak,
-          streak_freeze_used_this_week: clientUpdateData.streakFreezeUsed,
-        });
+        if (!isRetry) {
+          // Normal progression updates
+          await updateDoc(userRef, {
+            seen_question_ids: arrayUnion(...clientUpdateData.questionIds),
+            total_time_seconds: increment(duration),
+            total_rounds_played: increment(1),
+            total_correct_answers: increment(clientUpdateData.score),
+            last_active: new Date().toISOString(),
+            last_activity_date: new Date().toISOString().split('T')[0],
+            streak_count: clientUpdateData.newStreak,
+            longest_streak: clientUpdateData.newLongestStreak,
+            streak_freeze_used_this_week: clientUpdateData.streakFreezeUsed,
+          });
+        } else {
+          // Retry updates: Only update time and activity
+          await updateDoc(userRef, {
+            total_time_seconds: increment(duration),
+            last_active: new Date().toISOString(),
+          });
+        }
 
         await addDoc(collection(db, 'attempts'), {
           user_id: user.uid,
           timestamp: new Date().toISOString(),
+          is_retry: isRetry,
+          round_index: isRetry && targetRoundIndex !== undefined ? targetRoundIndex : profile.total_rounds_played || 0,
           duration_seconds: duration,
           score: clientUpdateData.score,
           raw_score: clientUpdateData.rawScore,

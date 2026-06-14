@@ -13,7 +13,7 @@ import type { Question, QuestionResult } from '@/types';
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { userId, answers, durationSeconds, userProfile } = body;
+    const { userId, answers, durationSeconds, userProfile, isRetry } = body;
 
     if (!userId || !answers) {
       return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
@@ -74,7 +74,7 @@ export async function POST(request: NextRequest) {
     let newLongestStreak = userProfile?.longest_streak || 0;
     let streakFreezeUsed = userProfile?.streak_freeze_used_this_week || false;
     
-    if (userProfile) {
+    if (!isRetry && userProfile?.last_activity_date) {
       const streakCalc = calculateStreak(
         userProfile.last_activity_date,
         userProfile.streak_count,
