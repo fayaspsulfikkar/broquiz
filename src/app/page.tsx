@@ -208,33 +208,6 @@ export default function LandingPage() {
       <nav style={{ background: '#fff', borderBottom: '1px solid #E8E8ED', padding: '12px 24px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
         <h1 style={{ fontSize: 17, fontWeight: 700, color: '#1D1D1F' }}>BroQuiz Dashboard</h1>
         <div style={{ display: 'flex', gap: 16 }}>
-          <button 
-            onClick={async () => {
-              if (!confirm('Are you sure you want to reset all your progress? This cannot be undone.')) return;
-              try {
-                const { doc, updateDoc, collection, getDocs, query, where, deleteDoc } = await import('firebase/firestore');
-                await updateDoc(doc(db, 'users', user.uid), {
-                  total_correct_answers: 0,
-                  total_rounds_played: 0,
-                  total_time_seconds: 0,
-                  streak_count: 0,
-                  longest_streak: 0,
-                  seen_question_ids: [],
-                });
-                const q = query(collection(db, 'attempts'), where('user_id', '==', user.uid));
-                const snapshot = await getDocs(q);
-                await Promise.all(snapshot.docs.map(d => deleteDoc(doc(db, 'attempts', d.id))));
-                alert('Progress reset successfully! Please refresh the page.');
-                window.location.reload();
-              } catch (e) {
-                console.error(e);
-                alert('Failed to reset data.');
-              }
-            }}
-            style={{ color: '#FF3B30', fontSize: 14, fontWeight: 600, background: 'none', border: 'none', cursor: 'pointer' }}
-          >
-            Reset Progress
-          </button>
           {profile.is_admin && (
             <button 
               onClick={() => router.push('/admin')}
