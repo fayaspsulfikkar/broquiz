@@ -103,7 +103,7 @@ export default function LeaderboardPage() {
               {[1, 0, 2].map((podiumIdx) => {
                 const u = users[podiumIdx];
                 if (!u) return null;
-                const rank = podiumIdx === 0 ? 2 : podiumIdx === 1 ? 1 : 3;
+                const rank = podiumIdx + 1;
                 const heights = { 1: 180, 2: 150, 3: 130 };
                 const medals = { 1: '🥇', 2: '🥈', 3: '🥉' };
                 return (
