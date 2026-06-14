@@ -136,9 +136,16 @@ export default function LandingPage() {
       {/* Header */}
       <nav style={{ background: '#fff', borderBottom: '1px solid #E8E8ED', padding: '12px 24px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
         <h1 style={{ fontSize: 17, fontWeight: 700, color: '#1D1D1F' }}>BroQuiz Dashboard</h1>
-        <button onClick={() => router.push('/profile')} style={{ background: 'none', border: 'none', color: '#0071E3', fontWeight: 500, cursor: 'pointer' }}>
-          Profile
-        </button>
+        <div style={{ display: 'flex', gap: 16 }}>
+          {profile.is_admin && (
+            <button onClick={() => router.push('/admin')} style={{ background: 'none', border: 'none', color: '#FF3B30', fontWeight: 500, cursor: 'pointer' }}>
+              Admin Panel
+            </button>
+          )}
+          <button onClick={() => router.push('/profile')} style={{ background: 'none', border: 'none', color: '#0071E3', fontWeight: 500, cursor: 'pointer' }}>
+            Profile
+          </button>
+        </div>
       </nav>
 
       <div style={{ maxWidth: 800, margin: '0 auto', padding: '32px 24px' }}>
