@@ -11,7 +11,7 @@ service cloud.firestore {
     match /users/{userId} {
       // Users can read/write their own document, admins can read all
       allow read: if request.auth != null && (request.auth.uid == userId || isAdmin() || resource == null);
-      allow write: if request.auth != null && request.auth.uid == userId;
+      allow write: if request.auth != null && (request.auth.uid == userId || isAdmin());
       // Allow reading for leaderboard (only public fields) - handled by application logic over open read
       allow list: if request.auth != null; // Everyone can list users for leaderboard
     }
@@ -26,7 +26,8 @@ service cloud.firestore {
     match /attempts/{attemptId} {
       allow read: if request.auth != null && (resource.data.user_id == request.auth.uid || isAdmin());
       allow list: if isAdmin(); // Only admins can list all attempts
-      allow write: if request.auth != null && request.resource.data.user_id == request.auth.uid;
+      allow create: if request.auth != null && request.resource.data.user_id == request.auth.uid;
+      allow update, delete: if request.auth != null && (resource.data.user_id == request.auth.uid || isAdmin());
     }
 
     // Certificates collection
