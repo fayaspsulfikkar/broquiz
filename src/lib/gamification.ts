@@ -67,38 +67,6 @@ export function evaluateNewBadges(
     }
   };
 
-  // First Step: Complete Level 1 (any score)
-  if (level === 1) {
-    addBadge('first_step');
-  }
-
-  // Perfect Score: 10/10 on any level
-  if (rawScore === 10) {
-    addBadge('perfect_score');
-  }
-
-  // Speed Coder: Complete under 10 minutes
-  if (durationSeconds < 600) {
-    addBadge('speed_coder');
-  }
-
-  // Comeback Kid: Pass a level after 3+ failed attempts
-  const levelKey = `level_${level}` as keyof typeof profile.levels;
-  const levelProgress = profile.levels[levelKey];
-  if (score >= PASS_SCORE && levelProgress.attempts >= 3 && !levelProgress.passed) {
-    addBadge('comeback_kid');
-  }
-
-  // Scholarship Ready: Pass all 4 levels with ≥7/10
-  const allPassed =
-    (level === 1 && score >= PASS_SCORE ? true : profile.levels.level_1.passed) &&
-    (level === 2 && score >= PASS_SCORE ? true : profile.levels.level_2.passed) &&
-    (level === 3 && score >= PASS_SCORE ? true : profile.levels.level_3.passed) &&
-    (level === 4 && score >= PASS_SCORE ? true : profile.levels.level_4.passed);
-  if (allPassed) {
-    addBadge('scholarship_ready');
-  }
-
   // Streak badges
   const currentStreak = profile.streak_count;
   if (currentStreak >= 3) addBadge('streak_3');
@@ -109,11 +77,6 @@ export function evaluateNewBadges(
   const arrayQuestions = topicResults.filter((r) => r.topic_tag === 'arrays');
   if (arrayQuestions.length > 0 && arrayQuestions.every((r) => r.is_correct)) {
     addBadge('array_expert');
-  }
-
-  // Logic Wizard: Pass Level 3 with ≥9/10
-  if (level === 3 && score >= 9) {
-    addBadge('logic_wizard');
   }
 
   return newBadges;

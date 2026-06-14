@@ -34,23 +34,14 @@ export type LeaderboardResetCycle = 'weekly' | 'monthly' | 'never';
 
 // --- User ---
 
-export interface LevelProgress {
-  passed: boolean;
-  best_score: number;
-  attempts: number;
-  all_scores: number[];
-  last_attempt_date?: string;
-}
-
 export interface UserProfile {
   uid: string;
   name: string;
   email: string;
-  profile_type: ProfileType;
+  profile_type?: ProfileType;
   avatar_url: string;
-  goal: UserGoal;
+  goal?: UserGoal;
   age_or_year?: string;
-  onboarding_complete: boolean;
   created_at: string;
   last_active: string;
   streak_count: number;
@@ -60,12 +51,9 @@ export interface UserProfile {
   total_xp: number;
   rank_tier: RankTier;
   seen_question_ids: string[];
-  levels: {
-    level_1: LevelProgress;
-    level_2: LevelProgress;
-    level_3: LevelProgress;
-    level_4: LevelProgress;
-  };
+  total_time_seconds: number;
+  total_rounds_played: number;
+  total_correct_answers: number;
   badges: BadgeId[];
   scholarship_eligible: boolean;
   anonymous_leaderboard: boolean;

@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState, Suspense } from 'react';
+import { useState, useEffect, useCallback, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useAuth } from '@/lib/auth-context';
 import { useQuizStore } from '@/store/quiz-store';
@@ -10,11 +10,9 @@ import type { ClientQuestion } from '@/types';
 
 function QuizContent() {
   const router = useRouter();
-  const searchParams = useSearchParams();
   const { user, profile } = useAuth();
-  const level = Number(searchParams.get('level')) || 1;
   const {
-    questions, currentIndex, answers, flaggedQuestions,
+    questions, currentIndex, answers, flaggedQuestions, totalAvailable,
     timeStarted, isLoading, isSubmitting,
     startQuiz, setAnswer, toggleFlag, nextQuestion,
     goToQuestion, setLoading, setSubmitting, setResults, setError, error,
@@ -39,11 +37,11 @@ function QuizContent() {
       const res = await fetch('/api/questions/generate', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ level, userId: user?.uid, profile }),
+        body: JSON.stringify({ userId: user?.uid, profile }),
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || 'Failed to load questions');
-      startQuiz(level, data.questions);
+      startQuiz(data.questions, data.totalAvailable);
     } catch (err: unknown) {
       setError(err instanceof Error ? err.message : 'Failed to load questions');
     } finally {
@@ -52,7 +50,7 @@ function QuizContent() {
   };
 
   const handleSubmit = async () => {
-    if (!user || !profile) return; // Note: Need profile from useAuth
+    if (!user || !profile) return;
     setSubmitting(true);
     try {
       const answerArray = Array.from(answers.entries()).map(([questionId, a]) => ({
@@ -66,10 +64,9 @@ function QuizContent() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           userId: user.uid,
-          level,
           answers: answerArray,
           durationSeconds: duration,
-          userProfile: profile, // Pass profile for badge/streak eval
+          userProfile: profile, // Pass profile for streak eval
         }),
       });
       const data = await res.json();
@@ -78,71 +75,36 @@ function QuizContent() {
       // PERFORM DATABASE WRITES ON THE CLIENT (AUTHENTICATED)
       const { clientUpdateData, results: finalResults } = data;
       if (clientUpdateData) {
-        const { doc, updateDoc, addDoc, collection, arrayUnion } = await import('firebase/firestore');
+        const { doc, updateDoc, addDoc, collection, arrayUnion, increment } = await import('firebase/firestore');
         const { db } = await import('@/lib/firebase');
         
         const userRef = doc(db, 'users', user.uid);
-        const levelKey = `levels.level_${level}`;
         
-        const levelUpdate: Record<string, unknown> = {
-          [`${levelKey}.attempts`]: (profile.levels[`level_${level}` as keyof typeof profile.levels]?.attempts || 0) + 1,
-          [`${levelKey}.all_scores`]: arrayUnion(clientUpdateData.score),
-          [`${levelKey}.last_attempt_date`]: new Date().toISOString(),
-        };
-
-        const currentBest = profile.levels[`level_${level}` as keyof typeof profile.levels]?.best_score || 0;
-        if (clientUpdateData.score > currentBest) {
-          levelUpdate[`${levelKey}.best_score`] = clientUpdateData.score;
-        }
-        if (clientUpdateData.passed) {
-          levelUpdate[`${levelKey}.passed`] = true;
-        }
-
-        const allPassed =
-          (level === 1 ? clientUpdateData.passed : profile.levels.level_1.passed) &&
-          (level === 2 ? clientUpdateData.passed : profile.levels.level_2.passed) &&
-          (level === 3 ? clientUpdateData.passed : profile.levels.level_3.passed) &&
-          (level === 4 ? clientUpdateData.passed : profile.levels.level_4.passed);
-
         await updateDoc(userRef, {
-          ...levelUpdate,
           seen_question_ids: arrayUnion(...clientUpdateData.questionIds),
-          total_xp: clientUpdateData.totalXP,
-          rank_tier: clientUpdateData.rankTier,
-          badges: clientUpdateData.newBadges.length > 0 ? arrayUnion(...clientUpdateData.newBadges) : profile.badges,
+          total_time_seconds: increment(duration),
+          total_rounds_played: increment(1),
+          total_correct_answers: increment(clientUpdateData.score),
           last_active: new Date().toISOString(),
           last_activity_date: new Date().toISOString().split('T')[0],
           streak_count: clientUpdateData.newStreak,
           longest_streak: clientUpdateData.newLongestStreak,
           streak_freeze_used_this_week: clientUpdateData.streakFreezeUsed,
-          scholarship_eligible: allPassed,
         });
 
         await addDoc(collection(db, 'attempts'), {
           user_id: user.uid,
-          level,
           timestamp: new Date().toISOString(),
           duration_seconds: duration,
           score: clientUpdateData.score,
           raw_score: clientUpdateData.rawScore,
           wrong_count: clientUpdateData.wrongCount,
-          net_score: clientUpdateData.netScore,
           answers: finalResults.map((r: any) => ({
             question_id: r.question_id,
             user_answer: r.user_answer,
             is_correct: r.is_correct,
             points_awarded: r.points_awarded,
           })),
-          improvement_suggestions: clientUpdateData.improvementSuggestions,
-        });
-
-        // Update question correct count asynchronously
-        finalResults.forEach(async (r: any) => {
-          try {
-            const qRef = doc(db, 'questions', r.question_id);
-            // We use increment, but we need to import it if we want to be exact. 
-            // Better to skip for now to avoid permission issues if users can't write to questions collection.
-          } catch (e) {}
         });
       }
 
@@ -177,7 +139,7 @@ function QuizContent() {
         <div style={{ fontSize: 48 }}>⚠️</div>
         <p style={{ fontSize: 16, color: '#FF3B30', fontWeight: 500 }}>{error}</p>
         <div style={{ display: 'flex', gap: 12 }}>
-          <button className="btn-secondary" onClick={() => router.push('/dashboard')}>Dashboard</button>
+          <button className="btn-secondary" onClick={() => router.push('/')}>Home</button>
           <button className="btn-primary" onClick={loadQuestions}>Retry</button>
         </div>
       </div>
@@ -191,8 +153,11 @@ function QuizContent() {
 
   const currentAnswer = getAnswerForQuestion(currentQuestion.id);
   const isFlagged = flaggedQuestions.has(currentQuestion.id);
-  const progress = getProgress();
   const allAnswered = isAllAnswered();
+  
+  // Calculate Global Progress for Top Bar
+  const totalSeen = profile?.seen_question_ids?.length || 0;
+  const globalProgress = totalAvailable > 0 ? (totalSeen / totalAvailable) * 100 : 0;
 
   return (
     <div style={{ minHeight: '100vh', background: '#F5F5F7' }}>
@@ -203,22 +168,22 @@ function QuizContent() {
         position: 'sticky', top: 0, zIndex: 50,
       }}>
         <div style={{ fontSize: 14, fontWeight: 600, color: '#1D1D1F' }}>
-          Level {level}
+          Global Progress
         </div>
 
-        {/* Progress */}
+        {/* Global Progress */}
         <div style={{ flex: 1, maxWidth: 400, margin: '0 24px' }}>
-          <div style={{ width: '100%', height: 4, background: '#E8E8ED', borderRadius: 2 }}>
+          <div style={{ width: '100%', height: 6, background: '#E8E8ED', borderRadius: 3, overflow: 'hidden' }}>
             <motion.div
-              style={{ height: '100%', background: '#000', borderRadius: 2 }}
-              animate={{ width: `${progress}%` }}
-              transition={{ duration: 0.3 }}
+              style={{ height: '100%', background: 'linear-gradient(90deg, #34C759 0%, #0071E3 100%)', borderRadius: 3 }}
+              animate={{ width: `${Math.min(100, globalProgress)}%` }}
+              transition={{ duration: 0.5 }}
             />
           </div>
         </div>
 
         <div style={{ fontSize: 14, color: '#6E6E73' }}>
-          {currentIndex + 1} / {questions.length}
+          {totalSeen} / {totalAvailable}
         </div>
       </div>
 
@@ -370,11 +335,6 @@ function QuizContent() {
                 You&apos;ve answered {answers.size}/{questions.length} questions.
                 {flaggedQuestions.size > 0 && ` ${flaggedQuestions.size} flagged for review.`}
               </p>
-              {level === 4 && (
-                <p style={{ fontSize: 13, color: '#FF9F0A', fontWeight: 500, marginBottom: 24 }}>
-                  ⚠️ Remember: Wrong answers have -0.25 penalty
-                </p>
-              )}
               <div style={{ display: 'flex', gap: 12, justifyContent: 'center' }}>
                 <button className="btn-secondary" onClick={() => setShowConfirm(false)}>Review Answers</button>
                 <button className="btn-primary" onClick={handleSubmit} disabled={isSubmitting}>

@@ -20,6 +20,9 @@ export default function LoginPage() {
   const [otpCode, setOtpCode] = useState('');
   const [confirmationResult, setConfirmationResult] = useState<any>(null);
 
+  const [showNameInput, setShowNameInput] = useState(false);
+  const [name, setName] = useState('');
+
   useEffect(() => {
     if (showPhoneInput && !confirmationResult) {
       setTimeout(() => {
@@ -28,15 +31,32 @@ export default function LoginPage() {
     }
   }, [showPhoneInput, confirmationResult, setupRecaptcha]);
 
-  // Redirect if already logged in
-  if (user) {
-    if (profile?.onboarding_complete) {
-      router.push('/dashboard');
-    } else {
-      router.push('/onboarding');
+  // Redirect or Ask Name if logged in
+  useEffect(() => {
+    if (user && profile) {
+      if (!profile.name || profile.name.trim() === '') {
+        setShowNameInput(true);
+      } else {
+        router.push('/quiz');
+      }
     }
-    return null;
-  }
+  }, [user, profile, router]);
+
+  const handleNameSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!name.trim() || !user) return;
+    setLoading(true);
+    try {
+      const { doc, updateDoc } = await import('firebase/firestore');
+      const { db } = await import('@/lib/firebase');
+      await updateDoc(doc(db, 'users', user.uid), { name: name.trim() });
+      router.push('/quiz');
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleEmailAuth = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -136,6 +156,55 @@ export default function LoginPage() {
           }}>
             Back to Sign In
           </button>
+        </motion.div>
+      </div>
+    );
+  }
+
+  if (showNameInput) {
+    return (
+      <div style={{
+        minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center',
+        background: '#F5F5F7', padding: 24,
+      }}>
+        <motion.div
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1 }}
+          style={{
+            background: '#fff', borderRadius: 20, padding: 'clamp(32px, 5vw, 48px)',
+            maxWidth: 420, width: '100%',
+            boxShadow: '0 8px 30px rgba(0,0,0,0.06)',
+            border: '1px solid #E8E8ED',
+          }}
+        >
+          <div style={{ textAlign: 'center', marginBottom: 32 }}>
+            <div style={{ fontSize: 48, marginBottom: 16 }}>👋</div>
+            <h1 style={{ fontSize: 24, fontWeight: 700, color: '#1D1D1F', letterSpacing: '-0.03em' }}>
+              What&apos;s your name?
+            </h1>
+            <p style={{ fontSize: 15, color: '#6E6E73', marginTop: 6 }}>
+              Let us know what to call you on the leaderboard.
+            </p>
+          </div>
+          <form onSubmit={handleNameSubmit}>
+            <input
+              type="text"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              placeholder="e.g. Fayas"
+              required
+              className="input"
+              style={{ marginBottom: 16 }}
+            />
+            <button
+              type="submit"
+              disabled={loading || !name.trim()}
+              className="btn-primary"
+              style={{ width: '100%', opacity: (loading || !name.trim()) ? 0.6 : 1 }}
+            >
+              {loading ? 'Saving...' : 'Start Quiz →'}
+            </button>
+          </form>
         </motion.div>
       </div>
     );

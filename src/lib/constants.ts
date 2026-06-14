@@ -201,15 +201,7 @@ export const QUESTION_TYPE_LABELS: Record<string, string> = {
 
 // --- Default User Profile ---
 
-export const DEFAULT_LEVEL_PROGRESS = {
-  passed: false,
-  best_score: 0,
-  attempts: 0,
-  all_scores: [],
-};
-
 export const DEFAULT_USER_PROFILE = {
-  onboarding_complete: false,
   streak_count: 0,
   longest_streak: 0,
   last_activity_date: '',
@@ -217,12 +209,9 @@ export const DEFAULT_USER_PROFILE = {
   total_xp: 0,
   rank_tier: 'newbie' as RankTier,
   seen_question_ids: [],
-  levels: {
-    level_1: { ...DEFAULT_LEVEL_PROGRESS },
-    level_2: { ...DEFAULT_LEVEL_PROGRESS },
-    level_3: { ...DEFAULT_LEVEL_PROGRESS },
-    level_4: { ...DEFAULT_LEVEL_PROGRESS },
-  },
+  total_time_seconds: 0,
+  total_rounds_played: 0,
+  total_correct_answers: 0,
   badges: [],
   scholarship_eligible: false,
   anonymous_leaderboard: false,

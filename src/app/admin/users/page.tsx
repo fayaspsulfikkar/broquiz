@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { collection, getDocs, doc, updateDoc, deleteField } from 'firebase/firestore';
+import { collection, getDocs, doc, updateDoc } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import type { UserProfile } from '@/types';
 
@@ -9,7 +9,6 @@ export default function AdminUsersPage() {
   const [users, setUsers] = useState<UserProfile[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
-  const [filterType, setFilterType] = useState<string>('all');
   const [sortBy, setSortBy] = useState<string>('created_at');
   const [selectedUser, setSelectedUser] = useState<UserProfile | null>(null);
 
@@ -22,7 +21,7 @@ export default function AdminUsersPage() {
       const data: UserProfile[] = [];
       snapshot.forEach((d) => {
         const u = { uid: d.id, ...d.data() } as UserProfile;
-        if (u.onboarding_complete) data.push(u);
+        data.push(u);
       });
       setUsers(data);
     } catch (e) {
@@ -33,15 +32,14 @@ export default function AdminUsersPage() {
   };
 
   const filtered = users
-    .filter((u) => filterType === 'all' || u.profile_type === filterType)
     .filter((u) => {
       if (!search) return true;
       const s = search.toLowerCase();
       return u.name?.toLowerCase().includes(s) || u.email?.toLowerCase().includes(s);
     })
     .sort((a, b) => {
-      if (sortBy === 'xp') return b.total_xp - a.total_xp;
-      if (sortBy === 'streak') return b.streak_count - a.streak_count;
+      if (sortBy === 'correct') return (b.total_correct_answers || 0) - (a.total_correct_answers || 0);
+      if (sortBy === 'streak') return (b.streak_count || 0) - (a.streak_count || 0);
       if (sortBy === 'name') return (a.name || '').localeCompare(b.name || '');
       return (b.created_at || '').localeCompare(a.created_at || '');
     });
@@ -52,12 +50,10 @@ export default function AdminUsersPage() {
   };
 
   const exportCSV = () => {
-    const headers = ['Name', 'Email', 'Type', 'XP', 'L1', 'L2', 'L3', 'L4', 'Badges', 'Streak', 'Eligible', 'Joined'];
+    const headers = ['Name', 'Email', 'Total Rounds', 'Total Correct', 'Total Time(s)', 'Streak', 'Eligible', 'Joined'];
     const rows = filtered.map((u) => [
-      u.name, u.email, u.profile_type, u.total_xp,
-      u.levels?.level_1?.best_score || 0, u.levels?.level_2?.best_score || 0,
-      u.levels?.level_3?.best_score || 0, u.levels?.level_4?.best_score || 0,
-      u.badges?.length || 0, u.streak_count, u.scholarship_eligible ? 'Yes' : 'No',
+      u.name, u.email, u.total_rounds_played || 0, u.total_correct_answers || 0,
+      u.total_time_seconds || 0, u.streak_count || 0, u.scholarship_eligible ? 'Yes' : 'No',
       u.created_at?.split('T')[0] || '',
     ]);
     const csv = [headers.join(','), ...rows.map((r) => r.join(','))].join('\n');
@@ -77,15 +73,9 @@ export default function AdminUsersPage() {
       {/* Filters */}
       <div style={{ display: 'flex', gap: 12, marginBottom: 20, flexWrap: 'wrap' }}>
         <input className="input" value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search by name or email..." style={{ maxWidth: 300 }} />
-        <select value={filterType} onChange={(e) => setFilterType(e.target.value)} className="input" style={{ width: 'auto' }}>
-          <option value="all">All Types</option>
-          <option value="school">School</option>
-          <option value="college">College</option>
-          <option value="job_seeker">Job Seeker</option>
-        </select>
         <select value={sortBy} onChange={(e) => setSortBy(e.target.value)} className="input" style={{ width: 'auto' }}>
           <option value="created_at">Join Date</option>
-          <option value="xp">XP</option>
+          <option value="correct">Total Correct</option>
           <option value="streak">Streak</option>
           <option value="name">Name</option>
         </select>
@@ -101,12 +91,10 @@ export default function AdminUsersPage() {
             <thead>
               <tr style={{ borderBottom: '1px solid #E8E8ED' }}>
                 <th style={{ padding: '12px 16px', textAlign: 'left', fontWeight: 600, color: '#86868B', fontSize: 12 }}>Name</th>
-                <th style={{ padding: '12px 16px', textAlign: 'left', fontWeight: 600, color: '#86868B', fontSize: 12 }}>Type</th>
-                <th style={{ padding: '12px 16px', textAlign: 'center', fontWeight: 600, color: '#86868B', fontSize: 12 }}>L1</th>
-                <th style={{ padding: '12px 16px', textAlign: 'center', fontWeight: 600, color: '#86868B', fontSize: 12 }}>L2</th>
-                <th style={{ padding: '12px 16px', textAlign: 'center', fontWeight: 600, color: '#86868B', fontSize: 12 }}>L3</th>
-                <th style={{ padding: '12px 16px', textAlign: 'center', fontWeight: 600, color: '#86868B', fontSize: 12 }}>L4</th>
-                <th style={{ padding: '12px 16px', textAlign: 'center', fontWeight: 600, color: '#86868B', fontSize: 12 }}>XP</th>
+                <th style={{ padding: '12px 16px', textAlign: 'center', fontWeight: 600, color: '#86868B', fontSize: 12 }}>Rounds</th>
+                <th style={{ padding: '12px 16px', textAlign: 'center', fontWeight: 600, color: '#86868B', fontSize: 12 }}>Correct</th>
+                <th style={{ padding: '12px 16px', textAlign: 'center', fontWeight: 600, color: '#86868B', fontSize: 12 }}>Time (s)</th>
+                <th style={{ padding: '12px 16px', textAlign: 'center', fontWeight: 600, color: '#86868B', fontSize: 12 }}>Streak</th>
                 <th style={{ padding: '12px 16px', textAlign: 'center', fontWeight: 600, color: '#86868B', fontSize: 12 }}>Eligible</th>
                 <th style={{ padding: '12px 16px', textAlign: 'center', fontWeight: 600, color: '#86868B', fontSize: 12 }}>Actions</th>
               </tr>
@@ -118,20 +106,10 @@ export default function AdminUsersPage() {
                     <div style={{ fontWeight: 500, color: '#1D1D1F' }}>{u.name}</div>
                     <div style={{ fontSize: 12, color: '#86868B' }}>{u.email}</div>
                   </td>
-                  <td style={{ padding: '12px 16px', fontSize: 12, color: '#6E6E73' }}>{u.profile_type}</td>
-                  <td style={{ padding: '12px 16px', textAlign: 'center', color: u.levels?.level_1?.passed ? '#34C759' : '#86868B' }}>
-                    {u.levels?.level_1?.best_score || '—'}
-                  </td>
-                  <td style={{ padding: '12px 16px', textAlign: 'center', color: u.levels?.level_2?.passed ? '#34C759' : '#86868B' }}>
-                    {u.levels?.level_2?.best_score || '—'}
-                  </td>
-                  <td style={{ padding: '12px 16px', textAlign: 'center', color: u.levels?.level_3?.passed ? '#34C759' : '#86868B' }}>
-                    {u.levels?.level_3?.best_score || '—'}
-                  </td>
-                  <td style={{ padding: '12px 16px', textAlign: 'center', color: u.levels?.level_4?.passed ? '#34C759' : '#86868B' }}>
-                    {u.levels?.level_4?.best_score || '—'}
-                  </td>
-                  <td style={{ padding: '12px 16px', textAlign: 'center', fontWeight: 600 }}>{u.total_xp}</td>
+                  <td style={{ padding: '12px 16px', textAlign: 'center', color: '#6E6E73' }}>{u.total_rounds_played || 0}</td>
+                  <td style={{ padding: '12px 16px', textAlign: 'center', color: '#34C759', fontWeight: 600 }}>{u.total_correct_answers || 0}</td>
+                  <td style={{ padding: '12px 16px', textAlign: 'center', color: '#6E6E73' }}>{u.total_time_seconds || 0}</td>
+                  <td style={{ padding: '12px 16px', textAlign: 'center', color: '#FF9F0A', fontWeight: 600 }}>{u.streak_count || 0}</td>
                   <td style={{ padding: '12px 16px', textAlign: 'center' }}>
                     <button
                       onClick={() => toggleScholarship(u.uid, u.scholarship_eligible)}
@@ -174,11 +152,9 @@ export default function AdminUsersPage() {
             <h3 style={{ fontSize: 20, fontWeight: 600, color: '#1D1D1F', marginBottom: 20 }}>{selectedUser.name}</h3>
             <div style={{ fontSize: 14, color: '#6E6E73', lineHeight: 2 }}>
               <div><strong>Email:</strong> {selectedUser.email}</div>
-              <div><strong>Type:</strong> {selectedUser.profile_type}</div>
-              <div><strong>Goal:</strong> {selectedUser.goal}</div>
-              <div><strong>XP:</strong> {selectedUser.total_xp}</div>
-              <div><strong>Rank:</strong> {selectedUser.rank_tier}</div>
-              <div><strong>Streak:</strong> 🔥 {selectedUser.streak_count} (best: {selectedUser.longest_streak})</div>
+              <div><strong>Rounds:</strong> {selectedUser.total_rounds_played || 0}</div>
+              <div><strong>Correct:</strong> {selectedUser.total_correct_answers || 0}</div>
+              <div><strong>Streak:</strong> 🔥 {selectedUser.streak_count || 0} (best: {selectedUser.longest_streak || 0})</div>
               <div><strong>Badges:</strong> {selectedUser.badges?.length || 0}</div>
               <div><strong>Questions Seen:</strong> {selectedUser.seen_question_ids?.length || 0}</div>
               <div><strong>Joined:</strong> {selectedUser.created_at?.split('T')[0]}</div>

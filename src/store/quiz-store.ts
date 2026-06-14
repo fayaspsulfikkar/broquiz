@@ -15,11 +15,11 @@ interface QuizState {
   isLoading: boolean;
   isSubmitting: boolean;
   results: QuizResults | null;
-  level: number;
+  totalAvailable: number;
   error: string | null;
 
   // Actions
-  startQuiz: (level: number, questions: ClientQuestion[]) => void;
+  startQuiz: (questions: ClientQuestion[], totalAvailable: number) => void;
   setAnswer: (questionId: string, answer: string | string[]) => void;
   toggleFlag: (questionId: string) => void;
   nextQuestion: () => void;
@@ -47,12 +47,11 @@ export const useQuizStore = create<QuizState>((set, get) => ({
   isLoading: false,
   isSubmitting: false,
   results: null,
-  level: 1,
+  totalAvailable: 260,
   error: null,
 
-  startQuiz: (level, questions) =>
+  startQuiz: (questions, totalAvailable) =>
     set({
-      level,
       questions,
       currentIndex: 0,
       answers: new Map(),
@@ -121,7 +120,7 @@ export const useQuizStore = create<QuizState>((set, get) => ({
       isLoading: false,
       isSubmitting: false,
       results: null,
-      level: 1,
+      totalAvailable: 260,
       error: null,
     }),
 
