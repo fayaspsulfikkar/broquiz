@@ -138,7 +138,7 @@ export default function LeaderboardPage() {
                       {u.anonymous_leaderboard ? 'Anonymous' : u.name?.split(' ')[0]}
                     </div>
                     <div style={{ fontSize: 16, fontWeight: 700, color: '#0071E3' }}>
-                      Round {(u.total_rounds_played || 0) + 1}
+                      Round {u.total_rounds_played || 0}
                     </div>
                     <div style={{ fontSize: 11, color: '#86868B', marginTop: 4 }}>
                       {u.total_correct_answers} Mastered • {u.streak_count}🔥
@@ -196,7 +196,7 @@ export default function LeaderboardPage() {
                           </div>
                         </td>
                         <td style={{ padding: '16px', fontSize: 15, fontWeight: 600, color: '#0071E3' }}>
-                          Round {(u.total_rounds_played || 0) + 1}
+                          Round {u.total_rounds_played || 0}
                         </td>
                         <td style={{ padding: '16px', fontSize: 15, fontWeight: 600, color: '#1D1D1F' }}>
                           {u.total_correct_answers}
