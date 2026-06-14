@@ -19,6 +19,7 @@ interface LeaderboardUser {
   total_time_seconds: number;
   streak_count: number;
   anonymous_leaderboard: boolean;
+  fraud_detected?: boolean;
 }
 
 export default function LandingPage() {
@@ -316,9 +317,10 @@ export default function LandingPage() {
                 }}>
                   <div style={{ width: 32, fontSize: 16, fontWeight: 700, color: idx < 3 ? '#0071E3' : '#86868B' }}>#{idx + 1}</div>
                   <div style={{ flex: 1 }}>
-                    <div style={{ fontSize: 15, fontWeight: 600, color: '#1D1D1F', display: 'flex', alignItems: 'center', gap: 6 }}>
+                    <div style={{ fontSize: 15, fontWeight: 600, color: '#1D1D1F', display: 'flex', alignItems: 'center', gap: 6, flexWrap: 'wrap' }}>
                       {u.anonymous_leaderboard ? 'Anonymous Learner' : u.name}
                       {u.uid === user.uid && <span style={{ fontSize: 10, background: '#0071E3', color: '#fff', padding: '2px 6px', borderRadius: 4 }}>YOU</span>}
+                      {u.fraud_detected && <span style={{ fontSize: 10, background: '#FF3B30', color: '#fff', padding: '2px 6px', borderRadius: 4, letterSpacing: '0.02em', textTransform: 'uppercase' }}>FRAUD DETECTED</span>}
                     </div>
                   </div>
                   <div style={{ textAlign: 'right', display: 'flex', gap: 16 }}>

@@ -16,6 +16,7 @@ interface LeaderboardUser {
   total_time_seconds: number;
   streak_count: number;
   anonymous_leaderboard: boolean;
+  fraud_detected?: boolean;
 }
 
 export default function LeaderboardPage() {
@@ -134,8 +135,13 @@ export default function LeaderboardPage() {
                         u.anonymous_leaderboard ? '?' : u.name?.charAt(0).toUpperCase()
                       )}
                     </div>
-                    <div style={{ fontSize: 13, fontWeight: 600, color: '#1D1D1F', marginBottom: 4 }}>
+                    <div style={{ fontSize: 13, fontWeight: 600, color: '#1D1D1F', marginBottom: 4, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4 }}>
                       {u.anonymous_leaderboard ? 'Anonymous' : u.name?.split(' ')[0]}
+                      {u.fraud_detected && (
+                        <span style={{ fontSize: 9, fontWeight: 700, color: '#fff', background: '#FF3B30', padding: '2px 6px', borderRadius: 6, letterSpacing: '0.02em', textTransform: 'uppercase' }}>
+                          Fraud Detected
+                        </span>
+                      )}
                     </div>
                     <div style={{ fontSize: 16, fontWeight: 700, color: '#0071E3' }}>
                       Round {u.total_rounds_played || 0}
@@ -197,6 +203,7 @@ export default function LeaderboardPage() {
                           <div style={{ fontSize: 14, fontWeight: isMe ? 700 : 500, color: '#1D1D1F' }}>
                             {u.anonymous_leaderboard ? 'Anonymous' : u.name}
                             {isMe && <span style={{ color: '#0071E3', marginLeft: 8, fontSize: 11, fontWeight: 700, background: '#E0F0FF', padding: '2px 6px', borderRadius: 10 }}>YOU</span>}
+                            {u.fraud_detected && <span style={{ color: '#fff', marginLeft: 8, fontSize: 10, fontWeight: 700, background: '#FF3B30', padding: '2px 6px', borderRadius: 6, textTransform: 'uppercase' }}>FRAUD DETECTED</span>}
                           </div>
                         </td>
                         <td style={{ padding: '16px 24px', fontSize: 14, fontWeight: 600, color: '#0071E3' }}>

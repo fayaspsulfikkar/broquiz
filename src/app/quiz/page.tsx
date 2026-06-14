@@ -21,6 +21,48 @@ function QuizContent() {
 
   const [showConfirm, setShowConfirm] = useState(false);
   const [activeSeconds, setActiveSeconds] = useState(0);
+  const [fraudWarnings, setFraudWarnings] = useState(0);
+  const [showFraudModal, setShowFraudModal] = useState(false);
+
+  // Tab switching detection
+  useEffect(() => {
+    if (isLoading || questions.length === 0 || showConfirm) return;
+
+    const handleVisibilityChange = async () => {
+      if (document.visibilityState === 'hidden') {
+        const newWarnings = fraudWarnings + 1;
+        setFraudWarnings(newWarnings);
+        
+        if (newWarnings >= 3) {
+          try {
+            const { doc, updateDoc } = await import('firebase/firestore');
+            const { db } = await import('@/lib/firebase');
+            if (user) {
+              await updateDoc(doc(db, 'users', user.uid), {
+                fraud_detected: true
+              });
+            }
+            alert('FRAUD DETECTED: You have switched tabs too many times. Your account has been flagged and the current question is marked incorrect.');
+            
+            const currentQ = questions[currentIndex];
+            if (currentQ) {
+              setAnswer(currentQ.id, "FRAUD_PENALTY_INCORRECT_TAB_SWITCH");
+              if (currentIndex < questions.length - 1) {
+                 nextQuestion();
+              }
+            }
+          } catch (e) {
+             console.error(e);
+          }
+        } else {
+          setShowFraudModal(true);
+        }
+      }
+    };
+
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    return () => document.removeEventListener('visibilitychange', handleVisibilityChange);
+  }, [isLoading, questions.length, showConfirm, fraudWarnings, user, currentIndex, nextQuestion, setAnswer]);
 
   // Track active time only when the tab is focused
   useEffect(() => {
@@ -250,7 +292,11 @@ function QuizContent() {
       </div>
 
       {/* Question Card */}
-      <div style={{ maxWidth: 700, margin: '0 auto', padding: '0 24px 100px' }}>
+      <div 
+        style={{ maxWidth: 700, margin: '0 auto', padding: '0 24px 100px', userSelect: 'none' }}
+        onContextMenu={(e) => e.preventDefault()}
+        onCopy={(e) => { e.preventDefault(); alert("Copying is disabled during the quiz."); }}
+      >
         <AnimatePresence mode="wait">
           <motion.div
             key={currentQuestion.id}
@@ -375,6 +421,49 @@ function QuizContent() {
                   {isSubmitting ? 'Submitting...' : 'Confirm Submit'}
                 </button>
               </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Fraud Warning Modal */}
+      <AnimatePresence>
+        {showFraudModal && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            style={{
+              position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.6)',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              padding: 24, zIndex: 100, backdropFilter: 'blur(4px)'
+            }}
+          >
+            <motion.div
+              initial={{ scale: 0.95, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.95, opacity: 0 }}
+              style={{
+                background: '#fff', borderRadius: 24, padding: 32,
+                maxWidth: 400, width: '100%', textAlign: 'center',
+                boxShadow: '0 20px 40px rgba(0,0,0,0.2)'
+              }}
+            >
+              <div style={{ fontSize: 48, marginBottom: 16 }}>⚠️</div>
+              <h3 style={{ fontSize: 20, fontWeight: 700, color: '#1D1D1F', marginBottom: 12 }}>
+                Tab Switching Detected
+              </h3>
+              <p style={{ fontSize: 15, color: '#6E6E73', lineHeight: 1.5, marginBottom: 24 }}>
+                Please stay on this tab during the quiz! You have switched tabs {fraudWarnings} time(s). 
+                <strong> If you switch tabs 3 times, your current question will be marked wrong and a "Fraud Detected" badge will permanently appear on your public leaderboard profile.</strong>
+              </p>
+              <button
+                className="btn-primary"
+                onClick={() => setShowFraudModal(false)}
+                style={{ width: '100%', padding: '14px 0', fontSize: 16 }}
+              >
+                I Understand
+              </button>
             </motion.div>
           </motion.div>
         )}
