@@ -461,7 +461,7 @@
 }
 
 .bg-liquid-mesh {
-  background: linear-gradient(-45deg, #fbc2eb, #a6c1ee, #fdcbf1, #e6dee9);
+  background: linear-gradient(135deg, #fbc2eb 0%, #a6c1ee 25%, #fdcbf1 50%, #e6dee9 75%, #fbc2eb 100%);
   background-size: 400% 400%;
   animation: liquidGradient 15s ease infinite;
   min-height: 100vh;
@@ -474,11 +474,13 @@
 }
 
 .glass {
-  background: rgba(45, 5, 10, 0.65); /* Dark red tint */
-  backdrop-filter: blur(28px) saturate(200%);
-  -webkit-backdrop-filter: blur(28px) saturate(200%);
-  border: 1px solid rgba(255, 100, 100, 0.15);
-  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.25);
+  background: rgba(140, 20, 40, 0.2); /* Much lighter semi-transparent red */
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-top: 1px solid rgba(255, 255, 255, 0.4);
+  border-left: 1px solid rgba(255, 255, 255, 0.4);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
   color: #FFFFFF;
 }
 
