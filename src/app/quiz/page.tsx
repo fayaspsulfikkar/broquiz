@@ -20,6 +20,20 @@ function QuizContent() {
   } = useQuizStore();
 
   const [showConfirm, setShowConfirm] = useState(false);
+  const [activeSeconds, setActiveSeconds] = useState(0);
+
+  // Track active time only when the tab is focused
+  useEffect(() => {
+    if (isLoading || questions.length === 0 || showConfirm) return;
+
+    const intervalId = setInterval(() => {
+      if (document.visibilityState === 'visible' && document.hasFocus()) {
+        setActiveSeconds((prev) => prev + 1);
+      }
+    }, 1000);
+
+    return () => clearInterval(intervalId);
+  }, [isLoading, questions.length, showConfirm]);
 
   // Fetch questions on mount
   useEffect(() => {
@@ -57,7 +71,7 @@ function QuizContent() {
         questionId,
         userAnswer: a.answer,
       }));
-      const duration = timeStarted ? Math.round((Date.now() - timeStarted) / 1000) : 0;
+      const duration = activeSeconds;
 
       const res = await fetch('/api/questions/submit', {
         method: 'POST',

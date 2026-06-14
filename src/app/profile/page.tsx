@@ -19,14 +19,21 @@ export default function ProfilePage() {
     return <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}><p style={{ color: '#6E6E73' }}>Loading...</p></div>;
   }
 
-  const formatTime = (seconds: number) => {
+  const formatTime = (seconds?: number) => {
+    if (!seconds || isNaN(seconds)) return '0m';
     const hours = Math.floor(seconds / 3600);
     const minutes = Math.floor((seconds % 3600) / 60);
-    return `${hours}h ${minutes}m`;
+    if (hours > 0) return `${hours}h ${minutes}m`;
+    return `${minutes}m`;
   };
 
-  const accuracy = profile.total_rounds_played > 0 
-    ? Math.round((profile.total_correct_answers / (profile.total_rounds_played * 10)) * 100) 
+  const played = profile.total_rounds_played || 0;
+  const correct = profile.total_correct_answers || 0;
+  const time = profile.total_time_seconds || 0;
+  const streak = profile.streak_count || 0;
+
+  const accuracy = played > 0 
+    ? Math.round((correct / (played * 10)) * 100) 
     : 0;
 
   return (
@@ -60,57 +67,30 @@ export default function ProfilePage() {
 
         {/* Stats */}
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} style={{
-          background: '#fff', borderRadius: 20, padding: 28, border: '1px solid #E8E8ED', marginBottom: 24,
+          background: '#fff', borderRadius: 20, padding: 28, border: '1px solid #E8E8ED',
         }}>
-          <h3 style={{ fontSize: 17, fontWeight: 600, color: '#1D1D1F', marginBottom: 16 }}>Your Journey</h3>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14 }}>
-            <div style={{ background: '#F5F5F7', borderRadius: 12, padding: 16, textAlign: 'center' }}>
-              <div style={{ fontSize: 24, fontWeight: 700, color: '#1D1D1F' }}>{profile.total_rounds_played}</div>
-              <div style={{ fontSize: 12, color: '#86868B' }}>Rounds Played</div>
+          <h3 style={{ fontSize: 17, fontWeight: 600, color: '#1D1D1F', marginBottom: 20, textAlign: 'center' }}>Your Journey</h3>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
+            <div style={{ background: '#F5F5F7', borderRadius: 16, padding: 20, textAlign: 'center' }}>
+              <div style={{ fontSize: 28, fontWeight: 700, color: '#1D1D1F', marginBottom: 4 }}>{played}</div>
+              <div style={{ fontSize: 13, color: '#86868B', fontWeight: 500 }}>Rounds Played</div>
             </div>
-            <div style={{ background: '#F5F5F7', borderRadius: 12, padding: 16, textAlign: 'center' }}>
-              <div style={{ fontSize: 24, fontWeight: 700, color: '#1D1D1F' }}>{profile.total_correct_answers}</div>
-              <div style={{ fontSize: 12, color: '#86868B' }}>Questions Mastered</div>
+            <div style={{ background: '#F5F5F7', borderRadius: 16, padding: 20, textAlign: 'center' }}>
+              <div style={{ fontSize: 28, fontWeight: 700, color: '#1D1D1F', marginBottom: 4 }}>{correct}</div>
+              <div style={{ fontSize: 13, color: '#86868B', fontWeight: 500 }}>Questions Mastered</div>
             </div>
-            <div style={{ background: '#F5F5F7', borderRadius: 12, padding: 16, textAlign: 'center' }}>
-              <div style={{ fontSize: 24, fontWeight: 700, color: '#1D1D1F' }}>{formatTime(profile.total_time_seconds)}</div>
-              <div style={{ fontSize: 12, color: '#86868B' }}>Time Spent</div>
+            <div style={{ background: '#F5F5F7', borderRadius: 16, padding: 20, textAlign: 'center' }}>
+              <div style={{ fontSize: 28, fontWeight: 700, color: '#1D1D1F', marginBottom: 4 }}>{formatTime(time)}</div>
+              <div style={{ fontSize: 13, color: '#86868B', fontWeight: 500 }}>Time Spent</div>
             </div>
-            <div style={{ background: '#F5F5F7', borderRadius: 12, padding: 16, textAlign: 'center' }}>
-              <div style={{ fontSize: 24, fontWeight: 700, color: '#1D1D1F' }}>🔥 {profile.streak_count}</div>
-              <div style={{ fontSize: 12, color: '#86868B' }}>Current Streak</div>
+            <div style={{ background: '#F5F5F7', borderRadius: 16, padding: 20, textAlign: 'center' }}>
+              <div style={{ fontSize: 28, fontWeight: 700, color: '#1D1D1F', marginBottom: 4 }}>🔥 {streak}</div>
+              <div style={{ fontSize: 13, color: '#86868B', fontWeight: 500 }}>Current Streak</div>
             </div>
           </div>
         </motion.div>
 
-        {/* Settings */}
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} style={{
-          background: '#fff', borderRadius: 20, padding: 28, border: '1px solid #E8E8ED',
-        }}>
-          <h3 style={{ fontSize: 17, fontWeight: 600, color: '#1D1D1F', marginBottom: 16 }}>Settings</h3>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '12px 0' }}>
-            <div>
-              <div style={{ fontSize: 15, fontWeight: 500, color: '#1D1D1F' }}>Anonymous on Leaderboard</div>
-              <div style={{ fontSize: 13, color: '#86868B' }}>Hide your name from the public leaderboard</div>
-            </div>
-            <button
-              onClick={() => user && toggleAnonymousLeaderboard(user.uid)}
-              style={{
-                width: 48, height: 28, borderRadius: 14, border: 'none', cursor: 'pointer',
-                background: profile.anonymous_leaderboard ? '#34C759' : '#E8E8ED',
-                position: 'relative', transition: 'background 0.2s ease',
-              }}
-            >
-              <div style={{
-                width: 24, height: 24, borderRadius: 12, background: '#fff',
-                position: 'absolute', top: 2,
-                left: profile.anonymous_leaderboard ? 22 : 2,
-                transition: 'left 0.2s ease',
-                boxShadow: '0 1px 3px rgba(0,0,0,0.15)',
-              }} />
-            </button>
-          </div>
-        </motion.div>
+
       </div>
     </div>
   );
