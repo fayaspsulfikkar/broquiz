@@ -466,9 +466,9 @@
 }
 
 .bg-liquid-mesh {
-  background: linear-gradient(135deg, #050002 0%, #2a0008 25%, #0f0004 50%, #3d0010 75%, #050002 100%);
-  background-size: 400% 400%;
-  animation: liquidGradient 15s ease infinite;
+  background: linear-gradient(135deg, #000000 0%, #5a0010 25%, #050002 50%, #8a0020 75%, #000000 100%);
+  background-size: 300% 300%;
+  animation: liquidGradient 8s ease-in-out infinite;
   min-height: 100vh;
 }
 
