@@ -213,67 +213,71 @@ export default function Spectator() {
           )}
         </AnimatePresence>
 
-        {/* Jelly Blob SVG */}
+        {/* High-Tech Drone SVG */}
         <svg viewBox="0 0 100 120" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ width: '100%', height: '100%' }}>
-          {/* Main Body (Domed Blob) */}
-          <path d="M50 10 C20 10 10 30 10 60 C10 85 20 90 50 90 C80 90 90 85 90 60 C90 30 80 10 50 10 Z" fill={bodyColor}/>
-          
-          {/* Wiggling Tentacles */}
-          <motion.path 
-            d="M 25 88 Q 20 110 30 115" stroke={bodyColor} strokeWidth="12" strokeLinecap="round" fill="none"
-            animate={{ d: ["M 25 88 Q 20 110 30 115", "M 25 88 Q 30 110 20 115", "M 25 88 Q 20 110 30 115"] }}
-            transition={{ repeat: Infinity, duration: 1.5, ease: "easeInOut" }}
-          />
-          <motion.path 
-            d="M 50 88 Q 45 115 55 120" stroke={bodyColor} strokeWidth="14" strokeLinecap="round" fill="none"
-            animate={{ d: ["M 50 88 Q 45 115 55 120", "M 50 88 Q 55 115 45 120", "M 50 88 Q 45 115 55 120"] }}
-            transition={{ repeat: Infinity, duration: 2, ease: "easeInOut", delay: 0.2 }}
-          />
-          <motion.path 
-            d="M 75 88 Q 80 110 70 115" stroke={bodyColor} strokeWidth="12" strokeLinecap="round" fill="none"
-            animate={{ d: ["M 75 88 Q 80 110 70 115", "M 75 88 Q 70 110 80 115", "M 75 88 Q 80 110 70 115"] }}
-            transition={{ repeat: Infinity, duration: 1.7, ease: "easeInOut", delay: 0.4 }}
+          {/* Antenna */}
+          <path d="M 50 20 L 50 5" stroke={bodyColor} strokeWidth="3" strokeLinecap="round" />
+          <motion.circle 
+            cx="50" cy="5" r="4" fill={isMad ? '#FF3B30' : '#00C7FF'} 
+            animate={{ opacity: [0.4, 1, 0.4] }}
+            transition={{ repeat: Infinity, duration: 1 }}
           />
           
-          {/* Face */}
+          {/* Main Chassis */}
+          <path d="M 20 50 C 20 25 80 25 80 50 C 80 70 70 80 50 80 C 30 80 20 70 20 50 Z" fill={bodyColor} />
+          
+          {/* Stabilizer Fins */}
+          <path d="M 20 40 L 5 45 L 20 60 Z" fill={bodyColor} />
+          <path d="M 80 40 L 95 45 L 80 60 Z" fill={bodyColor} />
+
+          {/* Digital Visor */}
+          <rect x="25" y="35" width="50" height="25" rx="12" fill="#1D1D1F" />
+          
+          {/* Visor Expressions */}
           {!blink ? (
             state === 'angry' ? (
               // Angry Eyes
               <>
-                <path d="M 25 45 L 45 50" stroke={eyeColor} strokeWidth="5" strokeLinecap="round" />
-                <path d="M 75 45 L 55 50" stroke={eyeColor} strokeWidth="5" strokeLinecap="round" />
-                <circle cx="35" cy="55" r="5" fill={eyeColor}/>
-                <circle cx="65" cy="55" r="5" fill={eyeColor}/>
+                <path d="M 35 42 L 45 47" stroke="#FF3B30" strokeWidth="3" strokeLinecap="round" />
+                <path d="M 65 42 L 55 47" stroke="#FF3B30" strokeWidth="3" strokeLinecap="round" />
+                <circle cx="40" cy="52" r="3" fill="#FF3B30"/>
+                <circle cx="60" cy="52" r="3" fill="#FF3B30"/>
               </>
             ) : state === 'suspicious' ? (
               // Suspicious Squint
               <>
-                <line x1="25" y1="48" x2="45" y2="48" stroke={eyeColor} strokeWidth="5" strokeLinecap="round" />
-                <line x1="55" y1="48" x2="75" y2="48" stroke={eyeColor} strokeWidth="5" strokeLinecap="round" />
-                <circle cx="35" cy="52" r="4" fill={eyeColor}/>
-                <circle cx="65" cy="52" r="4" fill={eyeColor}/>
+                <line x1="30" y1="48" x2="45" y2="48" stroke="#FF3B30" strokeWidth="4" strokeLinecap="round" />
+                <line x1="55" y1="48" x2="70" y2="48" stroke="#FF3B30" strokeWidth="4" strokeLinecap="round" />
               </>
             ) : (
-              // Big Cute Eyes
+              // Neutral / Happy Eyes (Cyan)
               <>
-                <circle cx="35" cy="50" r="8" fill={eyeColor}/>
-                <circle cx="37" cy="48" r="3" fill={pupilColor}/>
-                <circle cx="65" cy="50" r="8" fill={eyeColor}/>
-                <circle cx="67" cy="48" r="3" fill={pupilColor}/>
+                <circle cx="38" cy="48" r="5" fill="#00C7FF"/>
+                <circle cx="62" cy="48" r="5" fill="#00C7FF"/>
               </>
             )
           ) : (
-            // Blink (closed eyes)
+            // Blink (Horizontal line)
             <>
-              <path d="M 25 50 Q 35 45 45 50" stroke={eyeColor} strokeWidth="4" strokeLinecap="round" fill="none"/>
-              <path d="M 55 50 Q 65 45 75 50" stroke={eyeColor} strokeWidth="4" strokeLinecap="round" fill="none"/>
+              <line x1="30" y1="48" x2="46" y2="48" stroke="#00C7FF" strokeWidth="3" strokeLinecap="round" />
+              <line x1="54" y1="48" x2="70" y2="48" stroke="#00C7FF" strokeWidth="3" strokeLinecap="round" />
             </>
           )}
 
-          {/* Mouth */}
-          {state === 'idle' && <path d="M 45 65 Q 50 72 55 65" stroke={eyeColor} strokeWidth="4" strokeLinecap="round" fill="none"/>}
-          {state === 'moving' && <circle cx="50" cy="68" r="4" fill={eyeColor}/>}
-          {(state === 'angry' || state === 'suspicious') && <path d="M 45 72 Q 50 65 55 72" stroke={eyeColor} strokeWidth="4" strokeLinecap="round" fill="none"/>}
+          {/* Thruster Nozzle */}
+          <path d="M 40 80 L 60 80 L 55 90 L 45 90 Z" fill="#1D1D1F" />
+
+          {/* Thruster Flame (Animated) */}
+          <motion.path 
+            d="M 45 90 C 45 100 50 120 50 120 C 50 120 55 100 55 90 Z" 
+            fill={isMad ? '#FF3B30' : '#00C7FF'}
+            animate={{ 
+              scaleY: state === 'moving' ? [1, 1.4, 1] : [0.8, 1.1, 0.8],
+              opacity: state === 'moving' ? [0.8, 1, 0.8] : [0.4, 0.8, 0.4]
+            }}
+            transition={{ repeat: Infinity, duration: state === 'moving' ? 0.08 : 0.3 }}
+            style={{ transformOrigin: '50% 90px' }}
+          />
         </svg>
       </motion.div>
     </motion.div>
