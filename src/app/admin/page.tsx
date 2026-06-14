@@ -70,6 +70,7 @@ export default function AdminDashboard() {
         streak_count: 0,
         longest_streak: 0,
         seen_question_ids: [],
+        fraud_detected: false,
       });
       const q = query(collection(db, 'attempts'), where('user_id', '==', uid));
       const snapshot = await getDocs(q);
@@ -96,6 +97,7 @@ export default function AdminDashboard() {
           streak_count: 0,
           longest_streak: 0,
           seen_question_ids: [],
+          fraud_detected: false,
         })
       ));
       // 2. Delete all attempts
