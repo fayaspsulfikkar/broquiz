@@ -163,8 +163,8 @@ export default function LeaderboardPage() {
                   </tr>
                 </thead>
                 <tbody>
-                  {users.slice(3).map((u, i) => {
-                    const rank = i + 4;
+                  {users.map((u, i) => {
+                    const rank = i + 1;
                     const isMe = u.uid === user?.uid;
                     return (
                       <tr
