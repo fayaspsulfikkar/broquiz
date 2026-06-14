@@ -157,6 +157,7 @@ export default function LeaderboardPage() {
                     <th style={{ padding: '16px', fontSize: 12, fontWeight: 600, color: '#86868B', textTransform: 'uppercase' }}>Name</th>
                     <th style={{ padding: '16px', fontSize: 12, fontWeight: 600, color: '#86868B', textTransform: 'uppercase' }}>Round</th>
                     <th style={{ padding: '16px', fontSize: 12, fontWeight: 600, color: '#86868B', textTransform: 'uppercase' }}>Questions Mastered</th>
+                    <th style={{ padding: '16px', fontSize: 12, fontWeight: 600, color: '#86868B', textTransform: 'uppercase' }}>Wrong</th>
                     <th style={{ padding: '16px', fontSize: 12, fontWeight: 600, color: '#86868B', textTransform: 'uppercase' }}>Accuracy</th>
                     <th style={{ padding: '16px', fontSize: 12, fontWeight: 600, color: '#86868B', textTransform: 'uppercase' }}>Avg Time / Q</th>
                     <th style={{ padding: '16px', fontSize: 12, fontWeight: 600, color: '#86868B', textTransform: 'uppercase' }}>Streak</th>
@@ -200,6 +201,9 @@ export default function LeaderboardPage() {
                         </td>
                         <td style={{ padding: '16px', fontSize: 15, fontWeight: 600, color: '#1D1D1F' }}>
                           {u.total_correct_answers}
+                        </td>
+                        <td style={{ padding: '16px', fontSize: 14, fontWeight: 500, color: '#FF3B30' }}>
+                          {Math.max(0, (u.total_rounds_played * 10) - u.total_correct_answers)}
                         </td>
                         <td style={{ padding: '16px', fontSize: 14, color: '#6E6E73' }}>
                           {getAccuracy(u)}%
