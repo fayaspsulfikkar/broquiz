@@ -3,18 +3,31 @@
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/lib/auth-context';
+import { useQuizStore } from '@/store/quiz-store';
 import { LEVELS, BADGES, RANK_THRESHOLDS } from '@/lib/constants';
 import { getRankTitle } from '@/lib/gamification';
 import { motion } from 'framer-motion';
 
 export default function DashboardPage() {
   const router = useRouter();
-  const { user, profile, loading, logout } = useAuth();
+  const { user, profile, loading, refreshProfile, logout } = useAuth();
+  const { results } = useQuizStore();
 
   useEffect(() => {
     if (!loading && !user) router.push('/login');
-    if (!loading && user && !profile?.onboarding_complete) router.push('/onboarding');
-  }, [user, profile, loading, router]);
+    if (profile && !profile.onboarding_complete) router.push('/onboarding');
+    
+    // Auto-grant admin access for this specific email
+    if (profile?.email === 'fayas.gimelvavteth@gmail.com' && !profile.is_admin) {
+      import('firebase/firestore').then(({ doc, updateDoc }) => {
+        import('@/lib/firebase').then(({ db }) => {
+          updateDoc(doc(db, 'users', profile.uid), { is_admin: true })
+            .then(() => refreshProfile())
+            .catch(console.error);
+        });
+      });
+    }
+  }, [user, loading, profile, router, refreshProfile]);
 
   if (loading || !profile) {
     return (
@@ -58,6 +71,11 @@ export default function DashboardPage() {
         </div>
 
         <div style={{ display: 'flex', alignItems: 'center', gap: 20 }}>
+          {profile.is_admin && (
+            <button onClick={() => router.push('/admin')} className="btn-ghost" style={{ padding: '0 12px', height: 36, fontSize: 13, fontWeight: 600, color: '#0071E3', background: '#0071E315', borderRadius: 100 }}>
+              Admin Panel
+            </button>
+          )}
           <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 14, color: '#1D1D1F' }}>
             🔥 <span style={{ fontWeight: 600 }}>{profile.streak_count}</span>
           </div>

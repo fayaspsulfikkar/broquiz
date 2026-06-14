@@ -10,16 +10,50 @@ import { motion, AnimatePresence } from 'framer-motion';
 
 export default function ResultsPage() {
   const router = useRouter();
-  const { refreshProfile } = useAuth();
+  const { refreshProfile, profile } = useAuth();
   const { results, reset } = useQuizStore();
   const [expandedQ, setExpandedQ] = useState<string | null>(null);
   const [animatedScore, setAnimatedScore] = useState(0);
   const [showBadge, setShowBadge] = useState(false);
+  const [isGeneratingCert, setIsGeneratingCert] = useState(false);
 
   useEffect(() => {
     refreshProfile();
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  const handleDownloadCertificate = async () => {
+    if (!results || !profile) return;
+    setIsGeneratingCert(true);
+    try {
+      const res = await fetch('/api/certificate/generate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ userId: profile.uid, level: results.level })
+      });
+      const data = await res.json();
+      if (data.verification_id) {
+        const { generateCertificatePDF } = await import('@/lib/certificate');
+        await generateCertificatePDF({
+          verification_id: data.verification_id,
+          user_id: profile.uid,
+          user_name: profile.name || 'Learner',
+          level: results.level,
+          level_name: LEVELS.find(l => l.id === results.level)?.name || `Level ${results.level}`,
+          score: results.score,
+          date: new Date().toISOString(),
+          valid: true
+        });
+      } else {
+        alert(data.error || 'Failed to generate certificate');
+      }
+    } catch (e) {
+      console.error(e);
+      alert('Failed to generate certificate. Please try again later.');
+    } finally {
+      setIsGeneratingCert(false);
+    }
+  };
 
   // Animate score count-up
   useEffect(() => {
@@ -183,6 +217,16 @@ export default function ResultsPage() {
                 {results.level < 4 ? `Go to Level ${results.level + 1} →` : 'Back to Dashboard 🎉'}
               </button>
             )}
+            {results.passed && (
+              <button 
+                className="btn-secondary" 
+                disabled={isGeneratingCert}
+                onClick={handleDownloadCertificate}
+                style={{ opacity: isGeneratingCert ? 0.6 : 1 }}
+              >
+                {isGeneratingCert ? 'Generating...' : 'Download Certificate'}
+              </button>
+            )}
             <button className="btn-secondary" onClick={() => {
               reset();
               router.push(`/quiz?level=${results.level}`);
@@ -191,8 +235,9 @@ export default function ResultsPage() {
             </button>
             <button className="btn-secondary" onClick={() => {
               // LinkedIn share
+              const origin = typeof window !== 'undefined' ? window.location.origin : '';
               const text = `Passed Level ${results.level} on BroQuiz with ${results.score}/10! Testing my coding logic fundamentals. #BroQuiz #Scholarship #Programming`;
-              window.open(`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(window.location.origin)}&text=${encodeURIComponent(text)}`, '_blank');
+              window.open(`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(origin)}&text=${encodeURIComponent(text)}`, '_blank');
             }}>
               Share on LinkedIn
             </button>

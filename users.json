@@ -1,2 +1,19 @@
 {"users": [
-]}
+{
+  "localId": "zHJnzq5ajTSYZSSFcSdmMGQe1wZ2",
+  "email": "fayas.gimelvavteth@gmail.com",
+  "emailVerified": true,
+  "displayName": "Fayas P Sulfikkar",
+  "photoUrl": "https://lh3.googleusercontent.com/a/ACg8ocLqrou71RZXYOK4L9ye1lCFl2XSzFQLs8bc9Lqpx-vf-xW74FiL3Q=s96-c",
+  "lastSignedInAt": "1781347094925",
+  "createdAt": "1781347094925",
+  "providerUserInfo": [
+    {
+      "providerId": "google.com",
+      "rawId": "105169005557932475737",
+      "email": "fayas.gimelvavteth@gmail.com",
+      "displayName": "Fayas P Sulfikkar",
+      "photoUrl": "https://lh3.googleusercontent.com/a/ACg8ocLqrou71RZXYOK4L9ye1lCFl2XSzFQLs8bc9Lqpx-vf-xW74FiL3Q=s96-c"
+    }
+  ]
+}]}

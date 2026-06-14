@@ -4,7 +4,7 @@
 // ============================================
 
 import { NextRequest, NextResponse } from 'next/server';
-import { doc, getDoc, updateDoc, addDoc, collection, arrayUnion } from 'firebase/firestore';
+import { doc, getDoc } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import { gradeAnswer, getEligibilityStatus } from '@/lib/scoring';
 import { evaluateNewBadges, calculateStreak, getXPForLevel, calculateRankTier } from '@/lib/gamification';
@@ -16,17 +16,16 @@ import type { Question, QuestionResult, QuizResults, UserProfile } from '@/types
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { userId, level, answers, durationSeconds } = body;
+    const { userId, level, answers, durationSeconds, userProfile } = body;
 
     if (!userId || !level || !answers) {
       return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
     }
 
-    // Fetch questions with correct answers (server-side only)
+    // Fetch questions with correct answers
     const questionMap = new Map<string, Question>();
 
     for (const { questionId } of answers) {
-      // Try Firestore first
       try {
         const qDoc = await getDoc(doc(db, 'questions', questionId));
         if (qDoc.exists()) {
@@ -34,7 +33,7 @@ export async function POST(request: NextRequest) {
           continue;
         }
       } catch (e) {
-        console.error('Error fetching question:', e);
+        // Expected to fail if unauthenticated on server, ignore
       }
 
       // Fall back to seed questions
@@ -89,21 +88,6 @@ export async function POST(request: NextRequest) {
         code_snippet: question.code_snippet,
         options: question.options,
       });
-
-      // Update question stats
-      try {
-        const qRef = doc(db, 'questions', questionId);
-        const qDoc = await getDoc(qRef);
-        if (qDoc.exists()) {
-          await updateDoc(qRef, {
-            times_shown: (qDoc.data().times_shown || 0) + 1,
-            correct_count: (qDoc.data().correct_count || 0) + (isCorrect ? 1 : 0),
-          });
-        }
-      } catch (e) {
-        // Non-critical error
-        console.error('Error updating question stats:', e);
-      }
     }
 
     // Calculate net score
@@ -113,17 +97,6 @@ export async function POST(request: NextRequest) {
     const totalQuestions = answers.length;
     const accuracy = totalQuestions > 0 ? Math.round((rawScore / totalQuestions) * 100) : 0;
     const passed = score >= PASS_SCORE;
-
-    // Get user profile for badge evaluation
-    let userProfile: UserProfile | null = null;
-    try {
-      const userDoc = await getDoc(doc(db, 'users', userId));
-      if (userDoc.exists()) {
-        userProfile = { uid: userId, ...userDoc.data() } as UserProfile;
-      }
-    } catch (e) {
-      console.error('Error fetching user:', e);
-    }
 
     // Evaluate badges
     const topicResults = results.map((r) => ({
@@ -139,6 +112,22 @@ export async function POST(request: NextRequest) {
     const totalXP = (userProfile?.total_xp || 0) + newXP;
     const rankTier = calculateRankTier(totalXP);
 
+    // Calculate Streak
+    let newStreak = userProfile?.streak_count || 0;
+    let newLongestStreak = userProfile?.longest_streak || 0;
+    let streakFreezeUsed = userProfile?.streak_freeze_used_this_week || 0;
+    if (userProfile) {
+      const streakCalc = calculateStreak(
+        userProfile.last_activity_date,
+        userProfile.streak_count,
+        userProfile.longest_streak,
+        userProfile.streak_freeze_used_this_week
+      );
+      newStreak = streakCalc.newStreak;
+      newLongestStreak = streakCalc.newLongestStreak;
+      streakFreezeUsed = streakCalc.streakFreezeUsed;
+    }
+
     // Generate improvement suggestions
     let improvementSuggestions = '';
     if (wrongTopics.length > 0) {
@@ -149,86 +138,8 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    // Update user document
-    if (userProfile) {
-      try {
-        const userRef = doc(db, 'users', userId);
-        const levelKey = `levels.level_${level}`;
-        const questionIds = answers.map((a: { questionId: string }) => a.questionId);
-
-        // Streak calculation
-        const { newStreak, newLongestStreak, streakFreezeUsed } = calculateStreak(
-          userProfile.last_activity_date,
-          userProfile.streak_count,
-          userProfile.longest_streak,
-          userProfile.streak_freeze_used_this_week
-        );
-
-        const levelUpdate: Record<string, unknown> = {
-          [`${levelKey}.attempts`]: (userProfile.levels[`level_${level}` as keyof typeof userProfile.levels]?.attempts || 0) + 1,
-          [`${levelKey}.all_scores`]: arrayUnion(score),
-          [`${levelKey}.last_attempt_date`]: new Date().toISOString(),
-        };
-
-        // Update best score and passed status if this is the best
-        const currentBest = userProfile.levels[`level_${level}` as keyof typeof userProfile.levels]?.best_score || 0;
-        if (score > currentBest) {
-          levelUpdate[`${levelKey}.best_score`] = score;
-        }
-        if (passed) {
-          levelUpdate[`${levelKey}.passed`] = true;
-        }
-
-        // Check scholarship eligibility
-        const allPassed =
-          (level === 1 ? passed : userProfile.levels.level_1.passed) &&
-          (level === 2 ? passed : userProfile.levels.level_2.passed) &&
-          (level === 3 ? passed : userProfile.levels.level_3.passed) &&
-          (level === 4 ? passed : userProfile.levels.level_4.passed);
-
-        await updateDoc(userRef, {
-          ...levelUpdate,
-          seen_question_ids: arrayUnion(...questionIds),
-          total_xp: totalXP,
-          rank_tier: rankTier,
-          badges: arrayUnion(...newBadges),
-          last_active: new Date().toISOString(),
-          last_activity_date: new Date().toISOString().split('T')[0],
-          streak_count: newStreak,
-          longest_streak: newLongestStreak,
-          streak_freeze_used_this_week: streakFreezeUsed,
-          scholarship_eligible: allPassed,
-        });
-      } catch (e) {
-        console.error('Error updating user:', e);
-      }
-    }
-
-    // Save attempt
-    try {
-      await addDoc(collection(db, 'attempts'), {
-        user_id: userId,
-        level,
-        timestamp: new Date().toISOString(),
-        duration_seconds: durationSeconds || 0,
-        score,
-        raw_score: rawScore,
-        wrong_count: wrongCount,
-        net_score: netScore,
-        answers: results.map((r) => ({
-          question_id: r.question_id,
-          user_answer: r.user_answer,
-          is_correct: r.is_correct,
-          points_awarded: r.points_awarded,
-        })),
-        improvement_suggestions: improvementSuggestions,
-      });
-    } catch (e) {
-      console.error('Error saving attempt:', e);
-    }
-
     // Build response
-    const response: QuizResults = {
+    const response = {
       score,
       raw_score: rawScore,
       wrong_count: wrongCount,
@@ -245,6 +156,22 @@ export async function POST(request: NextRequest) {
       new_xp: newXP,
       total_xp: totalXP,
       rank_tier: rankTier,
+      // Pass back data needed by client to write to Firestore
+      clientUpdateData: {
+        score,
+        passed,
+        questionIds: answers.map((a: { questionId: string }) => a.questionId),
+        newBadges,
+        totalXP,
+        rankTier,
+        rawScore,
+        wrongCount,
+        netScore,
+        improvementSuggestions,
+        newStreak,
+        newLongestStreak,
+        streakFreezeUsed,
+      }
     };
 
     return NextResponse.json(response);

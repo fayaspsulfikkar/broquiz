@@ -1,18 +1,32 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/lib/auth-context';
 import { motion } from 'framer-motion';
 
 export default function LoginPage() {
   const router = useRouter();
-  const { signInWithGoogle, signInWithGitHub, signInWithEmail, signUpWithEmail, error, clearError, user, profile } = useAuth();
+  const { signInWithGoogle, signInWithGitHub, signInWithEmail, signUpWithEmail, setupRecaptcha, sendPhoneCode, verifyPhoneCode, error, clearError, user, profile } = useAuth();
   const [isSignUp, setIsSignUp] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [showVerification, setShowVerification] = useState(false);
+  
+  // Phone Auth State
+  const [showPhoneInput, setShowPhoneInput] = useState(false);
+  const [phoneNumber, setPhoneNumber] = useState('+91');
+  const [otpCode, setOtpCode] = useState('');
+  const [confirmationResult, setConfirmationResult] = useState<any>(null);
+
+  useEffect(() => {
+    if (showPhoneInput && !confirmationResult) {
+      setTimeout(() => {
+        setupRecaptcha('phone-sign-in-button');
+      }, 100);
+    }
+  }, [showPhoneInput, confirmationResult, setupRecaptcha]);
 
   // Redirect if already logged in
   if (user) {
@@ -53,6 +67,33 @@ export default function LoginPage() {
       }
     } catch {
       // Error is handled by context
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleSendPhoneCode = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    clearError();
+    try {
+      const result = await sendPhoneCode(phoneNumber);
+      setConfirmationResult(result);
+    } catch {
+      // Error handled by context
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleVerifyPhoneCode = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    clearError();
+    try {
+      await verifyPhoneCode(confirmationResult, otpCode);
+    } catch {
+      // Error handled by context
     } finally {
       setLoading(false);
     }
@@ -166,6 +207,25 @@ export default function LoginPage() {
             <svg width="18" height="18" viewBox="0 0 24 24" fill="#1D1D1F"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
             Continue with GitHub
           </button>
+          
+          <button
+            onClick={() => { setShowPhoneInput(true); clearError(); }}
+            disabled={loading}
+            style={{
+              width: '100%', height: 48, borderRadius: 10,
+              border: '1px solid #D2D2D7', background: '#fff',
+              display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10,
+              fontSize: 15, fontWeight: 500, color: '#1D1D1F', cursor: 'pointer',
+              transition: 'all 0.15s ease',
+            }}
+            onMouseEnter={(e) => { e.currentTarget.style.background = '#F5F5F7'; }}
+            onMouseLeave={(e) => { e.currentTarget.style.background = '#fff'; }}
+          >
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#1D1D1F" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+            </svg>
+            Continue with Phone
+          </button>
         </div>
 
         {/* Divider */}
@@ -177,82 +237,152 @@ export default function LoginPage() {
           <div style={{ flex: 1, height: 1, background: '#E8E8ED' }} />
         </div>
 
-        {/* Email Form */}
-        <form onSubmit={handleEmailAuth}>
-          <div style={{ marginBottom: 16 }}>
-            <label style={{ fontSize: 13, fontWeight: 500, color: '#6E6E73', display: 'block', marginBottom: 6 }}>Email</label>
-            <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="you@example.com"
-              required
-              className="input"
-            />
-          </div>
-
-          <div style={{ marginBottom: 8 }}>
-            <label style={{ fontSize: 13, fontWeight: 500, color: '#6E6E73', display: 'block', marginBottom: 6 }}>Password</label>
-            <input
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder="••••••••"
-              required
-              minLength={6}
-              className="input"
-            />
-          </div>
-
-          {/* Password Strength */}
-          {isSignUp && password.length > 0 && (
-            <div style={{ marginBottom: 20 }}>
-              <div style={{ display: 'flex', gap: 4, marginBottom: 4 }}>
-                {[1, 2, 3, 4].map((level) => (
-                  <div key={level} style={{
-                    flex: 1, height: 3, borderRadius: 2,
-                    background: passwordStrength.level >= level ? passwordStrength.color : '#E8E8ED',
-                    transition: 'background 0.2s ease',
-                  }} />
-                ))}
+        {showPhoneInput ? (
+          confirmationResult ? (
+            <form onSubmit={handleVerifyPhoneCode}>
+              <div style={{ marginBottom: 16 }}>
+                <label style={{ fontSize: 13, fontWeight: 500, color: '#6E6E73', display: 'block', marginBottom: 6 }}>Verification Code</label>
+                <input
+                  type="text"
+                  value={otpCode}
+                  onChange={(e) => setOtpCode(e.target.value)}
+                  placeholder="123456"
+                  required
+                  className="input"
+                  style={{ textAlign: 'center', letterSpacing: '0.2em', fontSize: 18 }}
+                  maxLength={6}
+                />
               </div>
-              <div style={{ fontSize: 12, color: passwordStrength.color }}>{passwordStrength.label}</div>
-            </div>
-          )}
 
-          {/* Error */}
-          {error && (
-            <div style={{
-              padding: '10px 14px', borderRadius: 8,
-              background: '#FF3B3010', color: '#FF3B30',
-              fontSize: 13, marginBottom: 16,
-            }}>
-              {error.replace('Firebase: ', '')}
-            </div>
-          )}
+              {error && (
+                <div style={{ padding: '10px 14px', borderRadius: 8, background: '#FF3B3010', color: '#FF3B30', fontSize: 13, marginBottom: 16 }}>
+                  {error.replace('Firebase: ', '')}
+                </div>
+              )}
 
-          <button
-            type="submit"
-            disabled={loading}
-            className="btn-primary"
-            style={{ width: '100%', marginTop: 8, opacity: loading ? 0.6 : 1 }}
-          >
-            {loading ? 'Please wait...' : isSignUp ? 'Create Account' : 'Sign In'}
-          </button>
-        </form>
+              <button type="submit" disabled={loading} className="btn-primary" style={{ width: '100%', marginTop: 8, opacity: loading ? 0.6 : 1 }}>
+                {loading ? 'Verifying...' : 'Verify & Sign In'}
+              </button>
+            </form>
+          ) : (
+            <form onSubmit={handleSendPhoneCode}>
+              <div style={{ marginBottom: 16 }}>
+                <label style={{ fontSize: 13, fontWeight: 500, color: '#6E6E73', display: 'block', marginBottom: 6 }}>Phone Number</label>
+                <input
+                  type="tel"
+                  value={phoneNumber}
+                  onChange={(e) => setPhoneNumber(e.target.value)}
+                  placeholder="+91 9876543210"
+                  required
+                  className="input"
+                />
+                <p style={{ fontSize: 12, color: '#86868B', marginTop: 8 }}>
+                  Make sure to include the country code (e.g. +91).
+                </p>
+              </div>
+
+              {error && (
+                <div style={{ padding: '10px 14px', borderRadius: 8, background: '#FF3B3010', color: '#FF3B30', fontSize: 13, marginBottom: 16 }}>
+                  {error.replace('Firebase: ', '')}
+                </div>
+              )}
+
+              <button id="phone-sign-in-button" type="submit" disabled={loading} className="btn-primary" style={{ width: '100%', marginTop: 8, opacity: loading ? 0.6 : 1 }}>
+                {loading ? 'Sending SMS...' : 'Send Code'}
+              </button>
+            </form>
+          )
+        ) : (
+          <form onSubmit={handleEmailAuth}>
+            <div style={{ marginBottom: 16 }}>
+              <label style={{ fontSize: 13, fontWeight: 500, color: '#6E6E73', display: 'block', marginBottom: 6 }}>Email</label>
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="you@example.com"
+                required
+                className="input"
+              />
+            </div>
+
+            <div style={{ marginBottom: 8 }}>
+              <label style={{ fontSize: 13, fontWeight: 500, color: '#6E6E73', display: 'block', marginBottom: 6 }}>Password</label>
+              <input
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="••••••••"
+                required
+                minLength={6}
+                className="input"
+              />
+            </div>
+
+            {/* Password Strength */}
+            {isSignUp && password.length > 0 && (
+              <div style={{ marginBottom: 20 }}>
+                <div style={{ display: 'flex', gap: 4, marginBottom: 4 }}>
+                  {[1, 2, 3, 4].map((level) => (
+                    <div key={level} style={{
+                      flex: 1, height: 3, borderRadius: 2,
+                      background: passwordStrength.level >= level ? passwordStrength.color : '#E8E8ED',
+                      transition: 'background 0.2s ease',
+                    }} />
+                  ))}
+                </div>
+                <div style={{ fontSize: 12, color: passwordStrength.color }}>{passwordStrength.label}</div>
+              </div>
+            )}
+
+            {/* Error */}
+            {error && (
+              <div style={{
+                padding: '10px 14px', borderRadius: 8,
+                background: '#FF3B3010', color: '#FF3B30',
+                fontSize: 13, marginBottom: 16,
+              }}>
+                {error.replace('Firebase: ', '')}
+              </div>
+            )}
+
+            <button
+              type="submit"
+              disabled={loading}
+              className="btn-primary"
+              style={{ width: '100%', marginTop: 8, opacity: loading ? 0.6 : 1 }}
+            >
+              {loading ? 'Please wait...' : isSignUp ? 'Create Account' : 'Sign In'}
+            </button>
+          </form>
+        )}
 
         {/* Toggle */}
         <div style={{ textAlign: 'center', marginTop: 24, fontSize: 14, color: '#6E6E73' }}>
-          {isSignUp ? 'Already have an account?' : "Don't have an account?"}
-          <button
-            onClick={() => { setIsSignUp(!isSignUp); clearError(); }}
-            style={{
-              background: 'none', border: 'none', color: '#0071E3',
-              fontWeight: 500, cursor: 'pointer', marginLeft: 6, fontSize: 14,
-            }}
-          >
-            {isSignUp ? 'Sign In' : 'Sign Up'}
-          </button>
+          {showPhoneInput ? (
+            <>
+              Prefer email?
+              <button
+                onClick={() => { setShowPhoneInput(false); setConfirmationResult(null); clearError(); }}
+                style={{ background: 'none', border: 'none', color: '#0071E3', fontWeight: 500, cursor: 'pointer', marginLeft: 6, fontSize: 14 }}
+              >
+                Sign in with Email
+              </button>
+            </>
+          ) : (
+            <>
+              {isSignUp ? 'Already have an account?' : "Don't have an account?"}
+              <button
+                onClick={() => { setIsSignUp(!isSignUp); clearError(); }}
+                style={{
+                  background: 'none', border: 'none', color: '#0071E3',
+                  fontWeight: 500, cursor: 'pointer', marginLeft: 6, fontSize: 14,
+                }}
+              >
+                {isSignUp ? 'Sign In' : 'Sign Up'}
+              </button>
+            </>
+          )}
         </div>
 
         {/* Back to home */}
