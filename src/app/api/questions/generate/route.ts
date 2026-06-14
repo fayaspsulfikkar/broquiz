@@ -39,7 +39,10 @@ export async function POST(request: NextRequest) {
       });
 
       // Shuffle and pick 10 unused questions
-      questions = shuffleArray(cachedQuestions).slice(0, QUESTIONS_PER_LEVEL);
+      const selected = shuffleArray(cachedQuestions).slice(0, QUESTIONS_PER_LEVEL);
+      
+      // Sort by difficulty (easy to hard)
+      questions = selected.sort((a, b) => (a.difficulty || 1) - (b.difficulty || 1));
     } catch (e) {
       console.error('Error fetching cached questions:', e);
     }

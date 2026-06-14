@@ -116,6 +116,14 @@ export default function ResultsPage() {
               <div style={{ fontSize: 11, color: '#86868B', marginBottom: 4 }}>Accuracy</div>
               <div style={{ fontSize: 20, fontWeight: 600, color: '#1D1D1F' }}>{results.accuracy_percentage}%</div>
             </div>
+            <div style={{ background: '#34C75915', borderRadius: 12, padding: 14 }}>
+              <div style={{ fontSize: 11, color: '#34C759', marginBottom: 4 }}>Correct</div>
+              <div style={{ fontSize: 20, fontWeight: 600, color: '#34C759' }}>{results.score}</div>
+            </div>
+            <div style={{ background: '#FF3B3015', borderRadius: 12, padding: 14 }}>
+              <div style={{ fontSize: 11, color: '#FF3B30', marginBottom: 4 }}>Wrong</div>
+              <div style={{ fontSize: 20, fontWeight: 600, color: '#FF3B30' }}>{results.wrong_count}</div>
+            </div>
             <div style={{ background: '#F5F5F7', borderRadius: 12, padding: 14 }}>
               <div style={{ fontSize: 11, color: '#86868B', marginBottom: 4 }}>Time Taken</div>
               <div style={{ fontSize: 20, fontWeight: 600, color: '#1D1D1F' }}>{formatDuration(results.duration_seconds)}</div>
