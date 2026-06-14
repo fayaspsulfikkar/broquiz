@@ -228,27 +228,26 @@ function QuizContent() {
   const globalProgress = totalAvailable > 0 ? (totalSeen / totalAvailable) * 100 : 0;
 
   return (
-    <div style={{ minHeight: '100vh', background: '#F5F5F7' }}>
+    <div style={{ minHeight: '100vh', background: 'transparent' }}>
       {/* Top Bar */}
-      <div style={{
-        background: '#fff', borderBottom: '1px solid #E8E8ED',
+      <div className="glass" style={{
         padding: '12px 24px', display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-        position: 'sticky', top: 0, zIndex: 50,
+        position: 'sticky', top: 0, zIndex: 50, border: 'none', borderRadius: 0
       }}>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 2, minWidth: 100 }}>
-          <div style={{ fontSize: 15, fontWeight: 700, color: '#1D1D1F' }}>
+          <div style={{ fontSize: 15, fontWeight: 700, color: 'inherit' }}>
             Round {(profile?.total_rounds_played || 0) + 1}
           </div>
-          <div style={{ fontSize: 11, color: '#86868B', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+          <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.6)', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
             Global Progress
           </div>
         </div>
 
         {/* Global Progress */}
         <div style={{ flex: 1, maxWidth: 400, margin: '0 24px' }}>
-          <div style={{ width: '100%', height: 6, background: '#E8E8ED', borderRadius: 3, overflow: 'hidden' }}>
+          <div style={{ width: '100%', height: 6, background: 'rgba(255,255,255,0.2)', borderRadius: 3, overflow: 'hidden' }}>
             <motion.div
-              style={{ height: '100%', background: 'linear-gradient(90deg, #34C759 0%, #0071E3 100%)', borderRadius: 3 }}
+              style={{ height: '100%', background: '#fff', borderRadius: 3, boxShadow: '0 0 10px rgba(255,255,255,0.8)' }}
               animate={{ width: `${Math.min(100, globalProgress)}%` }}
               transition={{ duration: 0.5 }}
             />
@@ -256,10 +255,10 @@ function QuizContent() {
         </div>
 
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 2, minWidth: 100 }}>
-          <div style={{ fontSize: 14, fontWeight: 600, color: '#1D1D1F' }}>
+          <div style={{ fontSize: 14, fontWeight: 600, color: 'inherit' }}>
             {totalSeen} / {totalAvailable}
           </div>
-          <div style={{ fontSize: 11, color: '#86868B' }}>Mastered</div>
+          <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.6)' }}>Mastered</div>
         </div>
       </div>
 
@@ -277,9 +276,9 @@ function QuizContent() {
               onClick={() => goToQuestion(i)}
               style={{
                 width: 32, height: 32, borderRadius: 8,
-                border: i === currentIndex ? '2px solid #000' : '1px solid #E8E8ED',
-                background: answered ? '#000' : flagged ? '#FF9F0A' : '#fff',
-                color: answered ? '#fff' : '#1D1D1F',
+                border: i === currentIndex ? '2px solid #fff' : '1px solid rgba(255,255,255,0.2)',
+                background: answered ? 'rgba(255,255,255,0.9)' : flagged ? '#FF9F0A' : 'rgba(0,0,0,0.2)',
+                color: answered ? '#000' : 'rgba(255,255,255,0.9)',
                 fontSize: 12, fontWeight: 600, cursor: 'pointer',
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
                 transition: 'all 0.15s ease',
@@ -304,23 +303,23 @@ function QuizContent() {
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: -20 }}
             transition={{ duration: 0.25 }}
+            className="glass"
             style={{
-              background: '#fff', borderRadius: 20, padding: 'clamp(24px, 4vw, 36px)',
-              border: '1px solid #E8E8ED',
+              borderRadius: 20, padding: 'clamp(24px, 4vw, 36px)'
             }}
           >
             {/* Type badge */}
             <div style={{
               display: 'inline-block', padding: '4px 10px', borderRadius: 6,
-              background: '#F5F5F7', fontSize: 11, fontWeight: 600,
-              color: '#6E6E73', textTransform: 'uppercase', letterSpacing: '0.04em',
+              background: 'rgba(255,255,255,0.15)', fontSize: 11, fontWeight: 600,
+              color: 'rgba(255,255,255,0.9)', textTransform: 'uppercase', letterSpacing: '0.04em',
               marginBottom: 20,
             }}>
               {QUESTION_TYPE_LABELS[currentQuestion.type]}
             </div>
 
             {/* Question text */}
-            <div style={{ fontSize: 17, fontWeight: 500, color: '#1D1D1F', lineHeight: 1.7, marginBottom: 24 }}>
+            <div style={{ fontSize: 17, fontWeight: 500, color: 'inherit', lineHeight: 1.7, marginBottom: 24 }}>
               {currentQuestion.question}
             </div>
 
@@ -404,14 +403,15 @@ function QuizContent() {
               animate={{ scale: 1 }}
               exit={{ scale: 0.95 }}
               onClick={(e) => e.stopPropagation()}
+              className="glass"
               style={{
-                background: '#fff', borderRadius: 20, padding: 36,
+                borderRadius: 20, padding: 36,
                 maxWidth: 420, width: '100%', textAlign: 'center',
               }}
             >
               <div style={{ fontSize: 48, marginBottom: 16 }}>📝</div>
-              <h3 style={{ fontSize: 20, fontWeight: 600, color: '#1D1D1F', marginBottom: 8 }}>Submit Your Answers?</h3>
-              <p style={{ fontSize: 15, color: '#6E6E73', marginBottom: 8 }}>
+              <h3 style={{ fontSize: 20, fontWeight: 600, color: 'inherit', marginBottom: 8 }}>Submit Your Answers?</h3>
+              <p style={{ fontSize: 15, color: 'rgba(255,255,255,0.8)', marginBottom: 8 }}>
                 You&apos;ve answered {answers.size}/{questions.length} questions.
                 {flaggedQuestions.size > 0 && ` ${flaggedQuestions.size} flagged for review.`}
               </p>
@@ -443,17 +443,18 @@ function QuizContent() {
               initial={{ scale: 0.95, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.95, opacity: 0 }}
+              className="glass"
               style={{
-                background: '#fff', borderRadius: 24, padding: 32,
+                borderRadius: 24, padding: 32,
                 maxWidth: 400, width: '100%', textAlign: 'center',
                 boxShadow: '0 20px 40px rgba(0,0,0,0.2)'
               }}
             >
               <div style={{ fontSize: 48, marginBottom: 16 }}>⚠️</div>
-              <h3 style={{ fontSize: 20, fontWeight: 700, color: '#1D1D1F', marginBottom: 12 }}>
+              <h3 style={{ fontSize: 20, fontWeight: 700, color: 'inherit', marginBottom: 12 }}>
                 Tab Switching Detected
               </h3>
-              <p style={{ fontSize: 15, color: '#6E6E73', lineHeight: 1.5, marginBottom: 24 }}>
+              <p style={{ fontSize: 15, color: 'rgba(255,255,255,0.8)', lineHeight: 1.5, marginBottom: 24 }}>
                 Please stay on this tab during the quiz! You have switched tabs {fraudWarnings} time(s). 
                 <strong> If you switch tabs 3 times, your current question will be marked wrong and a "Fraud Detected" badge will permanently appear on your public leaderboard profile.</strong>
               </p>
@@ -494,28 +495,26 @@ function QuestionAnswerArea({
               <button
                 key={i}
                 onClick={() => onAnswer(option)}
+                className="glass"
                 style={{
                   textAlign: 'left',
                   padding: '14px 18px', borderRadius: 12,
-                  border: `2px solid ${selected ? '#000' : '#E8E8ED'}`,
-                  background: selected ? '#000' : '#fff',
-                  color: selected ? '#fff' : '#1D1D1F',
+                  border: `1px solid ${selected ? 'rgba(255,255,255,0.4)' : 'rgba(255,255,255,0.1)'}`,
+                  background: selected ? 'rgba(255,255,255,0.2)' : 'rgba(255,255,255,0.05)',
+                  color: 'inherit',
                   fontSize: 15, cursor: 'pointer',
-                  display: 'flex', alignItems: 'flex-start', gap: 12,
+                  display: 'flex', alignItems: 'center', gap: 12,
                   transition: 'all 0.15s ease',
-                  lineHeight: 1.5,
                 }}
               >
-                <span style={{
-                  width: 24, height: 24, borderRadius: 12,
-                  border: `2px solid ${selected ? '#fff' : '#D2D2D7'}`,
+                <div style={{
+                  width: 20, height: 20, borderRadius: '50%',
+                  border: `2px solid ${selected ? '#fff' : 'rgba(255,255,255,0.3)'}`,
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  flexShrink: 0, marginTop: 1,
-                  background: selected ? '#fff' : 'transparent',
                 }}>
-                  {selected && <div style={{ width: 10, height: 10, borderRadius: 5, background: '#000' }} />}
-                </span>
-                <span style={{ whiteSpace: 'pre-wrap' }}>{option}</span>
+                  {selected && <div style={{ width: 10, height: 10, borderRadius: '50%', background: '#fff' }} />}
+                </div>
+                {option}
               </button>
             );
           })}
@@ -541,23 +540,22 @@ function QuestionAnswerArea({
                       : [...selectedOptions, option];
                     onAnswer(newSelection);
                   }}
+                  className="glass"
                   style={{
                     textAlign: 'left',
                     padding: '14px 18px', borderRadius: 12,
-                    border: `2px solid ${selected ? '#000' : '#E8E8ED'}`,
-                    background: selected ? '#000' : '#fff',
-                    color: selected ? '#fff' : '#1D1D1F',
+                    border: `1px solid ${selected ? 'rgba(255,255,255,0.4)' : 'rgba(255,255,255,0.1)'}`,
+                    background: selected ? 'rgba(255,255,255,0.2)' : 'rgba(255,255,255,0.05)',
+                    color: 'inherit',
                     fontSize: 15, cursor: 'pointer',
-                    display: 'flex', alignItems: 'flex-start', gap: 12,
+                    display: 'flex', alignItems: 'center', gap: 12,
                     transition: 'all 0.15s ease',
-                    lineHeight: 1.5,
                   }}
                 >
-                  <span style={{
-                    width: 22, height: 22, borderRadius: 4,
-                    border: `2px solid ${selected ? '#fff' : '#D2D2D7'}`,
+                  <div style={{
+                    width: 20, height: 20, borderRadius: 4,
+                    border: `2px solid ${selected ? '#fff' : 'rgba(255,255,255,0.3)'}`,
                     display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    flexShrink: 0, marginTop: 2,
                     background: selected ? '#fff' : 'transparent',
                   }}>
                     {selected && (
@@ -565,7 +563,7 @@ function QuestionAnswerArea({
                         <polyline points="20 6 9 17 4 12" />
                       </svg>
                     )}
-                  </span>
+                  </div>
                   <span style={{ whiteSpace: 'pre-wrap' }}>{option}</span>
                 </button>
               );
@@ -582,7 +580,7 @@ function QuestionAnswerArea({
             value={(currentAnswer as string) || ''}
             onChange={(e) => onAnswer(e.target.value)}
             placeholder="Type your answer..."
-            className="input"
+            className="input glass"
             style={{
               fontFamily: 'var(--font-mono)',
               fontSize: 16,
@@ -592,7 +590,7 @@ function QuestionAnswerArea({
             }}
             autoFocus
           />
-          <p style={{ fontSize: 12, color: '#86868B', textAlign: 'center', marginTop: 8 }}>
+          <p style={{ fontSize: 12, color: 'rgba(255,255,255,0.7)', textAlign: 'center', marginTop: 8 }}>
             Case-insensitive. Type the exact answer.
           </p>
         </div>

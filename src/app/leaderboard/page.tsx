@@ -77,17 +77,16 @@ export default function LeaderboardPage() {
   const userRank = users.findIndex((u) => u.uid === user?.uid) + 1;
 
   return (
-    <div style={{ minHeight: '100vh', background: '#F5F5F7' }}>
+    <div style={{ minHeight: '100vh', background: 'transparent' }}>
       {/* Nav */}
-      <nav style={{
-        background: '#fff', borderBottom: '1px solid #E8E8ED',
+      <nav className="glass" style={{
         padding: '12px 24px', display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-        position: 'sticky', top: 0, zIndex: 10,
+        position: 'sticky', top: 0, zIndex: 10, border: 'none', borderRadius: 0
       }}>
         <button onClick={() => router.push('/')} style={{ background: 'none', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 8 }}>
-          <span style={{ fontSize: 14, color: '#0071E3', fontWeight: 500 }}>← Home</span>
+          <span style={{ fontSize: 14, color: 'rgba(255,255,255,0.8)', fontWeight: 500 }}>← Home</span>
         </button>
-        <h1 style={{ fontSize: 17, fontWeight: 700, color: '#1D1D1F' }}>Global Leaderboard</h1>
+        <h1 style={{ fontSize: 17, fontWeight: 700, color: 'inherit' }}>Global Leaderboard</h1>
         <div style={{ width: 80 }} />
       </nav>
 
@@ -113,9 +112,10 @@ export default function LeaderboardPage() {
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: podiumIdx * 0.1 }}
+                    className="glass"
                     style={{
-                      background: '#fff', borderRadius: 16, padding: 20,
-                      border: rank === 1 ? '2px solid #FFD700' : '1px solid #E8E8ED',
+                      borderRadius: 16, padding: 20,
+                      border: rank === 1 ? '2px solid #FFD700' : '1px solid rgba(255,255,255,0.2)',
                       width: rank === 1 ? 160 : 140,
                       minHeight: heights[rank as keyof typeof heights],
                       display: 'flex', flexDirection: 'column', alignItems: 'center',
@@ -124,9 +124,9 @@ export default function LeaderboardPage() {
                   >
                     <div style={{ fontSize: 28, marginBottom: 8 }}>{medals[rank as keyof typeof medals]}</div>
                     <div style={{
-                      width: 48, height: 48, borderRadius: 24, background: '#E8E8ED',
+                      width: 48, height: 48, borderRadius: 24, background: 'rgba(255,255,255,0.2)',
                       display: 'flex', alignItems: 'center', justifyContent: 'center',
-                      fontSize: 18, fontWeight: 600, color: '#6E6E73', marginBottom: 8,
+                      fontSize: 18, fontWeight: 600, color: 'inherit', marginBottom: 8,
                       overflow: 'hidden',
                     }}>
                       {u.avatar_url ? (
@@ -135,7 +135,7 @@ export default function LeaderboardPage() {
                         u.anonymous_leaderboard ? '?' : u.name?.charAt(0).toUpperCase()
                       )}
                     </div>
-                    <div style={{ fontSize: 13, fontWeight: 600, color: '#1D1D1F', marginBottom: 4, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4 }}>
+                    <div style={{ fontSize: 13, fontWeight: 600, color: 'inherit', marginBottom: 4, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4 }}>
                       {u.anonymous_leaderboard ? 'Anonymous' : u.name?.split(' ')[0]}
                       {u.fraud_detected && (
                         <span style={{ fontSize: 9, fontWeight: 700, color: '#fff', background: '#FF3B30', padding: '2px 6px', borderRadius: 6, letterSpacing: '0.02em', textTransform: 'uppercase' }}>
@@ -143,10 +143,10 @@ export default function LeaderboardPage() {
                         </span>
                       )}
                     </div>
-                    <div style={{ fontSize: 16, fontWeight: 700, color: '#0071E3' }}>
+                    <div style={{ fontSize: 16, fontWeight: 700, color: '#4ADE80' }}>
                       Round {u.total_rounds_played || 0}
                     </div>
-                    <div style={{ fontSize: 11, color: '#86868B', marginTop: 4 }}>
+                    <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.6)', marginTop: 4 }}>
                       {u.total_correct_answers} Mastered • {u.streak_count}🔥
                     </div>
                   </motion.div>
@@ -155,18 +155,18 @@ export default function LeaderboardPage() {
             </div>
 
             {/* Full List Table */}
-            <div style={{ background: '#fff', borderRadius: 16, border: '1px solid #E8E8ED', overflowX: 'auto' }}>
+            <div className="glass" style={{ borderRadius: 16, border: '1px solid rgba(255,255,255,0.2)', overflowX: 'auto' }}>
               <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', minWidth: 600 }}>
                 <thead>
-                  <tr style={{ borderBottom: '1px solid #E8E8ED', background: '#FBFBFD' }}>
-                    <th style={{ padding: '16px 16px', fontSize: 11, fontWeight: 700, color: '#86868B', textTransform: 'uppercase', letterSpacing: '0.04em' }}>Rank</th>
-                    <th style={{ padding: '16px 16px', fontSize: 11, fontWeight: 700, color: '#86868B', textTransform: 'uppercase', letterSpacing: '0.04em' }}>Name</th>
-                    <th style={{ padding: '16px 16px', fontSize: 11, fontWeight: 700, color: '#86868B', textTransform: 'uppercase', letterSpacing: '0.04em' }}>Round</th>
-                    <th style={{ padding: '16px 16px', fontSize: 11, fontWeight: 700, color: '#86868B', textTransform: 'uppercase', letterSpacing: '0.04em' }}>Questions Mastered</th>
-                    <th style={{ padding: '16px 16px', fontSize: 11, fontWeight: 700, color: '#86868B', textTransform: 'uppercase', letterSpacing: '0.04em' }}>Wrong Answers</th>
-                    <th style={{ padding: '16px 16px', fontSize: 11, fontWeight: 700, color: '#86868B', textTransform: 'uppercase', letterSpacing: '0.04em' }}>Accuracy</th>
-                    <th style={{ padding: '16px 16px', fontSize: 11, fontWeight: 700, color: '#86868B', textTransform: 'uppercase', letterSpacing: '0.04em' }}>Avg Time / Q</th>
-                    <th style={{ padding: '16px 16px', fontSize: 11, fontWeight: 700, color: '#86868B', textTransform: 'uppercase', letterSpacing: '0.04em' }}>Streak</th>
+                  <tr style={{ borderBottom: '1px solid rgba(255,255,255,0.2)', background: 'rgba(255,255,255,0.05)' }}>
+                    <th style={{ padding: '16px 16px', fontSize: 11, fontWeight: 700, color: 'rgba(255,255,255,0.6)', textTransform: 'uppercase', letterSpacing: '0.04em' }}>Rank</th>
+                    <th style={{ padding: '16px 16px', fontSize: 11, fontWeight: 700, color: 'rgba(255,255,255,0.6)', textTransform: 'uppercase', letterSpacing: '0.04em' }}>Name</th>
+                    <th style={{ padding: '16px 16px', fontSize: 11, fontWeight: 700, color: 'rgba(255,255,255,0.6)', textTransform: 'uppercase', letterSpacing: '0.04em' }}>Round</th>
+                    <th style={{ padding: '16px 16px', fontSize: 11, fontWeight: 700, color: 'rgba(255,255,255,0.6)', textTransform: 'uppercase', letterSpacing: '0.04em' }}>Questions Mastered</th>
+                    <th style={{ padding: '16px 16px', fontSize: 11, fontWeight: 700, color: 'rgba(255,255,255,0.6)', textTransform: 'uppercase', letterSpacing: '0.04em' }}>Wrong Answers</th>
+                    <th style={{ padding: '16px 16px', fontSize: 11, fontWeight: 700, color: 'rgba(255,255,255,0.6)', textTransform: 'uppercase', letterSpacing: '0.04em' }}>Accuracy</th>
+                    <th style={{ padding: '16px 16px', fontSize: 11, fontWeight: 700, color: 'rgba(255,255,255,0.6)', textTransform: 'uppercase', letterSpacing: '0.04em' }}>Avg Time / Q</th>
+                    <th style={{ padding: '16px 16px', fontSize: 11, fontWeight: 700, color: 'rgba(255,255,255,0.6)', textTransform: 'uppercase', letterSpacing: '0.04em' }}>Streak</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -177,21 +177,21 @@ export default function LeaderboardPage() {
                       <tr
                         key={u.uid}
                         style={{
-                          borderBottom: '1px solid #F5F5F7',
-                          background: isMe ? '#F0F7FF' : '#fff',
+                          borderBottom: '1px solid rgba(255,255,255,0.1)',
+                          background: isMe ? 'rgba(255,255,255,0.15)' : 'transparent',
                           transition: 'background 0.2s',
                         }}
-                        onMouseEnter={(e) => e.currentTarget.style.background = isMe ? '#E0F0FF' : '#FBFBFD'}
-                        onMouseLeave={(e) => e.currentTarget.style.background = isMe ? '#F0F7FF' : '#fff'}
+                        onMouseEnter={(e) => e.currentTarget.style.background = isMe ? 'rgba(255,255,255,0.2)' : 'rgba(255,255,255,0.05)'}
+                        onMouseLeave={(e) => e.currentTarget.style.background = isMe ? 'rgba(255,255,255,0.15)' : 'transparent'}
                       >
-                        <td style={{ padding: '16px 16px', fontSize: 15, fontWeight: 700, color: '#86868B' }}>
+                        <td style={{ padding: '16px 16px', fontSize: 15, fontWeight: 700, color: 'rgba(255,255,255,0.7)' }}>
                           {rank}
                         </td>
                         <td style={{ padding: '16px 16px', display: 'flex', alignItems: 'center', gap: 12 }}>
                           <div style={{
-                            width: 32, height: 32, borderRadius: 16, background: '#E8E8ED',
+                            width: 32, height: 32, borderRadius: 16, background: 'rgba(255,255,255,0.2)',
                             display: 'flex', alignItems: 'center', justifyContent: 'center',
-                            fontSize: 13, fontWeight: 600, color: '#6E6E73',
+                            fontSize: 13, fontWeight: 600, color: 'inherit',
                             overflow: 'hidden', flexShrink: 0,
                           }}>
                             {u.avatar_url ? (
@@ -200,25 +200,25 @@ export default function LeaderboardPage() {
                               u.anonymous_leaderboard ? '?' : u.name?.charAt(0).toUpperCase()
                             )}
                           </div>
-                          <div style={{ fontSize: 14, fontWeight: isMe ? 700 : 500, color: '#1D1D1F' }}>
+                          <div style={{ fontSize: 14, fontWeight: isMe ? 700 : 500, color: 'inherit' }}>
                             {u.anonymous_leaderboard ? 'Anonymous' : u.name}
-                            {isMe && <span style={{ color: '#0071E3', marginLeft: 8, fontSize: 11, fontWeight: 700, background: '#E0F0FF', padding: '2px 6px', borderRadius: 10 }}>YOU</span>}
+                            {isMe && <span style={{ color: 'inherit', marginLeft: 8, fontSize: 11, fontWeight: 700, background: 'rgba(255,255,255,0.2)', padding: '2px 6px', borderRadius: 10 }}>YOU</span>}
                             {u.fraud_detected && <span style={{ color: '#fff', marginLeft: 8, fontSize: 10, fontWeight: 700, background: '#FF3B30', padding: '2px 6px', borderRadius: 6, textTransform: 'uppercase' }}>FRAUD DETECTED</span>}
                           </div>
                         </td>
-                        <td style={{ padding: '16px 16px', fontSize: 14, fontWeight: 600, color: '#0071E3' }}>
+                        <td style={{ padding: '16px 16px', fontSize: 14, fontWeight: 600, color: '#4ADE80' }}>
                           Round {u.total_rounds_played || 0}
                         </td>
-                        <td style={{ padding: '16px 16px', fontSize: 14, fontWeight: 600, color: '#1D1D1F' }}>
+                        <td style={{ padding: '16px 16px', fontSize: 14, fontWeight: 600, color: 'inherit' }}>
                           {u.total_correct_answers}
                         </td>
                         <td style={{ padding: '16px 16px', fontSize: 14, fontWeight: 500, color: '#FF3B30' }}>
                           {Math.max(0, (u.total_rounds_played * 10) - u.total_correct_answers)}
                         </td>
-                        <td style={{ padding: '16px 16px', fontSize: 14, color: '#6E6E73', fontWeight: 500 }}>
+                        <td style={{ padding: '16px 16px', fontSize: 14, color: 'rgba(255,255,255,0.8)', fontWeight: 500 }}>
                           {getAccuracy(u)}%
                         </td>
-                        <td style={{ padding: '16px 16px', fontSize: 14, color: '#6E6E73', fontWeight: 500 }}>
+                        <td style={{ padding: '16px 16px', fontSize: 14, color: 'rgba(255,255,255,0.8)', fontWeight: 500 }}>
                           {getAvgTime(u)}s
                         </td>
                         <td style={{ padding: '16px 16px', fontSize: 14, fontWeight: 600, color: '#FF9F0A' }}>

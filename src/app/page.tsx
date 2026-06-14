@@ -159,15 +159,15 @@ export default function LandingPage() {
   // Unauthenticated Intro View
   if (!user || !profile) {
     return (
-      <div style={{ background: '#F5F5F7', minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+      <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+          className="glass"
           style={{
-            background: '#fff', borderRadius: 20, padding: 'clamp(32px, 5vw, 64px)',
+            borderRadius: 20, padding: 'clamp(32px, 5vw, 64px)',
             maxWidth: 600, width: '100%', margin: 24, textAlign: 'center',
-            boxShadow: '0 8px 30px rgba(0,0,0,0.06)', border: '1px solid #E8E8ED',
           }}
         >
           <div style={{
@@ -177,13 +177,13 @@ export default function LandingPage() {
           }}>B</div>
           
           <h1 style={{
-            fontSize: 'clamp(28px, 4vw, 40px)', fontWeight: 700, letterSpacing: '-0.03em', color: '#1D1D1F', marginBottom: 16,
+            fontSize: 'clamp(28px, 4vw, 40px)', fontWeight: 700, letterSpacing: '-0.03em', marginBottom: 16, color: 'inherit'
           }}>
             Welcome to BroQuiz
           </h1>
           
           <p style={{
-            fontSize: 17, color: '#6E6E73', lineHeight: 1.6, marginBottom: 32,
+            fontSize: 17, color: 'rgba(255,255,255,0.8)', lineHeight: 1.6, marginBottom: 32,
           }}>
             Test your programming fundamentals. <strong>Taking repeated quiz rounds will improve your chances of getting selected.</strong> The more questions you master, the higher you climb on the leaderboard.
           </p>
@@ -204,10 +204,10 @@ export default function LandingPage() {
   const progressPercent = Math.min(100, Math.round(((profile.total_correct_answers || 0) / MAX_QUESTIONS) * 100));
 
   return (
-    <div style={{ background: '#F5F5F7', minHeight: '100vh' }}>
+    <div style={{ minHeight: '100vh' }}>
       {/* Header */}
-      <nav style={{ background: '#fff', borderBottom: '1px solid #E8E8ED', padding: '12px 24px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-        <h1 style={{ fontSize: 17, fontWeight: 700, color: '#1D1D1F' }}>BroQuiz Dashboard</h1>
+      <nav className="glass" style={{ padding: '12px 24px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', border: 'none', borderRadius: 0 }}>
+        <h1 style={{ fontSize: 17, fontWeight: 700, color: 'inherit' }}>BroQuiz Dashboard</h1>
         <div style={{ display: 'flex', gap: 16 }}>
           {profile.is_admin && (
             <button 
@@ -225,37 +225,37 @@ export default function LandingPage() {
 
       <div style={{ maxWidth: 800, margin: '0 auto', padding: '32px 24px' }}>
         {/* Welcome Section */}
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} style={{ marginBottom: 32 }}>
-          <h2 style={{ fontSize: 28, fontWeight: 700, color: '#1D1D1F', marginBottom: 8 }}>
+        <motion.div className="glass" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} style={{ marginBottom: 32, padding: 24, borderRadius: 20 }}>
+          <h2 style={{ fontSize: 28, fontWeight: 700, color: 'inherit', marginBottom: 8 }}>
             Welcome back, {profile.name?.split(' ')[0] || 'Bro'}! 👋
           </h2>
-          <p style={{ color: '#6E6E73', fontSize: 16 }}>Ready to master some code today?</p>
+          <p style={{ color: 'rgba(255,255,255,0.8)', fontSize: 16 }}>Ready to master some code today?</p>
         </motion.div>
 
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: 24, marginBottom: 32 }}>
           {/* Progress Card */}
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} style={{
-            background: '#fff', borderRadius: 20, padding: 24, border: '1px solid #E8E8ED',
+          <motion.div className="glass" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} style={{
+            borderRadius: 20, padding: 24,
           }}>
-            <h3 style={{ fontSize: 15, fontWeight: 600, color: '#86868B', marginBottom: 16, textTransform: 'uppercase', letterSpacing: '0.05em' }}>Your Progress</h3>
+            <h3 style={{ fontSize: 15, fontWeight: 600, color: 'rgba(255,255,255,0.6)', marginBottom: 16, textTransform: 'uppercase', letterSpacing: '0.05em' }}>Your Progress</h3>
             <div style={{ display: 'flex', alignItems: 'flex-end', gap: 8, marginBottom: 16 }}>
-              <span style={{ fontSize: 36, fontWeight: 700, color: '#1D1D1F', lineHeight: 1 }}>{profile.total_rounds_played || 0}</span>
-              <span style={{ fontSize: 16, color: '#6E6E73', paddingBottom: 4 }}>/ 26 Rounds</span>
+              <span style={{ fontSize: 36, fontWeight: 700, color: 'inherit', lineHeight: 1 }}>{profile.total_rounds_played || 0}</span>
+              <span style={{ fontSize: 16, color: 'rgba(255,255,255,0.7)', paddingBottom: 4 }}>/ 26 Rounds</span>
             </div>
-            <div style={{ height: 8, background: '#F5F5F7', borderRadius: 4, overflow: 'hidden', marginBottom: 8 }}>
-              <div style={{ height: '100%', background: '#0071E3', width: `${Math.min(100, ((profile.total_rounds_played || 0) / 26) * 100)}%`, borderRadius: 4, transition: 'width 1s ease-out' }} />
+            <div style={{ height: 8, background: 'rgba(255,255,255,0.2)', borderRadius: 4, overflow: 'hidden', marginBottom: 8 }}>
+              <div style={{ height: '100%', background: '#fff', width: `${Math.min(100, ((profile.total_rounds_played || 0) / 26) * 100)}%`, borderRadius: 4, transition: 'width 1s ease-out', boxShadow: '0 0 10px rgba(255,255,255,0.8)' }} />
             </div>
-            <div style={{ fontSize: 13, color: '#86868B', textAlign: 'right' }}>{profile.total_correct_answers || 0} Questions Mastered</div>
+            <div style={{ fontSize: 13, color: 'rgba(255,255,255,0.6)', textAlign: 'right' }}>{profile.total_correct_answers || 0} Questions Mastered</div>
           </motion.div>
 
           {/* Streak Card */}
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} style={{
-            background: '#fff', borderRadius: 20, padding: 24, border: '1px solid #E8E8ED',
+          <motion.div className="glass" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} style={{
+            borderRadius: 20, padding: 24,
             display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center'
           }}>
             <div style={{ fontSize: 48, marginBottom: 8 }}>🔥</div>
-            <div style={{ fontSize: 24, fontWeight: 700, color: '#1D1D1F' }}>{profile.streak_count || 0} Day Streak</div>
-            <div style={{ fontSize: 14, color: '#6E6E73', marginTop: 4 }}>Keep coming back to climb the ranks!</div>
+            <div style={{ fontSize: 24, fontWeight: 700, color: 'inherit' }}>{profile.streak_count || 0} Day Streak</div>
+            <div style={{ fontSize: 14, color: 'rgba(255,255,255,0.8)', marginTop: 4 }}>Keep coming back to climb the ranks!</div>
           </motion.div>
         </div>
 
@@ -290,11 +290,11 @@ export default function LandingPage() {
         </motion.div>
 
         {/* Top 5 Leaderboard Preview */}
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }} style={{
-          background: '#fff', borderRadius: 20, padding: 24, border: '1px solid #E8E8ED',
+        <motion.div className="glass" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }} style={{
+          borderRadius: 20, padding: 24,
         }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 20 }}>
-            <h3 style={{ fontSize: 18, fontWeight: 600, color: '#1D1D1F' }}>Top Players</h3>
+            <h3 style={{ fontSize: 18, fontWeight: 600, color: 'inherit' }}>Top Players</h3>
             <button 
               onClick={() => router.push('/leaderboard')}
               style={{ background: 'none', border: 'none', color: '#0071E3', fontSize: 14, fontWeight: 500, cursor: 'pointer' }}
@@ -340,10 +340,10 @@ export default function LandingPage() {
         </motion.div>
 
         {/* Round History */}
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5 }} style={{
-          background: '#fff', borderRadius: 20, padding: 24, border: '1px solid #E8E8ED', marginTop: 32
+        <motion.div className="glass" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5 }} style={{
+          borderRadius: 20, padding: 24, marginTop: 32
         }}>
-          <h3 style={{ fontSize: 18, fontWeight: 600, color: '#1D1D1F', marginBottom: 20 }}>Round History</h3>
+          <h3 style={{ fontSize: 18, fontWeight: 600, color: 'inherit', marginBottom: 20 }}>Round History</h3>
 
           {loadingAttempts ? (
             <div style={{ padding: 20, textAlign: 'center', color: '#6E6E73' }}>Loading history...</div>
@@ -358,27 +358,27 @@ export default function LandingPage() {
                 
                 return (
                   <div key={attempt.id} style={{ 
-                    border: '1px solid #E8E8ED', borderRadius: 16, overflow: 'hidden'
+                    border: '1px solid rgba(255,255,255,0.2)', borderRadius: 16, overflow: 'hidden'
                   }}>
                     {/* Header Row */}
                     <div 
                       onClick={() => handleExpandAttempt(attempt)}
                       style={{ 
                         padding: '16px 20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-                        background: isExpanded ? '#F0F7FF' : '#fff', cursor: 'pointer', transition: 'background 0.2s'
+                        background: isExpanded ? 'rgba(255,255,255,0.15)' : 'transparent', cursor: 'pointer', transition: 'background 0.2s'
                       }}
                     >
                       <div>
                         <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4 }}>
-                          <span style={{ fontSize: 16, fontWeight: 700, color: '#1D1D1F' }}>Round {roundNum}</span>
-                          {attempt.is_retry && <span style={{ fontSize: 11, fontWeight: 700, background: '#E8E8ED', color: '#6E6E73', padding: '2px 6px', borderRadius: 6 }}>RETRY</span>}
+                          <span style={{ fontSize: 16, fontWeight: 700, color: 'inherit' }}>Round {roundNum}</span>
+                          {attempt.is_retry && <span style={{ fontSize: 11, fontWeight: 700, background: 'rgba(255,255,255,0.2)', color: 'rgba(255,255,255,0.8)', padding: '2px 6px', borderRadius: 6 }}>RETRY</span>}
                         </div>
-                        <div style={{ fontSize: 13, color: '#86868B' }}>{date} • {attempt.duration_seconds}s</div>
+                        <div style={{ fontSize: 13, color: 'rgba(255,255,255,0.6)' }}>{date} • {attempt.duration_seconds}s</div>
                       </div>
                       <div style={{ display: 'flex', alignItems: 'center', gap: 24 }}>
                         <div style={{ textAlign: 'right' }}>
-                          <div style={{ fontSize: 15, fontWeight: 700, color: '#34C759' }}>{attempt.score} / {attempt.answers.length}</div>
-                          <div style={{ fontSize: 11, color: '#86868B' }}>Score</div>
+                          <div style={{ fontSize: 15, fontWeight: 700, color: '#4ADE80' }}>{attempt.score} / {attempt.answers.length}</div>
+                          <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.6)' }}>Score</div>
                         </div>
                         <button 
                           onClick={(e) => { e.stopPropagation(); handleRetryRound(attempt.round_index || 0); }}
@@ -399,43 +399,43 @@ export default function LandingPage() {
                           initial={{ height: 0, opacity: 0 }}
                           animate={{ height: 'auto', opacity: 1 }}
                           exit={{ height: 0, opacity: 0 }}
-                          style={{ borderTop: '1px solid #E8E8ED', background: '#FBFBFD' }}
+                          style={{ borderTop: '1px solid rgba(255,255,255,0.2)', background: 'rgba(0,0,0,0.2)' }}
                         >
                           <div style={{ padding: 20 }}>
                             {loadingQuestions[attempt.id] ? (
-                              <div style={{ textAlign: 'center', color: '#6E6E73', fontSize: 14 }}>Loading questions...</div>
+                              <div style={{ textAlign: 'center', color: 'rgba(255,255,255,0.6)', fontSize: 14 }}>Loading questions...</div>
                             ) : (
                               <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
                                 {attempt.answers.map((ans, i) => {
                                   const q = attemptQuestions[ans.question_id];
                                   if (!q) return <div key={i}>Loading...</div>;
                                   return (
-                                    <div key={i} style={{ paddingBottom: 24, borderBottom: i < attempt.answers.length - 1 ? '1px solid #E8E8ED' : 'none' }}>
+                                    <div key={i} style={{ paddingBottom: 24, borderBottom: i < attempt.answers.length - 1 ? '1px solid rgba(255,255,255,0.1)' : 'none' }}>
                                       <div style={{ display: 'flex', gap: 12, marginBottom: 12 }}>
                                         <div style={{ 
                                           width: 24, height: 24, borderRadius: 12, display: 'flex', alignItems: 'center', justifyContent: 'center',
-                                          background: ans.is_correct ? '#E3F8E9' : '#FFEBEA',
-                                          color: ans.is_correct ? '#34C759' : '#FF3B30',
+                                          background: ans.is_correct ? 'rgba(74,222,128,0.2)' : 'rgba(255,59,48,0.2)',
+                                          color: ans.is_correct ? '#4ADE80' : '#FF3B30',
                                           fontSize: 14, fontWeight: 700, flexShrink: 0
                                         }}>
                                           {ans.is_correct ? '✓' : '×'}
                                         </div>
-                                        <div style={{ fontSize: 15, color: '#1D1D1F', fontWeight: 500, lineHeight: 1.5 }}>
+                                        <div style={{ fontSize: 15, color: 'inherit', fontWeight: 500, lineHeight: 1.5 }}>
                                           {q.question}
                                         </div>
                                       </div>
                                       
                                       <div style={{ paddingLeft: 36, display: 'flex', flexDirection: 'column', gap: 8 }}>
-                                        <div style={{ fontSize: 14, color: '#6E6E73' }}>
-                                          <strong>Your Answer:</strong> <span style={{ color: ans.is_correct ? '#34C759' : '#FF3B30' }}>{Array.isArray(ans.user_answer) ? ans.user_answer.join(', ') : ans.user_answer}</span>
+                                        <div style={{ fontSize: 14, color: 'rgba(255,255,255,0.8)' }}>
+                                          <strong>Your Answer:</strong> <span style={{ color: ans.is_correct ? '#4ADE80' : '#FF3B30' }}>{Array.isArray(ans.user_answer) ? ans.user_answer.join(', ') : ans.user_answer}</span>
                                         </div>
                                         {!ans.is_correct && (
-                                          <div style={{ fontSize: 14, color: '#6E6E73' }}>
+                                          <div style={{ fontSize: 14, color: 'rgba(255,255,255,0.8)' }}>
                                             <strong>Correct Answer:</strong> {Array.isArray(q.correct_answer) ? q.correct_answer.join(', ') : q.correct_answer}
                                           </div>
                                         )}
                                         {q.explanation && (
-                                          <div style={{ fontSize: 14, color: '#86868B', marginTop: 4, padding: 12, background: '#E8E8ED50', borderRadius: 8 }}>
+                                          <div style={{ fontSize: 14, color: 'rgba(255,255,255,0.7)', marginTop: 4, padding: 12, background: 'rgba(255,255,255,0.1)', borderRadius: 8 }}>
                                             💡 {q.explanation}
                                           </div>
                                         )}

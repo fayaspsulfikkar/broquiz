@@ -460,14 +460,34 @@
   background-clip: text;
 }
 
+.bg-liquid-mesh {
+  background: linear-gradient(-45deg, #fbc2eb, #a6c1ee, #fdcbf1, #e6dee9);
+  background-size: 400% 400%;
+  animation: liquidGradient 15s ease infinite;
+  min-height: 100vh;
+}
+
+@keyframes liquidGradient {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
 .glass {
-  background: rgba(255, 255, 255, 0.72);
-  backdrop-filter: blur(20px) saturate(180%);
-  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  background: rgba(45, 5, 10, 0.65); /* Dark red tint */
+  backdrop-filter: blur(28px) saturate(200%);
+  -webkit-backdrop-filter: blur(28px) saturate(200%);
+  border: 1px solid rgba(255, 100, 100, 0.15);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.25);
+  color: #FFFFFF;
+}
+
+.glass h1, .glass h2, .glass h3, .glass p, .glass div, .glass span {
+  color: inherit; /* Inherit white text inside glass */
 }
 
 .dark .glass {
-  background: rgba(28, 28, 30, 0.72);
+  background: rgba(20, 0, 5, 0.75);
 }
 
 /* Hide scrollbar but keep functionality */

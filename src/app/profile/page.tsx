@@ -37,55 +37,55 @@ export default function ProfilePage() {
     : 0;
 
   return (
-    <div style={{ minHeight: '100vh', background: '#F5F5F7' }}>
-      <nav style={{ background: '#fff', borderBottom: '1px solid #E8E8ED', padding: '12px 24px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-        <button onClick={() => router.push('/')} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#0071E3', fontSize: 14, fontWeight: 500 }}>← Home</button>
-        <h1 style={{ fontSize: 17, fontWeight: 700, color: '#1D1D1F' }}>Profile</h1>
+    <div style={{ minHeight: '100vh', background: 'transparent' }}>
+      <nav className="glass" style={{ borderBottom: 'none', padding: '12px 24px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderRadius: 0 }}>
+        <button onClick={() => router.push('/')} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'rgba(255,255,255,0.8)', fontSize: 14, fontWeight: 500 }}>← Home</button>
+        <h1 style={{ fontSize: 17, fontWeight: 700, color: 'inherit' }}>Profile</h1>
         <div style={{ width: 80 }} />
       </nav>
 
       <div style={{ maxWidth: 600, margin: '0 auto', padding: '32px 24px' }}>
         {/* Profile Header */}
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} style={{
-          background: '#fff', borderRadius: 20, padding: 32, border: '1px solid #E8E8ED', textAlign: 'center', marginBottom: 24,
+        <motion.div className="glass" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} style={{
+          borderRadius: 20, padding: 32, textAlign: 'center', marginBottom: 24,
         }}>
           <div style={{
-            width: 80, height: 80, borderRadius: 40, background: '#E8E8ED', margin: '0 auto 16px',
-            display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 32, fontWeight: 700, color: '#6E6E73', overflow: 'hidden',
+            width: 80, height: 80, borderRadius: 40, background: 'rgba(255,255,255,0.2)', margin: '0 auto 16px',
+            display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 32, fontWeight: 700, color: 'inherit', overflow: 'hidden',
           }}>
             {profile.avatar_url ? <img src={profile.avatar_url} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} /> : profile.name?.charAt(0).toUpperCase()}
           </div>
-          <h2 style={{ fontSize: 24, fontWeight: 700, color: '#1D1D1F', marginBottom: 4 }}>{profile.name}</h2>
-          <p style={{ fontSize: 14, color: '#6E6E73', marginBottom: 8 }}>{profile.email}</p>
+          <h2 style={{ fontSize: 24, fontWeight: 700, color: 'inherit', marginBottom: 4 }}>{profile.name}</h2>
+          <p style={{ fontSize: 14, color: 'rgba(255,255,255,0.7)', marginBottom: 8 }}>{profile.email}</p>
           <div style={{ display: 'flex', gap: 8, justifyContent: 'center', flexWrap: 'wrap' }}>
-            <span style={{ padding: '4px 12px', borderRadius: 100, background: '#F5F5F7', fontSize: 12, fontWeight: 500, color: '#6E6E73' }}>
+            <span style={{ padding: '4px 12px', borderRadius: 100, background: 'rgba(255,255,255,0.15)', fontSize: 12, fontWeight: 500, color: 'rgba(255,255,255,0.9)' }}>
               Accuracy: {accuracy}%
             </span>
-            {profile.scholarship_eligible && <span style={{ padding: '4px 12px', borderRadius: 100, background: '#34C75915', fontSize: 12, fontWeight: 600, color: '#34C759' }}>✓ Scholarship Eligible</span>}
+            {profile.scholarship_eligible && <span style={{ padding: '4px 12px', borderRadius: 100, background: 'rgba(74,222,128,0.2)', fontSize: 12, fontWeight: 600, color: '#4ADE80' }}>✓ Scholarship Eligible</span>}
           </div>
         </motion.div>
 
         {/* Stats */}
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} style={{
-          background: '#fff', borderRadius: 20, padding: 28, border: '1px solid #E8E8ED',
+        <motion.div className="glass" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} style={{
+          borderRadius: 20, padding: 28,
         }}>
-          <h3 style={{ fontSize: 17, fontWeight: 600, color: '#1D1D1F', marginBottom: 20, textAlign: 'center' }}>Your Journey</h3>
+          <h3 style={{ fontSize: 17, fontWeight: 600, color: 'inherit', marginBottom: 20, textAlign: 'center' }}>Your Journey</h3>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
-            <div style={{ background: '#F5F5F7', borderRadius: 16, padding: 20, textAlign: 'center' }}>
-              <div style={{ fontSize: 28, fontWeight: 700, color: '#1D1D1F', marginBottom: 4 }}>{played}</div>
-              <div style={{ fontSize: 13, color: '#86868B', fontWeight: 500 }}>Rounds Played</div>
+            <div style={{ background: 'rgba(255,255,255,0.1)', borderRadius: 16, padding: 20, textAlign: 'center' }}>
+              <div style={{ fontSize: 28, fontWeight: 700, color: 'inherit', marginBottom: 4 }}>{played}</div>
+              <div style={{ fontSize: 13, color: 'rgba(255,255,255,0.7)', fontWeight: 500 }}>Rounds Played</div>
             </div>
-            <div style={{ background: '#F5F5F7', borderRadius: 16, padding: 20, textAlign: 'center' }}>
-              <div style={{ fontSize: 28, fontWeight: 700, color: '#1D1D1F', marginBottom: 4 }}>{correct}</div>
-              <div style={{ fontSize: 13, color: '#86868B', fontWeight: 500 }}>Questions Mastered</div>
+            <div style={{ background: 'rgba(255,255,255,0.1)', borderRadius: 16, padding: 20, textAlign: 'center' }}>
+              <div style={{ fontSize: 28, fontWeight: 700, color: 'inherit', marginBottom: 4 }}>{correct}</div>
+              <div style={{ fontSize: 13, color: 'rgba(255,255,255,0.7)', fontWeight: 500 }}>Questions Mastered</div>
             </div>
-            <div style={{ background: '#F5F5F7', borderRadius: 16, padding: 20, textAlign: 'center' }}>
-              <div style={{ fontSize: 28, fontWeight: 700, color: '#1D1D1F', marginBottom: 4 }}>{formatTime(time)}</div>
-              <div style={{ fontSize: 13, color: '#86868B', fontWeight: 500 }}>Time Spent</div>
+            <div style={{ background: 'rgba(255,255,255,0.1)', borderRadius: 16, padding: 20, textAlign: 'center' }}>
+              <div style={{ fontSize: 28, fontWeight: 700, color: 'inherit', marginBottom: 4 }}>{formatTime(time)}</div>
+              <div style={{ fontSize: 13, color: 'rgba(255,255,255,0.7)', fontWeight: 500 }}>Time Spent</div>
             </div>
-            <div style={{ background: '#F5F5F7', borderRadius: 16, padding: 20, textAlign: 'center' }}>
-              <div style={{ fontSize: 28, fontWeight: 700, color: '#1D1D1F', marginBottom: 4 }}>🔥 {streak}</div>
-              <div style={{ fontSize: 13, color: '#86868B', fontWeight: 500 }}>Current Streak</div>
+            <div style={{ background: 'rgba(255,255,255,0.1)', borderRadius: 16, padding: 20, textAlign: 'center' }}>
+              <div style={{ fontSize: 28, fontWeight: 700, color: 'inherit', marginBottom: 4 }}>🔥 {streak}</div>
+              <div style={{ fontSize: 13, color: 'rgba(255,255,255,0.7)', fontWeight: 500 }}>Current Streak</div>
             </div>
           </div>
         </motion.div>
