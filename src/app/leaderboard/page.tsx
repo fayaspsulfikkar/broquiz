@@ -91,7 +91,7 @@ export default function LeaderboardPage() {
         <div style={{ width: 80 }} />
       </nav>
 
-      <div style={{ maxWidth: 900, margin: '0 auto', padding: '24px 24px' }}>
+      <div style={{ maxWidth: 1200, margin: '0 auto', padding: '24px 24px' }}>
         {/* Loading */}
         {loading ? (
           <div style={{ textAlign: 'center', padding: 60, color: '#6E6E73' }}>Loading leaderboard...</div>
@@ -159,14 +159,14 @@ export default function LeaderboardPage() {
               <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', minWidth: 600 }}>
                 <thead>
                   <tr style={{ borderBottom: '1px solid #E8E8ED', background: '#FBFBFD' }}>
-                    <th style={{ padding: '16px 24px', fontSize: 11, fontWeight: 700, color: '#86868B', textTransform: 'uppercase', letterSpacing: '0.04em' }}>Rank</th>
-                    <th style={{ padding: '16px 24px', fontSize: 11, fontWeight: 700, color: '#86868B', textTransform: 'uppercase', letterSpacing: '0.04em' }}>Name</th>
-                    <th style={{ padding: '16px 24px', fontSize: 11, fontWeight: 700, color: '#86868B', textTransform: 'uppercase', letterSpacing: '0.04em' }}>Round</th>
-                    <th style={{ padding: '16px 24px', fontSize: 11, fontWeight: 700, color: '#86868B', textTransform: 'uppercase', letterSpacing: '0.04em' }}>Questions Mastered</th>
-                    <th style={{ padding: '16px 24px', fontSize: 11, fontWeight: 700, color: '#86868B', textTransform: 'uppercase', letterSpacing: '0.04em' }}>Wrong Answers</th>
-                    <th style={{ padding: '16px 24px', fontSize: 11, fontWeight: 700, color: '#86868B', textTransform: 'uppercase', letterSpacing: '0.04em' }}>Accuracy</th>
-                    <th style={{ padding: '16px 24px', fontSize: 11, fontWeight: 700, color: '#86868B', textTransform: 'uppercase', letterSpacing: '0.04em' }}>Avg Time / Q</th>
-                    <th style={{ padding: '16px 24px', fontSize: 11, fontWeight: 700, color: '#86868B', textTransform: 'uppercase', letterSpacing: '0.04em' }}>Streak</th>
+                    <th style={{ padding: '16px 16px', fontSize: 11, fontWeight: 700, color: '#86868B', textTransform: 'uppercase', letterSpacing: '0.04em' }}>Rank</th>
+                    <th style={{ padding: '16px 16px', fontSize: 11, fontWeight: 700, color: '#86868B', textTransform: 'uppercase', letterSpacing: '0.04em' }}>Name</th>
+                    <th style={{ padding: '16px 16px', fontSize: 11, fontWeight: 700, color: '#86868B', textTransform: 'uppercase', letterSpacing: '0.04em' }}>Round</th>
+                    <th style={{ padding: '16px 16px', fontSize: 11, fontWeight: 700, color: '#86868B', textTransform: 'uppercase', letterSpacing: '0.04em' }}>Questions Mastered</th>
+                    <th style={{ padding: '16px 16px', fontSize: 11, fontWeight: 700, color: '#86868B', textTransform: 'uppercase', letterSpacing: '0.04em' }}>Wrong Answers</th>
+                    <th style={{ padding: '16px 16px', fontSize: 11, fontWeight: 700, color: '#86868B', textTransform: 'uppercase', letterSpacing: '0.04em' }}>Accuracy</th>
+                    <th style={{ padding: '16px 16px', fontSize: 11, fontWeight: 700, color: '#86868B', textTransform: 'uppercase', letterSpacing: '0.04em' }}>Avg Time / Q</th>
+                    <th style={{ padding: '16px 16px', fontSize: 11, fontWeight: 700, color: '#86868B', textTransform: 'uppercase', letterSpacing: '0.04em' }}>Streak</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -184,10 +184,10 @@ export default function LeaderboardPage() {
                         onMouseEnter={(e) => e.currentTarget.style.background = isMe ? '#E0F0FF' : '#FBFBFD'}
                         onMouseLeave={(e) => e.currentTarget.style.background = isMe ? '#F0F7FF' : '#fff'}
                       >
-                        <td style={{ padding: '16px 24px', fontSize: 15, fontWeight: 700, color: '#86868B' }}>
+                        <td style={{ padding: '16px 16px', fontSize: 15, fontWeight: 700, color: '#86868B' }}>
                           {rank}
                         </td>
-                        <td style={{ padding: '16px 24px', display: 'flex', alignItems: 'center', gap: 12 }}>
+                        <td style={{ padding: '16px 16px', display: 'flex', alignItems: 'center', gap: 12 }}>
                           <div style={{
                             width: 32, height: 32, borderRadius: 16, background: '#E8E8ED',
                             display: 'flex', alignItems: 'center', justifyContent: 'center',
@@ -206,22 +206,22 @@ export default function LeaderboardPage() {
                             {u.fraud_detected && <span style={{ color: '#fff', marginLeft: 8, fontSize: 10, fontWeight: 700, background: '#FF3B30', padding: '2px 6px', borderRadius: 6, textTransform: 'uppercase' }}>FRAUD DETECTED</span>}
                           </div>
                         </td>
-                        <td style={{ padding: '16px 24px', fontSize: 14, fontWeight: 600, color: '#0071E3' }}>
+                        <td style={{ padding: '16px 16px', fontSize: 14, fontWeight: 600, color: '#0071E3' }}>
                           Round {u.total_rounds_played || 0}
                         </td>
-                        <td style={{ padding: '16px 24px', fontSize: 14, fontWeight: 600, color: '#1D1D1F' }}>
+                        <td style={{ padding: '16px 16px', fontSize: 14, fontWeight: 600, color: '#1D1D1F' }}>
                           {u.total_correct_answers}
                         </td>
-                        <td style={{ padding: '16px 24px', fontSize: 14, fontWeight: 500, color: '#FF3B30' }}>
+                        <td style={{ padding: '16px 16px', fontSize: 14, fontWeight: 500, color: '#FF3B30' }}>
                           {Math.max(0, (u.total_rounds_played * 10) - u.total_correct_answers)}
                         </td>
-                        <td style={{ padding: '16px 24px', fontSize: 14, color: '#6E6E73', fontWeight: 500 }}>
+                        <td style={{ padding: '16px 16px', fontSize: 14, color: '#6E6E73', fontWeight: 500 }}>
                           {getAccuracy(u)}%
                         </td>
-                        <td style={{ padding: '16px 24px', fontSize: 14, color: '#6E6E73', fontWeight: 500 }}>
+                        <td style={{ padding: '16px 16px', fontSize: 14, color: '#6E6E73', fontWeight: 500 }}>
                           {getAvgTime(u)}s
                         </td>
-                        <td style={{ padding: '16px 24px', fontSize: 14, fontWeight: 600, color: '#FF9F0A' }}>
+                        <td style={{ padding: '16px 16px', fontSize: 14, fontWeight: 600, color: '#FF9F0A' }}>
                           {u.streak_count} 🔥
                         </td>
                       </tr>
