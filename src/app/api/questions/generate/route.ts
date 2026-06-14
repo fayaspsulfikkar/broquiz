@@ -30,19 +30,23 @@ export async function POST(request: NextRequest) {
         where('status', '==', 'approved')
       );
       const snapshot = await getDocs(qQuery);
-      const cachedQuestions: Question[] = [];
+      const allQuestions: Question[] = [];
       snapshot.forEach((doc) => {
-        const q = { id: doc.id, ...doc.data() } as Question;
-        if (!seenIds.includes(q.id) && !seenIds.includes(q.hash)) {
-          cachedQuestions.push(q);
-        }
+        allQuestions.push({ id: doc.id, ...doc.data() } as Question);
       });
 
-      // Shuffle and pick 10 unused questions
-      const selected = shuffleArray(cachedQuestions).slice(0, QUESTIONS_PER_LEVEL);
+      // Sort globally by difficulty (easiest to hardest)
+      allQuestions.sort((a, b) => (a.difficulty || 1) - (b.difficulty || 1));
+
+      // Calculate round index (loops back every 26 rounds)
+      const roundsPlayed = profile.total_rounds_played || 0;
+      const roundIndex = roundsPlayed % 26;
       
-      // Sort by difficulty (easy to hard)
-      questions = selected.sort((a, b) => (a.difficulty || 1) - (b.difficulty || 1));
+      const startIndex = roundIndex * QUESTIONS_PER_LEVEL;
+      const endIndex = startIndex + QUESTIONS_PER_LEVEL;
+
+      // Slice the exact 10 questions for this round
+      questions = allQuestions.slice(startIndex, endIndex);
     } catch (e) {
       console.error('Error fetching cached questions:', e);
     }

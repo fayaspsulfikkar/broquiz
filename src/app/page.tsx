@@ -157,13 +157,13 @@ export default function LandingPage() {
           }}>
             <h3 style={{ fontSize: 15, fontWeight: 600, color: '#86868B', marginBottom: 16, textTransform: 'uppercase', letterSpacing: '0.05em' }}>Your Progress</h3>
             <div style={{ display: 'flex', alignItems: 'flex-end', gap: 8, marginBottom: 16 }}>
-              <span style={{ fontSize: 36, fontWeight: 700, color: '#1D1D1F', lineHeight: 1 }}>{profile.total_correct_answers || 0}</span>
-              <span style={{ fontSize: 16, color: '#6E6E73', paddingBottom: 4 }}>/ {MAX_QUESTIONS} Mastered</span>
+              <span style={{ fontSize: 36, fontWeight: 700, color: '#1D1D1F', lineHeight: 1 }}>{profile.total_rounds_played || 0}</span>
+              <span style={{ fontSize: 16, color: '#6E6E73', paddingBottom: 4 }}>/ 26 Rounds</span>
             </div>
             <div style={{ height: 8, background: '#F5F5F7', borderRadius: 4, overflow: 'hidden', marginBottom: 8 }}>
-              <div style={{ height: '100%', background: '#0071E3', width: `${progressPercent}%`, borderRadius: 4, transition: 'width 1s ease-out' }} />
+              <div style={{ height: '100%', background: '#0071E3', width: `${Math.min(100, ((profile.total_rounds_played || 0) / 26) * 100)}%`, borderRadius: 4, transition: 'width 1s ease-out' }} />
             </div>
-            <div style={{ fontSize: 13, color: '#86868B', textAlign: 'right' }}>{progressPercent}% Complete</div>
+            <div style={{ fontSize: 13, color: '#86868B', textAlign: 'right' }}>{profile.total_correct_answers || 0} Questions Mastered</div>
           </motion.div>
 
           {/* Streak Card */}
@@ -177,14 +177,33 @@ export default function LandingPage() {
           </motion.div>
         </div>
 
+        {/* Completion Badge */}
+        {(profile.total_rounds_played || 0) >= 26 && (
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} style={{
+            background: 'linear-gradient(135deg, #34C759 0%, #28A745 100%)', borderRadius: 20, padding: 24, marginBottom: 32,
+            color: '#fff', textAlign: 'center', boxShadow: '0 8px 24px rgba(52, 199, 89, 0.25)'
+          }}>
+            <div style={{ fontSize: 40, marginBottom: 12 }}>🎓</div>
+            <h3 style={{ fontSize: 20, fontWeight: 700, marginBottom: 8 }}>Curriculum Completed!</h3>
+            <p style={{ fontSize: 15, opacity: 0.9, lineHeight: 1.5 }}>
+              You have successfully learned the fundamentals of programming. There is a <strong>very high chance of you getting selected</strong>. Keep practicing to maintain your streak!
+            </p>
+          </motion.div>
+        )}
+
         {/* Start Quiz Action */}
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }} style={{ marginBottom: 40 }}>
           <button 
             className="btn-primary" 
             onClick={handleStart}
-            style={{ width: '100%', height: 64, fontSize: 20, borderRadius: 16, boxShadow: '0 8px 20px rgba(0, 113, 227, 0.24)' }}
+            style={{ width: '100%', height: 64, fontSize: 18, borderRadius: 16, boxShadow: '0 8px 20px rgba(0, 113, 227, 0.24)', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}
           >
-            Start Quiz Round →
+            <div style={{ fontWeight: 600 }}>
+              {(profile.total_rounds_played || 0) >= 26 ? 'Play Again from Round 1 →' : `Start Round ${(profile.total_rounds_played || 0) + 1} →`}
+            </div>
+            {(profile.total_rounds_played || 0) >= 26 && (
+              <div style={{ fontSize: 13, fontWeight: 400, opacity: 0.9, marginTop: 4 }}>Keep earning points</div>
+            )}
           </button>
         </motion.div>
 

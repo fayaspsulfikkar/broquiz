@@ -138,10 +138,10 @@ export default function LeaderboardPage() {
                       {u.anonymous_leaderboard ? 'Anonymous' : u.name?.split(' ')[0]}
                     </div>
                     <div style={{ fontSize: 16, fontWeight: 700, color: '#0071E3' }}>
-                      {u.total_correct_answers} Mastered
+                      Round {(u.total_rounds_played || 0) + 1}
                     </div>
                     <div style={{ fontSize: 11, color: '#86868B', marginTop: 4 }}>
-                      {getAccuracy(u)}% Acc • {u.streak_count}🔥
+                      {u.total_correct_answers} Mastered • {u.streak_count}🔥
                     </div>
                   </motion.div>
                 );
@@ -155,10 +155,10 @@ export default function LeaderboardPage() {
                   <tr style={{ borderBottom: '1px solid #E8E8ED', background: '#F5F5F7' }}>
                     <th style={{ padding: '16px', fontSize: 12, fontWeight: 600, color: '#86868B', textTransform: 'uppercase' }}>Rank</th>
                     <th style={{ padding: '16px', fontSize: 12, fontWeight: 600, color: '#86868B', textTransform: 'uppercase' }}>Name</th>
+                    <th style={{ padding: '16px', fontSize: 12, fontWeight: 600, color: '#86868B', textTransform: 'uppercase' }}>Round</th>
                     <th style={{ padding: '16px', fontSize: 12, fontWeight: 600, color: '#86868B', textTransform: 'uppercase' }}>Questions Mastered</th>
                     <th style={{ padding: '16px', fontSize: 12, fontWeight: 600, color: '#86868B', textTransform: 'uppercase' }}>Accuracy</th>
                     <th style={{ padding: '16px', fontSize: 12, fontWeight: 600, color: '#86868B', textTransform: 'uppercase' }}>Avg Time / Q</th>
-                    <th style={{ padding: '16px', fontSize: 12, fontWeight: 600, color: '#86868B', textTransform: 'uppercase' }}>Total Time</th>
                     <th style={{ padding: '16px', fontSize: 12, fontWeight: 600, color: '#86868B', textTransform: 'uppercase' }}>Streak</th>
                   </tr>
                 </thead>
@@ -195,6 +195,9 @@ export default function LeaderboardPage() {
                             {isMe && <span style={{ color: '#0071E3', marginLeft: 6, fontSize: 12 }}>You</span>}
                           </div>
                         </td>
+                        <td style={{ padding: '16px', fontSize: 15, fontWeight: 600, color: '#0071E3' }}>
+                          Round {(u.total_rounds_played || 0) + 1}
+                        </td>
                         <td style={{ padding: '16px', fontSize: 15, fontWeight: 600, color: '#1D1D1F' }}>
                           {u.total_correct_answers}
                         </td>
@@ -203,9 +206,6 @@ export default function LeaderboardPage() {
                         </td>
                         <td style={{ padding: '16px', fontSize: 14, color: '#6E6E73' }}>
                           {getAvgTime(u)}s
-                        </td>
-                        <td style={{ padding: '16px', fontSize: 14, color: '#6E6E73' }}>
-                          {formatTime(u.total_time_seconds)}
                         </td>
                         <td style={{ padding: '16px', fontSize: 14, fontWeight: 500, color: '#FF9F0A' }}>
                           {u.streak_count} 🔥
