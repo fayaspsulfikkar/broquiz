@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/lib/auth-context';
-import { collection, getDocs, query, orderBy, limit } from 'firebase/firestore';
+import { collection, getDocs, query, orderBy, limit, where } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useQuizStore } from '@/store/quiz-store';
