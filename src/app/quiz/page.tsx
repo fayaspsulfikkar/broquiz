@@ -7,6 +7,7 @@ import { useQuizStore } from '@/store/quiz-store';
 import { QUESTION_TYPE_LABELS } from '@/lib/constants';
 import { motion, AnimatePresence } from 'framer-motion';
 import type { ClientQuestion } from '@/types';
+import Spectator from '@/components/Spectator';
 
 function QuizContent() {
   const router = useRouter();
@@ -229,6 +230,7 @@ function QuizContent() {
 
   return (
     <div style={{ minHeight: '100vh', background: 'transparent' }}>
+      <Spectator />
       {/* Top Bar */}
       <div className="glass" style={{
         padding: '12px 24px', display: 'flex', alignItems: 'center', justifyContent: 'space-between',
