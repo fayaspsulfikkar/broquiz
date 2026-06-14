@@ -8,12 +8,12 @@
 
 /* --- Design Tokens --- */
 @theme {
-  --color-brand-primary: #000000;
-  --color-brand-accent: #0071E3;
-  --color-brand-accent-hover: #0077ED;
-  --color-brand-success: #34C759;
-  --color-brand-success-light: #34C75915;
-  --color-brand-warning: #FF9F0A;
+  --color-brand-primary: rgba(255, 255, 255, 0.2);
+  --color-brand-accent: rgba(255, 255, 255, 0.9);
+  --color-brand-accent-hover: #FFFFFF;
+  --color-brand-success: #4ADE80;
+  --color-brand-success-light: rgba(74, 222, 128, 0.15);
+  --color-brand-warning: #FBBF24;
   --color-brand-warning-light: #FF9F0A15;
   --color-brand-danger: #FF3B30;
   --color-brand-danger-light: #FF3B3015;
@@ -155,21 +155,23 @@
     gap: 8px;
     height: 44px;
     padding: 0 24px;
-    background: var(--color-brand-primary);
-    color: var(--color-text-inverse);
-    border: none;
+    background: rgba(255, 255, 255, 0.15);
+    color: #FFFFFF;
+    border: 1px solid rgba(255, 255, 255, 0.3);
     border-radius: var(--radius-md);
     font-size: 15px;
     font-weight: 500;
     cursor: pointer;
     transition: all 0.2s var(--ease-out-expo);
     white-space: nowrap;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
   }
 
   .btn-primary:hover {
-    background: #333;
+    background: rgba(255, 255, 255, 0.25);
     transform: translateY(-1px);
-    box-shadow: var(--shadow-md);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
   }
 
   .btn-primary:active {

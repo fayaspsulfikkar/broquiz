@@ -172,8 +172,9 @@ export default function LandingPage() {
         >
           <div style={{
             width: 64, height: 64, borderRadius: 16,
-            background: '#000', display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
-            color: '#fff', fontSize: 32, fontWeight: 700, marginBottom: 24,
+            background: 'rgba(255,255,255,0.2)', display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+            color: 'inherit', fontSize: 32, fontWeight: 700, marginBottom: 24,
+            border: '1px solid rgba(255,255,255,0.4)',
           }}>B</div>
           
           <h1 style={{
@@ -212,12 +213,12 @@ export default function LandingPage() {
           {profile.is_admin && (
             <button 
               onClick={() => router.push('/admin')}
-              style={{ color: '#FF3B30', fontSize: 14, fontWeight: 500, background: 'none', border: 'none', cursor: 'pointer' }}
+              style={{ color: 'rgba(255,255,255,0.8)', fontSize: 14, fontWeight: 500, background: 'none', border: 'none', cursor: 'pointer' }}
             >
               Admin Panel
             </button>
           )}
-          <button onClick={() => router.push('/profile')} style={{ background: 'none', border: 'none', color: '#0071E3', fontWeight: 500, cursor: 'pointer' }}>
+          <button onClick={() => router.push('/profile')} style={{ background: 'none', border: 'none', color: 'rgba(255,255,255,0.8)', fontWeight: 500, cursor: 'pointer' }}>
             Profile
           </button>
         </div>
@@ -297,7 +298,7 @@ export default function LandingPage() {
             <h3 style={{ fontSize: 18, fontWeight: 600, color: 'inherit' }}>Top Players</h3>
             <button 
               onClick={() => router.push('/leaderboard')}
-              style={{ background: 'none', border: 'none', color: '#0071E3', fontSize: 14, fontWeight: 500, cursor: 'pointer' }}
+              style={{ background: 'none', border: 'none', color: 'rgba(255,255,255,0.8)', fontSize: 14, fontWeight: 500, cursor: 'pointer' }}
             >
               View Full Leaderboard →
             </button>
@@ -312,25 +313,25 @@ export default function LandingPage() {
               {topUsers.map((u, idx) => (
                 <div key={u.uid} style={{ 
                   display: 'flex', alignItems: 'center', padding: '12px 16px', 
-                  background: u.uid === user.uid ? '#0071E308' : '#F5F5F7', 
-                  borderRadius: 12, border: u.uid === user.uid ? '1px solid #0071E330' : '1px solid transparent'
+                  background: u.uid === user.uid ? 'rgba(255,255,255,0.15)' : 'rgba(255,255,255,0.05)', 
+                  borderRadius: 12, border: '1px solid rgba(255,255,255,0.1)'
                 }}>
-                  <div style={{ width: 32, fontSize: 16, fontWeight: 700, color: idx < 3 ? '#0071E3' : '#86868B' }}>#{idx + 1}</div>
+                  <div style={{ width: 32, fontSize: 16, fontWeight: 700, color: idx < 3 ? '#4ADE80' : 'rgba(255,255,255,0.6)' }}>#{idx + 1}</div>
                   <div style={{ flex: 1 }}>
-                    <div style={{ fontSize: 15, fontWeight: 600, color: '#1D1D1F', display: 'flex', alignItems: 'center', gap: 6, flexWrap: 'wrap' }}>
+                    <div style={{ fontSize: 15, fontWeight: 600, color: 'inherit', display: 'flex', alignItems: 'center', gap: 6, flexWrap: 'wrap' }}>
                       {u.anonymous_leaderboard ? 'Anonymous Learner' : u.name}
-                      {u.uid === user.uid && <span style={{ fontSize: 10, background: '#0071E3', color: '#fff', padding: '2px 6px', borderRadius: 4 }}>YOU</span>}
+                      {u.uid === user.uid && <span style={{ fontSize: 10, background: 'rgba(255,255,255,0.2)', color: 'inherit', padding: '2px 6px', borderRadius: 4 }}>YOU</span>}
                       {u.fraud_detected && <span style={{ fontSize: 10, background: '#FF3B30', color: '#fff', padding: '2px 6px', borderRadius: 4, letterSpacing: '0.02em', textTransform: 'uppercase' }}>FRAUD DETECTED</span>}
                     </div>
                   </div>
                   <div style={{ textAlign: 'right', display: 'flex', gap: 16 }}>
                     <div>
-                      <div style={{ fontSize: 15, fontWeight: 700, color: '#1D1D1F' }}>{u.total_correct_answers}</div>
-                      <div style={{ fontSize: 11, color: '#86868B' }}>Mastered</div>
+                      <div style={{ fontSize: 15, fontWeight: 700, color: 'inherit' }}>{u.total_correct_answers}</div>
+                      <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.6)' }}>Mastered</div>
                     </div>
                     <div>
-                      <div style={{ fontSize: 15, fontWeight: 700, color: '#34C759' }}>{getAccuracy(u)}%</div>
-                      <div style={{ fontSize: 11, color: '#86868B' }}>Accuracy</div>
+                      <div style={{ fontSize: 15, fontWeight: 700, color: '#4ADE80' }}>{getAccuracy(u)}%</div>
+                      <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.6)' }}>Accuracy</div>
                     </div>
                   </div>
                 </div>
@@ -383,7 +384,7 @@ export default function LandingPage() {
                         <button 
                           onClick={(e) => { e.stopPropagation(); handleRetryRound(attempt.round_index || 0); }}
                           style={{ 
-                            background: '#0071E3', color: '#fff', border: 'none', borderRadius: 8, 
+                            background: 'rgba(255,255,255,0.2)', color: '#fff', border: '1px solid rgba(255,255,255,0.3)', borderRadius: 8, 
                             padding: '8px 16px', fontSize: 13, fontWeight: 600, cursor: 'pointer' 
                           }}
                         >

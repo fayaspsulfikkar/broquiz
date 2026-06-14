@@ -126,7 +126,7 @@ export default function AdminDashboard() {
         <h1 style={{ fontSize: 28, fontWeight: 700, color: 'inherit', letterSpacing: '-0.03em' }}>Admin Dashboard</h1>
         <button 
           onClick={resetAllUsers}
-          style={{ background: '#FF3B30', color: '#fff', border: 'none', borderRadius: 8, padding: '10px 20px', fontSize: 14, fontWeight: 600, cursor: 'pointer' }}
+          style={{ background: 'rgba(255, 59, 48, 0.2)', color: '#FF3B30', border: '1px solid rgba(255, 59, 48, 0.4)', borderRadius: 8, padding: '10px 20px', fontSize: 14, fontWeight: 600, cursor: 'pointer' }}
         >
           🚨 Reset ALL Users
         </button>
@@ -182,7 +182,7 @@ export default function AdminDashboard() {
                   <td style={{ padding: '16px' }}>
                     <button 
                       onClick={() => resetUser(u.uid)}
-                      style={{ background: 'transparent', color: '#FF3B30', border: '1px solid #FF3B3030', borderRadius: 6, padding: '6px 12px', fontSize: 12, fontWeight: 600, cursor: 'pointer' }}
+                      style={{ background: 'transparent', color: '#FF3B30', border: '1px solid rgba(255, 59, 48, 0.4)', borderRadius: 6, padding: '6px 12px', fontSize: 12, fontWeight: 600, cursor: 'pointer' }}
                     >
                       Reset Data
                     </button>
