@@ -83,8 +83,14 @@
   .card {
     background: var(--color-bg-card);
     border: 2px solid var(--color-border);
-    padding: 24px;
+    padding: 32px;
     box-shadow: none;
+    transition: transform 0.2s ease-out, box-shadow 0.2s ease-out;
+  }
+
+  .card:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: 4px 4px 0px rgba(0,0,0,0.05);
   }
 
   /* Primary Button (Dark Red) */
@@ -102,11 +108,19 @@
     font-weight: 700;
     text-transform: uppercase;
     cursor: pointer;
+    transition: transform 0.15s ease-out, box-shadow 0.15s ease-out, background 0.15s ease-out;
   }
 
   .btn-primary:hover {
     background: var(--color-text-primary);
     color: var(--color-text-inverse);
+    transform: translate(-3px, -3px);
+    box-shadow: 4px 4px 0px var(--color-brand-danger);
+  }
+
+  .btn-primary:active {
+    transform: translate(0px, 0px);
+    box-shadow: none;
   }
 
   .btn-primary:disabled {
@@ -131,11 +145,19 @@
     font-weight: 700;
     text-transform: uppercase;
     cursor: pointer;
+    transition: transform 0.15s ease-out, box-shadow 0.15s ease-out, background 0.15s ease-out;
   }
 
   .btn-secondary:hover {
-    background: var(--color-text-primary);
-    color: var(--color-text-inverse);
+    background: var(--color-bg-tertiary);
+    color: var(--color-text-primary);
+    transform: translate(-3px, -3px);
+    box-shadow: 4px 4px 0px var(--color-brand-accent);
+  }
+
+  .btn-secondary:active {
+    transform: translate(0px, 0px);
+    box-shadow: none;
   }
 
   /* Input */
@@ -149,10 +171,12 @@
     font-size: 16px;
     font-family: var(--font-sans);
     outline: none;
+    transition: border-color 0.2s ease-out, box-shadow 0.2s ease-out;
   }
 
   .input:focus {
     border-color: var(--color-brand-accent);
+    box-shadow: 0 0 0 3px rgba(29, 29, 31, 0.15);
   }
 
   .input::placeholder {
