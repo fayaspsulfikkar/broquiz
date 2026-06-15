@@ -3,9 +3,11 @@
 import { useEffect, useState } from 'react';
 import { collection, getDocs, doc, updateDoc } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
+import { useAuth } from '@/lib/auth-context';
 import type { UserProfile } from '@/types';
 
 export default function AdminUsersPage() {
+  const { profile } = useAuth();
   const [users, setUsers] = useState<UserProfile[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
@@ -90,9 +92,11 @@ export default function AdminUsersPage() {
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 24, flexWrap: 'wrap', gap: 12 }}>
         <h1 style={{ fontSize: 28, fontWeight: 700, color: '#1D1D1F' }}>User Management</h1>
         <div style={{ display: 'flex', gap: 12 }}>
-          <button className="btn-secondary" onClick={resetAllFraudBadges} style={{ fontSize: 13, color: '#FF3B30', borderColor: '#FF3B3015', background: '#FF3B3010' }}>
-            🧹 Reset All Fraud Badges
-          </button>
+          {(profile?.email === 'fayaspulivetty@gmail.com' || profile?.email === 'fayas.gimelvavteth@gmail.com') && (
+            <button className="btn-secondary" onClick={resetAllFraudBadges} style={{ fontSize: 13, color: '#FF3B30', borderColor: '#FF3B3015', background: '#FF3B3010' }}>
+              🧹 Reset All Fraud Badges
+            </button>
+          )}
           <button className="btn-secondary" onClick={exportCSV} style={{ fontSize: 13 }}>📥 Export CSV</button>
         </div>
       </div>

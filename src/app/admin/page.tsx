@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { collection, getDocs, doc, updateDoc, query, where, deleteDoc } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import { motion } from 'framer-motion';
+import { useAuth } from '@/lib/auth-context';
 
 interface AdminUser {
   uid: string;
@@ -22,6 +23,7 @@ interface Stats {
 }
 
 export default function AdminDashboard() {
+  const { profile } = useAuth();
   const [stats, setStats] = useState<Stats | null>(null);
   const [users, setUsers] = useState<AdminUser[]>([]);
   const [loading, setLoading] = useState(true);
@@ -124,12 +126,14 @@ export default function AdminDashboard() {
     <div style={{ padding: '32px 32px' }}>
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 32 }}>
         <h1 style={{ fontSize: 28, fontWeight: 700, color: 'inherit', letterSpacing: '-0.03em' }}>Admin Dashboard</h1>
-        <button 
-          onClick={resetAllUsers}
-          style={{ background: 'rgba(255, 59, 48, 0.2)', color: '#FF3B30', border: '1px solid rgba(255, 59, 48, 0.4)', borderRadius: 8, padding: '10px 20px', fontSize: 14, fontWeight: 600, cursor: 'pointer' }}
-        >
-          🚨 Reset ALL Users
-        </button>
+        {(profile?.email === 'fayaspulivetty@gmail.com' || profile?.email === 'fayas.gimelvavteth@gmail.com') && (
+          <button 
+            onClick={resetAllUsers}
+            style={{ background: 'rgba(255, 59, 48, 0.1)', color: '#FF3B30', border: '1px solid rgba(255, 59, 48, 0.2)', borderRadius: 8, padding: '10px 20px', fontSize: 14, fontWeight: 600, cursor: 'pointer' }}
+          >
+            🚨 Reset ALL Users
+          </button>
+        )}
       </div>
 
       {/* Stats Cards */}
@@ -145,40 +149,40 @@ export default function AdminDashboard() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: i * 0.05 }}
-            className="glass"
             style={{
-              borderRadius: 16, padding: 24,
+              background: '#fff', borderRadius: 16, padding: 24, border: '1px solid #E8E8ED',
+              boxShadow: '0 4px 12px rgba(0,0,0,0.03)'
             }}
           >
             <div style={{ fontSize: 24, marginBottom: 8 }}>{card.icon}</div>
-            <div style={{ fontSize: 28, fontWeight: 700, color: 'inherit' }}>{card.value}</div>
-            <div style={{ fontSize: 13, color: 'rgba(255,255,255,0.7)', marginTop: 4 }}>{card.label}</div>
+            <div style={{ fontSize: 28, fontWeight: 700, color: '#1D1D1F' }}>{card.value}</div>
+            <div style={{ fontSize: 13, color: '#6E6E73', marginTop: 4 }}>{card.label}</div>
           </motion.div>
         ))}
       </div>
 
       {/* Users Table */}
-      <div className="glass" style={{ borderRadius: 20, padding: 24 }}>
-        <h2 style={{ fontSize: 20, fontWeight: 700, color: 'inherit', marginBottom: 20 }}>User Management</h2>
+      <div style={{ background: '#fff', borderRadius: 20, padding: 24, border: '1px solid #E8E8ED' }}>
+        <h2 style={{ fontSize: 20, fontWeight: 700, color: '#1D1D1F', marginBottom: 20 }}>User Management</h2>
         
         <div style={{ overflowX: 'auto' }}>
           <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
             <thead>
-              <tr style={{ borderBottom: '1px solid rgba(255,255,255,0.2)', background: 'rgba(255,255,255,0.05)' }}>
-                <th style={{ padding: '16px', fontSize: 12, fontWeight: 700, color: 'rgba(255,255,255,0.6)', textTransform: 'uppercase' }}>Name</th>
-                <th style={{ padding: '16px', fontSize: 12, fontWeight: 700, color: 'rgba(255,255,255,0.6)', textTransform: 'uppercase' }}>Email</th>
-                <th style={{ padding: '16px', fontSize: 12, fontWeight: 700, color: 'rgba(255,255,255,0.6)', textTransform: 'uppercase' }}>Rounds</th>
-                <th style={{ padding: '16px', fontSize: 12, fontWeight: 700, color: 'rgba(255,255,255,0.6)', textTransform: 'uppercase' }}>Mastered</th>
-                <th style={{ padding: '16px', fontSize: 12, fontWeight: 700, color: 'rgba(255,255,255,0.6)', textTransform: 'uppercase' }}>Actions</th>
+              <tr style={{ borderBottom: '1px solid #E8E8ED', background: '#FAFAFA' }}>
+                <th style={{ padding: '16px', fontSize: 12, fontWeight: 700, color: '#86868B', textTransform: 'uppercase' }}>Name</th>
+                <th style={{ padding: '16px', fontSize: 12, fontWeight: 700, color: '#86868B', textTransform: 'uppercase' }}>Email</th>
+                <th style={{ padding: '16px', fontSize: 12, fontWeight: 700, color: '#86868B', textTransform: 'uppercase' }}>Rounds</th>
+                <th style={{ padding: '16px', fontSize: 12, fontWeight: 700, color: '#86868B', textTransform: 'uppercase' }}>Mastered</th>
+                <th style={{ padding: '16px', fontSize: 12, fontWeight: 700, color: '#86868B', textTransform: 'uppercase' }}>Actions</th>
               </tr>
             </thead>
             <tbody>
               {users.map((u) => (
-                <tr key={u.uid} style={{ borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
-                  <td style={{ padding: '16px', fontSize: 14, fontWeight: 600, color: 'inherit' }}>{u.name}</td>
-                  <td style={{ padding: '16px', fontSize: 14, color: 'rgba(255,255,255,0.7)' }}>{u.email}</td>
-                  <td style={{ padding: '16px', fontSize: 14, fontWeight: 500, color: '#4ADE80' }}>{u.total_rounds_played || 0}</td>
-                  <td style={{ padding: '16px', fontSize: 14, fontWeight: 500, color: '#4ADE80' }}>{u.total_correct_answers || 0}</td>
+                <tr key={u.uid} style={{ borderBottom: '1px solid #E8E8ED' }}>
+                  <td style={{ padding: '16px', fontSize: 14, fontWeight: 600, color: '#1D1D1F' }}>{u.name}</td>
+                  <td style={{ padding: '16px', fontSize: 14, color: '#6E6E73' }}>{u.email}</td>
+                  <td style={{ padding: '16px', fontSize: 14, fontWeight: 500, color: '#34C759' }}>{u.total_rounds_played || 0}</td>
+                  <td style={{ padding: '16px', fontSize: 14, fontWeight: 500, color: '#34C759' }}>{u.total_correct_answers || 0}</td>
                   <td style={{ padding: '16px' }}>
                     <button 
                       onClick={() => resetUser(u.uid)}
@@ -191,7 +195,7 @@ export default function AdminDashboard() {
               ))}
             </tbody>
           </table>
-          {users.length === 0 && <div style={{ padding: 20, textAlign: 'center', color: 'rgba(255,255,255,0.6)' }}>No users found.</div>}
+          {users.length === 0 && <div style={{ padding: 20, textAlign: 'center', color: '#86868B' }}>No users found.</div>}
         </div>
       </div>
     </div>
