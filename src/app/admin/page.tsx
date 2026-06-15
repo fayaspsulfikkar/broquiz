@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { collection, getDocs, doc, updateDoc, query, where, deleteDoc } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import { useAuth } from '@/lib/auth-context';
+import { useRouter } from 'next/navigation';
 
 interface AdminUser {
   uid: string;
@@ -22,6 +23,7 @@ interface Stats {
 }
 
 export default function AdminDashboard() {
+  const router = useRouter();
   const { profile } = useAuth();
   const [stats, setStats] = useState<Stats | null>(null);
   const [users, setUsers] = useState<AdminUser[]>([]);
@@ -46,6 +48,9 @@ export default function AdminDashboard() {
         totalQuestionsMastered += (d.total_correct_answers || 0);
         usersData.push({ uid: docSnap.id, ...d } as AdminUser);
       });
+
+      // Sort users by total_correct_answers descending to create an inline data leaderboard
+      usersData.sort((a, b) => (b.total_correct_answers || 0) - (a.total_correct_answers || 0));
 
       setUsers(usersData);
 
@@ -123,16 +128,26 @@ export default function AdminDashboard() {
 
   return (
     <div style={{ padding: '32px 32px' }}>
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 32 }}>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 32, flexWrap: 'wrap', gap: 16 }}>
         <h1 style={{ fontSize: 28, fontWeight: 700, color: 'inherit', letterSpacing: '-0.03em' }}>Admin Dashboard</h1>
-        {(profile?.email === 'fayaspulivetty@gmail.com' || profile?.email === 'fayas.gimelvavteth@gmail.com') && (
+        
+        <div style={{ display: 'flex', gap: 12 }}>
           <button 
-            onClick={resetAllUsers}
-            style={{ background: 'rgba(255, 59, 48, 0.1)', color: '#FF3B30', border: '1px solid rgba(255, 59, 48, 0.2)', borderRadius: 8, padding: '10px 20px', fontSize: 14, fontWeight: 600, cursor: 'pointer' }}
+            onClick={() => router.push('/leaderboard')}
+            style={{ background: 'var(--color-brand-accent)', color: 'var(--color-text-inverse)', border: 'none', borderRadius: 8, padding: '10px 20px', fontSize: 14, fontWeight: 600, cursor: 'pointer' }}
           >
-            🚨 Reset ALL Users
+            🏆 View Leaderboard
           </button>
-        )}
+          
+          {(profile?.email === 'fayaspulivetty@gmail.com' || profile?.email === 'fayas.gimelvavteth@gmail.com') && (
+            <button 
+              onClick={resetAllUsers}
+              style={{ background: 'rgba(255, 59, 48, 0.1)', color: '#FF3B30', border: '1px solid rgba(255, 59, 48, 0.2)', borderRadius: 8, padding: '10px 20px', fontSize: 14, fontWeight: 600, cursor: 'pointer' }}
+            >
+              🚨 Reset ALL
+            </button>
+          )}
+        </div>
       </div>
 
       {/* Stats Cards */}
