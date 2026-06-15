@@ -213,4 +213,24 @@
   .score-pass { color: var(--color-brand-accent); }
   .score-mid { color: var(--color-text-primary); }
   .score-fail { color: var(--color-text-primary); }
+
+  /* Mobile Responsive Sizing */
+  @media (max-width: 768px) {
+    .card {
+      padding: 20px !important;
+    }
+    .btn-primary, .btn-secondary, .input {
+      height: 42px !important;
+      font-size: 14px !important;
+      padding: 0 16px !important;
+    }
+    .code-block {
+      padding: 12px !important;
+      font-size: 12px !important;
+    }
+    .badge {
+      font-size: 10px !important;
+      padding: 2px 6px !important;
+    }
+  }
 }
