@@ -19,8 +19,8 @@ export default function FluidBackground() {
             SIM_RESOLUTION: 128,
             DYE_RESOLUTION: 1024,
             CAPTURE_RESOLUTION: 512,
-            DENSITY_DISSIPATION: 2.5, // Fast dissipation to look like smoke/fluid fading into dark
-            VELOCITY_DISSIPATION: 0.5,
+            DENSITY_DISSIPATION: 0.5, // Much slower dissipation so the fluid lingers and fills the screen
+            VELOCITY_DISSIPATION: 0.2,
             PRESSURE: 0.8,
             PRESSURE_ITERATIONS: 20,
             CURL: 30, // High curl for lots of swirling
