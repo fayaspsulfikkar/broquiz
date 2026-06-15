@@ -3,7 +3,6 @@
 import { useEffect, useState } from 'react';
 import { collection, getDocs } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
-import { motion } from 'framer-motion';
 
 interface AnalyticsData {
   dailyAttempts: Record<string, number>;
@@ -89,10 +88,7 @@ export default function AdminAnalyticsPage() {
                   <div key={topic} style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
                     <div style={{ width: 100, fontSize: 13, fontWeight: 500, color: '#1D1D1F' }}>{topic}</div>
                     <div style={{ flex: 1, height: 8, background: '#E8E8ED', borderRadius: 4 }}>
-                      <motion.div
-                        initial={{ width: 0 }}
-                        animate={{ width: `${rate}%` }}
-                        transition={{ duration: 0.8 }}
+                      <div
                         style={{
                           height: '100%', borderRadius: 4,
                           background: rate >= 70 ? '#34C759' : rate >= 40 ? '#FF9F0A' : '#FF3B30',

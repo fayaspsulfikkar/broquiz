@@ -5,7 +5,6 @@ import { useRouter } from 'next/navigation';
 import { useAuth } from '@/lib/auth-context';
 import { collection, getDocs, query, orderBy, limit } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
-import { motion } from 'framer-motion';
 
 interface LeaderboardUser {
   uid: string;
@@ -79,7 +78,7 @@ export default function LeaderboardPage() {
   return (
     <div style={{ minHeight: '100vh', background: 'transparent' }}>
       {/* Nav */}
-      <nav className="glass" style={{
+      <nav  style={{
         padding: '12px 24px', display: 'flex', alignItems: 'center', justifyContent: 'space-between',
         position: 'sticky', top: 0, zIndex: 10, border: 'none', borderRadius: 0
       }}>
@@ -107,12 +106,9 @@ export default function LeaderboardPage() {
                 const heights = { 1: 180, 2: 150, 3: 130 };
                 const medals = { 1: '🥇', 2: '🥈', 3: '🥉' };
                 return (
-                  <motion.div
+                  <div
                     key={u.uid}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: podiumIdx * 0.1 }}
-                    className="glass"
+                    
                     style={{
                       borderRadius: 16, padding: 20,
                       border: rank === 1 ? '2px solid #FFD700' : '1px solid rgba(255,255,255,0.2)',
@@ -149,13 +145,13 @@ export default function LeaderboardPage() {
                     <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.6)', marginTop: 4 }}>
                       {u.total_correct_answers} Mastered • {u.streak_count}🔥
                     </div>
-                  </motion.div>
+                  </div>
                 );
               })}
             </div>
 
             {/* Full List Table */}
-            <div className="glass" style={{ borderRadius: 16, border: '1px solid rgba(255,255,255,0.2)', overflowX: 'auto' }}>
+            <div  style={{ borderRadius: 16, border: '1px solid rgba(255,255,255,0.2)', overflowX: 'auto' }}>
               <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', minWidth: 600 }}>
                 <thead>
                   <tr style={{ borderBottom: '1px solid rgba(255,255,255,0.2)', background: 'rgba(255,255,255,0.05)' }}>

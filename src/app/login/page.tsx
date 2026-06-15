@@ -3,7 +3,6 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/lib/auth-context';
-import { motion } from 'framer-motion';
 
 export default function LoginPage() {
   const router = useRouter();
@@ -135,10 +134,8 @@ export default function LoginPage() {
         minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center',
         padding: 24,
       }}>
-        <motion.div
-          initial={{ opacity: 0, scale: 0.95 }}
-          animate={{ opacity: 1, scale: 1 }}
-          className="glass"
+        <div
+          
           style={{
             borderRadius: 20, padding: 48,
             maxWidth: 420, width: '100%', textAlign: 'center',
@@ -156,7 +153,7 @@ export default function LoginPage() {
           }}>
             Back to Sign In
           </button>
-        </motion.div>
+        </div>
       </div>
     );
   }
@@ -167,10 +164,8 @@ export default function LoginPage() {
         minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center',
         padding: 24,
       }}>
-        <motion.div
-          initial={{ opacity: 0, scale: 0.95 }}
-          animate={{ opacity: 1, scale: 1 }}
-          className="glass"
+        <div
+          
           style={{
             borderRadius: 20, padding: 'clamp(32px, 5vw, 48px)',
             maxWidth: 420, width: '100%',
@@ -204,7 +199,7 @@ export default function LoginPage() {
               {loading ? 'Saving...' : 'Start Quiz →'}
             </button>
           </form>
-        </motion.div>
+        </div>
       </div>
     );
   }
@@ -214,11 +209,8 @@ export default function LoginPage() {
       minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center',
       padding: 24,
     }}>
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-        className="glass"
+      <div
+        
         style={{
           borderRadius: 20, padding: 'clamp(32px, 5vw, 48px)',
           maxWidth: 420, width: '100%',
@@ -464,7 +456,7 @@ export default function LoginPage() {
             ← Back to home
           </button>
         </div>
-      </motion.div>
+      </div>
     </div>
   );
 }

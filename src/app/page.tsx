@@ -5,7 +5,6 @@ import { useRouter } from 'next/navigation';
 import { useAuth } from '@/lib/auth-context';
 import { collection, getDocs, query, orderBy, limit, where } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
-import { motion, AnimatePresence } from 'framer-motion';
 import { useQuizStore } from '@/store/quiz-store';
 import type { Attempt, Question } from '@/types';
 
@@ -160,11 +159,8 @@ export default function LandingPage() {
   if (!user || !profile) {
     return (
       <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-          className="glass"
+        <div
+          
           style={{
             borderRadius: 20, padding: 'clamp(32px, 5vw, 64px)',
             maxWidth: 600, width: '100%', margin: 24, textAlign: 'center',
@@ -196,7 +192,7 @@ export default function LandingPage() {
           >
             Login to Start →
           </button>
-        </motion.div>
+        </div>
       </div>
     );
   }
@@ -207,7 +203,7 @@ export default function LandingPage() {
   return (
     <div style={{ minHeight: '100vh' }}>
       {/* Header */}
-      <nav className="glass" style={{ padding: '12px 24px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', border: 'none', borderRadius: 0 }}>
+      <nav  style={{ padding: '12px 24px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', border: 'none', borderRadius: 0 }}>
         <h1 style={{ fontSize: 17, fontWeight: 700, color: 'inherit' }}>BroQuiz Dashboard</h1>
         <div style={{ display: 'flex', gap: 16 }}>
           {profile.is_admin && (
@@ -226,16 +222,16 @@ export default function LandingPage() {
 
       <div style={{ maxWidth: 800, margin: '0 auto', padding: '32px 24px' }}>
         {/* Welcome Section */}
-        <motion.div className="glass" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} style={{ marginBottom: 32, padding: 24, borderRadius: 20 }}>
+        <div  style={{ marginBottom: 32, padding: 24, borderRadius: 20 }}>
           <h2 style={{ fontSize: 28, fontWeight: 700, color: 'inherit', marginBottom: 8 }}>
             Welcome back, {profile.name?.split(' ')[0] || 'Bro'}! 👋
           </h2>
           <p style={{ color: 'rgba(255,255,255,0.8)', fontSize: 16 }}>Ready to master some code today?</p>
-        </motion.div>
+        </div>
 
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: 24, marginBottom: 32 }}>
           {/* Progress Card */}
-          <motion.div className="glass" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} style={{
+          <div  style={{
             borderRadius: 20, padding: 24,
           }}>
             <h3 style={{ fontSize: 15, fontWeight: 600, color: 'rgba(255,255,255,0.6)', marginBottom: 16, textTransform: 'uppercase', letterSpacing: '0.05em' }}>Your Progress</h3>
@@ -247,22 +243,22 @@ export default function LandingPage() {
               <div style={{ height: '100%', background: '#fff', width: `${Math.min(100, ((profile.total_rounds_played || 0) / 26) * 100)}%`, borderRadius: 4, transition: 'width 1s ease-out', boxShadow: '0 0 10px rgba(255,255,255,0.8)' }} />
             </div>
             <div style={{ fontSize: 13, color: 'rgba(255,255,255,0.6)', textAlign: 'right' }}>{profile.total_correct_answers || 0} Questions Mastered</div>
-          </motion.div>
+          </div>
 
           {/* Streak Card */}
-          <motion.div className="glass" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} style={{
+          <div  style={{
             borderRadius: 20, padding: 24,
             display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center'
           }}>
             <div style={{ fontSize: 48, marginBottom: 8 }}>🔥</div>
             <div style={{ fontSize: 24, fontWeight: 700, color: 'inherit' }}>{profile.streak_count || 0} Day Streak</div>
             <div style={{ fontSize: 14, color: 'rgba(255,255,255,0.8)', marginTop: 4 }}>Keep coming back to climb the ranks!</div>
-          </motion.div>
+          </div>
         </div>
 
         {/* Completion Badge */}
         {(profile.total_rounds_played || 0) >= 26 && (
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} style={{
+          <div style={{
             background: 'linear-gradient(135deg, #34C759 0%, #28A745 100%)', borderRadius: 20, padding: 24, marginBottom: 32,
             color: '#fff', textAlign: 'center', boxShadow: '0 8px 24px rgba(52, 199, 89, 0.25)'
           }}>
@@ -271,11 +267,11 @@ export default function LandingPage() {
             <p style={{ fontSize: 15, opacity: 0.9, lineHeight: 1.5 }}>
               You have successfully learned the fundamentals of programming. There is a <strong>very high chance of you getting selected</strong>. Keep practicing to maintain your streak!
             </p>
-          </motion.div>
+          </div>
         )}
 
         {/* Start Quiz Action */}
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }} style={{ marginBottom: 40 }}>
+        <div style={{ marginBottom: 40 }}>
           <button 
             className="btn-primary" 
             onClick={handleStart}
@@ -288,10 +284,10 @@ export default function LandingPage() {
               <div style={{ fontSize: 13, fontWeight: 400, opacity: 0.9, marginTop: 4 }}>Keep earning points</div>
             )}
           </button>
-        </motion.div>
+        </div>
 
         {/* Top 5 Leaderboard Preview */}
-        <motion.div className="glass" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }} style={{
+        <div  style={{
           borderRadius: 20, padding: 24,
         }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 20 }}>
@@ -338,10 +334,10 @@ export default function LandingPage() {
               ))}
             </div>
           )}
-        </motion.div>
+        </div>
 
         {/* Round History */}
-        <motion.div className="glass" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5 }} style={{
+        <div  style={{
           borderRadius: 20, padding: 24, marginTop: 32
         }}>
           <h3 style={{ fontSize: 18, fontWeight: 600, color: 'inherit', marginBottom: 20 }}>Round History</h3>
@@ -394,12 +390,9 @@ export default function LandingPage() {
                     </div>
 
                     {/* Expanded Questions */}
-                    <AnimatePresence>
+                    
                       {isExpanded && (
-                        <motion.div
-                          initial={{ height: 0, opacity: 0 }}
-                          animate={{ height: 'auto', opacity: 1 }}
-                          exit={{ height: 0, opacity: 0 }}
+                        <div
                           style={{ borderTop: '1px solid rgba(255,255,255,0.2)', background: 'rgba(0,0,0,0.2)' }}
                         >
                           <div style={{ padding: 20 }}>
@@ -447,15 +440,15 @@ export default function LandingPage() {
                               </div>
                             )}
                           </div>
-                        </motion.div>
+                        </div>
                       )}
-                    </AnimatePresence>
+                    
                   </div>
                 );
               })}
             </div>
           )}
-        </motion.div>
+        </div>
       </div>
     </div>
   );

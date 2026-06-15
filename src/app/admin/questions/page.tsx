@@ -5,7 +5,6 @@ import { collection, getDocs, doc, setDoc, updateDoc, deleteDoc, writeBatch } fr
 import { db } from '@/lib/firebase';
 import { QUESTION_TYPE_LABELS } from '@/lib/constants';
 import type { Question } from '@/types';
-import { motion, AnimatePresence } from 'framer-motion';
 
 export default function AdminQuestionsPage() {
   const [questions, setQuestions] = useState<Question[]>([]);
@@ -271,16 +270,13 @@ export default function AdminQuestionsPage() {
       )}
 
       {/* Modal */}
-      <AnimatePresence>
+      
         {isModalOpen && editingQuestion && (
           <div style={{
             position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)', zIndex: 100,
             display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 24,
           }}>
-            <motion.div
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.95 }}
+            <div
               style={{
                 background: '#fff', borderRadius: 16, width: '100%', maxWidth: 600,
                 maxHeight: '90vh', display: 'flex', flexDirection: 'column',
@@ -379,10 +375,10 @@ export default function AdminQuestionsPage() {
                   {isSaving ? 'Saving...' : 'Save Question'}
                 </button>
               </div>
-            </motion.div>
+            </div>
           </div>
         )}
-      </AnimatePresence>
+      
     </div>
   );
 }

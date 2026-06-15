@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useEffect, useState, useRef } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
 
 type SpectatorState = 'idle' | 'moving' | 'suspicious' | 'angry';
 
@@ -170,57 +169,26 @@ export default function Spectator() {
   const pupilColor = isMad ? '#000' : '#fff';
 
   return (
-    <motion.div
+    <div
       style={{
         position: 'fixed',
         left: 0,
         top: 0,
         zIndex: 100, // Floats above everything
         pointerEvents: 'none', // Don't block clicks on answers
-        filter: 'drop-shadow(0px 8px 16px rgba(0,0,0,0.4))'
-      }}
-      animate={{
-        x: target.x,
-        y: target.y,
-        scaleX: facingLeft ? -1 : 1, // Flip character
-      }}
-      transition={{
-        // Smooth but quick spring for cursor swooping, gentler spring for roaming
-        x: { type: "spring", stiffness: isMad ? 60 : 25, damping: isMad ? 12 : 20, mass: 1 },
-        y: { type: "spring", stiffness: isMad ? 60 : 25, damping: isMad ? 12 : 20, mass: 1 },
-      }}
-      onUpdate={(latest) => {
-        // Track current position for orientation calculations
-        const currentX = latest.x;
-        const currentY = latest.y;
-        if (typeof currentX === 'number' && typeof currentY === 'number') {
-          setPosition({ x: currentX, y: currentY });
-        }
+        transform: `translate(${target.x}px, ${target.y}px) scaleX(${facingLeft ? -1 : 1})`,
       }}
     >
       {/* Container squashes and breathes */}
-      <motion.div 
-        style={{ position: 'relative', width: 80, height: 80, transform: facingLeft ? 'scaleX(-1)' : 'scaleX(1)', pointerEvents: 'auto', cursor: 'grab' }}
+      <div 
+        style={{ position: 'relative', width: 80, height: 80, pointerEvents: 'auto', cursor: 'grab' }}
         onMouseEnter={handlePoke}
         onClick={handlePoke}
-        animate={
-          state === 'moving' ? { scaleY: [1, 0.95, 1], scaleX: [1, 1.05, 1] } : 
-          state === 'angry' ? { scaleY: [1, 0.95, 1.05, 1], x: [-1.5, 1.5, -1.5, 1.5, 0] } : 
-          { scaleY: [1, 0.98, 1] } // gentle breathing when idle
-        }
-        transition={{
-          repeat: Infinity,
-          duration: state === 'moving' ? 1.5 : state === 'angry' ? 0.6 : 3,
-          ease: "easeInOut"
-        }}
       >
         {/* Speech Bubble */}
-        <AnimatePresence>
+        
           {speech && (
-            <motion.div
-              initial={{ opacity: 0, y: 10, scale: 0.8 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.8 }}
+            <div
               style={{
                 position: 'absolute',
                 top: -55,
@@ -248,18 +216,16 @@ export default function Spectator() {
                 background: isMad ? '#FF3B30' : '#fff',
                 transform: 'rotate(45deg)',
               }} />
-            </motion.div>
+            </div>
           )}
-        </AnimatePresence>
+        
 
         {/* High-Tech Drone SVG (2D) */}
         <svg viewBox="0 0 100 120" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ width: '100%', height: '100%' }}>
           {/* Antenna */}
           <path d="M 50 20 L 50 5" stroke={bodyColor} strokeWidth="3" strokeLinecap="round" />
-          <motion.circle 
-            cx="50" cy="5" r="4" fill={isMad ? '#FF3B30' : '#00C7FF'} 
-            animate={{ opacity: [0.4, 1, 0.4] }}
-            transition={{ repeat: Infinity, duration: 1 }}
+          <circle 
+            cx="50" cy="5" r="4" fill={isMad ? '#FF3B30' : '#00C7FF'}
           />
           
           {/* Main Chassis */}
@@ -306,19 +272,13 @@ export default function Spectator() {
           {/* Thruster Nozzle */}
           <path d="M 40 80 L 60 80 L 55 90 L 45 90 Z" fill="#1D1D1F" />
 
-          {/* Thruster Flame (Animated) */}
-          <motion.path 
+          {/* Thruster Flame (Static) */}
+          <path 
             d="M 45 90 C 45 100 50 120 50 120 C 50 120 55 100 55 90 Z" 
             fill={isMad ? '#FF3B30' : '#00C7FF'}
-            animate={{ 
-              scaleY: state === 'moving' ? [1, 1.4, 1] : [0.8, 1.1, 0.8],
-              opacity: state === 'moving' ? [0.8, 1, 0.8] : [0.4, 0.8, 0.4]
-            }}
-            transition={{ repeat: Infinity, duration: state === 'moving' ? 0.08 : 0.3 }}
-            style={{ transformOrigin: '50% 90px' }}
           />
         </svg>
-      </motion.div>
-    </motion.div>
+      </div>
+    </div>
   );
 }

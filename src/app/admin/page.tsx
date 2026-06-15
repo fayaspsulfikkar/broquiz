@@ -3,7 +3,6 @@
 import { useEffect, useState } from 'react';
 import { collection, getDocs, doc, updateDoc, query, where, deleteDoc } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
-import { motion } from 'framer-motion';
 import { useAuth } from '@/lib/auth-context';
 
 interface AdminUser {
@@ -144,11 +143,8 @@ export default function AdminDashboard() {
           { label: 'Questions Mastered', value: stats.totalQuestionsMastered, icon: '🧠', color: '#FF9F0A' },
           { label: 'Scholarship Eligible', value: stats.scholarshipEligible, icon: '🏆', color: '#34C759' },
         ].map((card, i) => (
-          <motion.div
+          <div
             key={card.label}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: i * 0.05 }}
             style={{
               background: '#fff', borderRadius: 16, padding: 24, border: '1px solid #E8E8ED',
               boxShadow: '0 4px 12px rgba(0,0,0,0.03)'
@@ -157,7 +153,7 @@ export default function AdminDashboard() {
             <div style={{ fontSize: 24, marginBottom: 8 }}>{card.icon}</div>
             <div style={{ fontSize: 28, fontWeight: 700, color: '#1D1D1F' }}>{card.value}</div>
             <div style={{ fontSize: 13, color: '#6E6E73', marginTop: 4 }}>{card.label}</div>
-          </motion.div>
+          </div>
         ))}
       </div>
 

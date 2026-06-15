@@ -4,7 +4,6 @@ import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/lib/auth-context';
 import { useUserStore } from '@/store/user-store';
-import { motion } from 'framer-motion';
 
 export default function ProfilePage() {
   const router = useRouter();
@@ -38,7 +37,7 @@ export default function ProfilePage() {
 
   return (
     <div style={{ minHeight: '100vh', background: 'transparent' }}>
-      <nav className="glass" style={{ borderBottom: 'none', padding: '12px 24px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderRadius: 0 }}>
+      <nav  style={{ borderBottom: 'none', padding: '12px 24px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderRadius: 0 }}>
         <button onClick={() => router.push('/')} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'rgba(255,255,255,0.8)', fontSize: 14, fontWeight: 500 }}>← Home</button>
         <h1 style={{ fontSize: 17, fontWeight: 700, color: 'inherit' }}>Profile</h1>
         <div style={{ width: 80 }} />
@@ -46,7 +45,7 @@ export default function ProfilePage() {
 
       <div style={{ maxWidth: 600, margin: '0 auto', padding: '32px 24px' }}>
         {/* Profile Header */}
-        <motion.div className="glass" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} style={{
+        <div  style={{
           borderRadius: 20, padding: 32, textAlign: 'center', marginBottom: 24,
         }}>
           <div style={{
@@ -63,10 +62,10 @@ export default function ProfilePage() {
             </span>
             {profile.scholarship_eligible && <span style={{ padding: '4px 12px', borderRadius: 100, background: 'rgba(74,222,128,0.2)', fontSize: 12, fontWeight: 600, color: '#4ADE80' }}>✓ Scholarship Eligible</span>}
           </div>
-        </motion.div>
+        </div>
 
         {/* Stats */}
-        <motion.div className="glass" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} style={{
+        <div  style={{
           borderRadius: 20, padding: 28,
         }}>
           <h3 style={{ fontSize: 17, fontWeight: 600, color: 'inherit', marginBottom: 20, textAlign: 'center' }}>Your Journey</h3>
@@ -88,7 +87,7 @@ export default function ProfilePage() {
               <div style={{ fontSize: 13, color: 'rgba(255,255,255,0.7)', fontWeight: 500 }}>Current Streak</div>
             </div>
           </div>
-        </motion.div>
+        </div>
 
 
       </div>

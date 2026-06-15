@@ -5,7 +5,6 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { useAuth } from '@/lib/auth-context';
 import { useQuizStore } from '@/store/quiz-store';
 import { QUESTION_TYPE_LABELS } from '@/lib/constants';
-import { motion, AnimatePresence } from 'framer-motion';
 import type { ClientQuestion } from '@/types';
 import Spectator from '@/components/Spectator';
 
@@ -191,9 +190,7 @@ function QuizContent() {
   if (isLoading) {
     return (
       <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 16 }}>
-        <motion.div
-          animate={{ rotate: 360 }}
-          transition={{ repeat: Infinity, duration: 1, ease: 'linear' }}
+        <div
           style={{ width: 32, height: 32, border: '3px solid #E8E8ED', borderTopColor: '#000', borderRadius: '50%' }}
         />
         <p style={{ fontSize: 15, color: '#6E6E73' }}>Generating your unique questions...</p>
@@ -232,7 +229,7 @@ function QuizContent() {
     <div style={{ minHeight: '100vh', background: 'transparent' }}>
       <Spectator />
       {/* Top Bar */}
-      <div className="glass" style={{
+      <div  style={{
         padding: '12px 24px', display: 'flex', alignItems: 'center', justifyContent: 'space-between',
         position: 'sticky', top: 0, zIndex: 50, border: 'none', borderRadius: 0
       }}>
@@ -248,10 +245,8 @@ function QuizContent() {
         {/* Global Progress */}
         <div style={{ flex: 1, maxWidth: 400, margin: '0 24px' }}>
           <div style={{ width: '100%', height: 6, background: 'rgba(255,255,255,0.2)', borderRadius: 3, overflow: 'hidden' }}>
-            <motion.div
+            <div
               style={{ height: '100%', background: '#fff', borderRadius: 3, boxShadow: '0 0 10px rgba(255,255,255,0.8)' }}
-              animate={{ width: `${Math.min(100, globalProgress)}%` }}
-              transition={{ duration: 0.5 }}
             />
           </div>
         </div>
@@ -298,14 +293,10 @@ function QuizContent() {
         onContextMenu={(e) => e.preventDefault()}
         onCopy={(e) => { e.preventDefault(); alert("Copying is disabled during the quiz."); }}
       >
-        <AnimatePresence mode="wait">
-          <motion.div
+        
+          <div
             key={currentQuestion.id}
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: -20 }}
-            transition={{ duration: 0.25 }}
-            className="glass"
+            
             style={{
               borderRadius: 20, padding: 'clamp(24px, 4vw, 36px)'
             }}
@@ -338,8 +329,8 @@ function QuizContent() {
               currentAnswer={currentAnswer?.answer}
               onAnswer={(answer) => setAnswer(currentQuestion.id, answer)}
             />
-          </motion.div>
-        </AnimatePresence>
+          </div>
+        
 
         {/* Action Bar */}
         <div style={{
@@ -387,12 +378,9 @@ function QuizContent() {
       </div>
 
       {/* Submit Confirmation Modal */}
-      <AnimatePresence>
+      
         {showConfirm && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
+          <div
             style={{
               position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.4)',
               display: 'flex', alignItems: 'center', justifyContent: 'center',
@@ -400,12 +388,9 @@ function QuizContent() {
             }}
             onClick={() => setShowConfirm(false)}
           >
-            <motion.div
-              initial={{ scale: 0.95 }}
-              animate={{ scale: 1 }}
-              exit={{ scale: 0.95 }}
+            <div
               onClick={(e) => e.stopPropagation()}
-              className="glass"
+              
               style={{
                 borderRadius: 20, padding: 36,
                 maxWidth: 420, width: '100%', textAlign: 'center',
@@ -423,29 +408,23 @@ function QuizContent() {
                   {isSubmitting ? 'Submitting...' : 'Confirm Submit'}
                 </button>
               </div>
-            </motion.div>
-          </motion.div>
+            </div>
+          </div>
         )}
-      </AnimatePresence>
+      
 
       {/* Fraud Warning Modal */}
-      <AnimatePresence>
+      
         {showFraudModal && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
+          <div
             style={{
               position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.6)',
               display: 'flex', alignItems: 'center', justifyContent: 'center',
               padding: 24, zIndex: 100, backdropFilter: 'blur(4px)'
             }}
           >
-            <motion.div
-              initial={{ scale: 0.95, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.95, opacity: 0 }}
-              className="glass"
+            <div
+              
               style={{
                 borderRadius: 24, padding: 32,
                 maxWidth: 400, width: '100%', textAlign: 'center',
@@ -467,10 +446,10 @@ function QuizContent() {
               >
                 I Understand
               </button>
-            </motion.div>
-          </motion.div>
+            </div>
+          </div>
         )}
-      </AnimatePresence>
+      
     </div>
   );
 }
@@ -497,7 +476,7 @@ function QuestionAnswerArea({
               <button
                 key={i}
                 onClick={() => onAnswer(option)}
-                className="glass"
+                
                 style={{
                   textAlign: 'left',
                   padding: '14px 18px', borderRadius: 12,
@@ -542,7 +521,7 @@ function QuestionAnswerArea({
                       : [...selectedOptions, option];
                     onAnswer(newSelection);
                   }}
-                  className="glass"
+                  
                   style={{
                     textAlign: 'left',
                     padding: '14px 18px', borderRadius: 12,
@@ -582,7 +561,7 @@ function QuestionAnswerArea({
             value={(currentAnswer as string) || ''}
             onChange={(e) => onAnswer(e.target.value)}
             placeholder="Type your answer..."
-            className="input glass"
+            className="input "
             style={{
               fontFamily: 'var(--font-mono)',
               fontSize: 16,

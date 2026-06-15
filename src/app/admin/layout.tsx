@@ -32,7 +32,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   }
 
   return (
-    <div style={{ display: 'flex', minHeight: '100vh', background: '#F5F5F7' }}>
+    <div style={{ display: 'flex', minHeight: '100vh', background: '#F5F5F7', color: '#1D1D1F' }}>
       {/* Sidebar */}
       <aside style={{
         width: sidebarOpen ? 240 : 60, background: '#fff',

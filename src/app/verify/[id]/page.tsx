@@ -5,7 +5,6 @@ import { useParams, useRouter } from 'next/navigation';
 import { doc, getDoc } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import type { Certificate } from '@/types';
-import { motion } from 'framer-motion';
 
 export default function VerifyPage() {
   const params = useParams();
@@ -43,7 +42,7 @@ export default function VerifyPage() {
   if (error || !cert) {
     return (
       <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 24 }}>
-        <div className="glass" style={{ padding: 48, borderRadius: 24, textAlign: 'center', maxWidth: 400 }}>
+        <div  style={{ padding: 48, borderRadius: 24, textAlign: 'center', maxWidth: 400 }}>
           <div style={{ fontSize: 48, marginBottom: 16 }}>⚠️</div>
           <h1 style={{ fontSize: 24, fontWeight: 700, color: 'inherit', marginBottom: 8 }}>Invalid Certificate</h1>
           <p style={{ fontSize: 15, color: 'rgba(255,255,255,0.7)', marginBottom: 24 }}>This certificate ID could not be found or has been revoked.</p>
@@ -59,10 +58,8 @@ export default function VerifyPage() {
 
   return (
     <div style={{ minHeight: '100vh', padding: '40px 24px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="glass"
+      <div
+        
         style={{
           borderRadius: 24, padding: 48, width: '100%', maxWidth: 600,
           textAlign: 'center',
@@ -105,7 +102,7 @@ export default function VerifyPage() {
         </div>
 
         <button className="btn-secondary" onClick={() => router.push('/')}>Explore CodIQ</button>
-      </motion.div>
+      </div>
     </div>
   );
 }

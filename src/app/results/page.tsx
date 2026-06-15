@@ -6,7 +6,6 @@ import { useAuth } from '@/lib/auth-context';
 import { useQuizStore } from '@/store/quiz-store';
 import { QUESTION_TYPE_LABELS } from '@/lib/constants';
 import { getScoreHexColor } from '@/lib/scoring';
-import { motion, AnimatePresence } from 'framer-motion';
 
 export default function ResultsPage() {
   const router = useRouter();
@@ -70,10 +69,8 @@ export default function ResultsPage() {
         </button>
 
         {/* Score Card */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="glass"
+        <div
+          
           style={{
             borderRadius: 24, padding: 'clamp(32px, 5vw, 48px)',
             textAlign: 'center', marginBottom: 24,
@@ -87,13 +84,10 @@ export default function ResultsPage() {
           <div style={{ position: 'relative', display: 'inline-block', marginBottom: 24 }}>
             <svg width="200" height="200" viewBox="0 0 200 200">
               <circle cx="100" cy="100" r={radius} fill="none" stroke="rgba(255,255,255,0.1)" strokeWidth="8" />
-              <motion.circle
+              <circle
                 cx="100" cy="100" r={radius} fill="none"
                 stroke={scoreColor} strokeWidth="8" strokeLinecap="round"
                 strokeDasharray={circumference}
-                initial={{ strokeDashoffset: circumference }}
-                animate={{ strokeDashoffset }}
-                transition={{ duration: 1.5, ease: [0.16, 1, 0.3, 1] }}
                 transform="rotate(-90 100 100)"
               />
             </svg>
@@ -113,19 +107,19 @@ export default function ResultsPage() {
             display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(100px, 1fr))',
             gap: 16, marginBottom: 24,
           }}>
-            <div className="glass" style={{ borderRadius: 12, padding: 14 }}>
+            <div  style={{ borderRadius: 12, padding: 14 }}>
               <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.6)', marginBottom: 4 }}>Accuracy</div>
               <div style={{ fontSize: 20, fontWeight: 600, color: 'inherit' }}>{results.accuracy_percentage}%</div>
             </div>
-            <div className="glass" style={{ background: 'rgba(74, 222, 128, 0.15)', borderRadius: 12, padding: 14, borderColor: 'rgba(74, 222, 128, 0.3)' }}>
+            <div  style={{ background: 'rgba(74, 222, 128, 0.15)', borderRadius: 12, padding: 14, borderColor: 'rgba(74, 222, 128, 0.3)' }}>
               <div style={{ fontSize: 11, color: '#4ADE80', marginBottom: 4 }}>Correct</div>
               <div style={{ fontSize: 20, fontWeight: 600, color: '#4ADE80' }}>{results.score}</div>
             </div>
-            <div className="glass" style={{ background: 'rgba(248, 113, 113, 0.15)', borderRadius: 12, padding: 14, borderColor: 'rgba(248, 113, 113, 0.3)' }}>
+            <div  style={{ background: 'rgba(248, 113, 113, 0.15)', borderRadius: 12, padding: 14, borderColor: 'rgba(248, 113, 113, 0.3)' }}>
               <div style={{ fontSize: 11, color: '#F87171', marginBottom: 4 }}>Wrong</div>
               <div style={{ fontSize: 20, fontWeight: 600, color: '#F87171' }}>{results.wrong_count}</div>
             </div>
-            <div className="glass" style={{ borderRadius: 12, padding: 14 }}>
+            <div  style={{ borderRadius: 12, padding: 14 }}>
               <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.6)', marginBottom: 4 }}>Time Taken</div>
               <div style={{ fontSize: 20, fontWeight: 600, color: 'inherit' }}>{formatDuration(results.duration_seconds)}</div>
             </div>
@@ -154,14 +148,11 @@ export default function ResultsPage() {
               Share on LinkedIn
             </button>
           </div>
-        </motion.div>
+        </div>
 
         {/* Answer Review */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.5 }}
-          className="glass"
+        <div
+          
           style={{
             borderRadius: 20, padding: 28,
             marginBottom: 24,
@@ -206,12 +197,9 @@ export default function ResultsPage() {
                   </div>
                 </button>
 
-                <AnimatePresence>
+                
                   {expandedQ === r.question_id && (
-                    <motion.div
-                      initial={{ height: 0, opacity: 0 }}
-                      animate={{ height: 'auto', opacity: 1 }}
-                      exit={{ height: 0, opacity: 0 }}
+                    <div
                       style={{ overflow: 'hidden' }}
                     >
                       <div style={{ padding: '16px 18px', borderLeft: '2px solid rgba(255,255,255,0.2)', marginLeft: 14, marginTop: 8 }}>
@@ -241,13 +229,13 @@ export default function ResultsPage() {
                           </div>
                         )}
                       </div>
-                    </motion.div>
+                    </div>
                   )}
-                </AnimatePresence>
+                
               </div>
             ))}
           </div>
-        </motion.div>
+        </div>
       </div>
     </div>
   );
