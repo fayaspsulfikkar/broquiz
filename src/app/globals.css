@@ -43,6 +43,13 @@
     box-sizing: border-box;
   }
 
+  /* Hide default cursor only on devices that have a precise pointing device (mouse) */
+  @media (pointer: fine) {
+    * {
+      cursor: none !important;
+    }
+  }
+
   @keyframes bg-scrolling-reverse {
     100% { background-position: 50px 50px; }
   }

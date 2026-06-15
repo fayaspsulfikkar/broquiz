@@ -3,6 +3,7 @@ import "./globals.css";
 import { AuthProvider } from "@/lib/auth-context";
 import { Toaster } from "react-hot-toast";
 import InteractiveBackground from "@/components/InteractiveBackground";
+import CustomCursor from "@/components/CustomCursor";
 
 export const metadata: Metadata = {
   title: "BroQuiz — Prove Your Code Logic. Earn Your Scholarship.",
@@ -18,6 +19,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
+        <CustomCursor />
         <InteractiveBackground />
         <AuthProvider>
           {children}
