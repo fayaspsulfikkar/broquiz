@@ -53,9 +53,44 @@ export default function FluidBackground() {
 
     initFluid();
 
-    // The library usually modifies the canvas globally. 
-    // We clean up event listeners if a destroy method exists, though sometimes it doesn't.
+    // Forward mouse events to the canvas so fluid reacts even when hovering over UI elements
+    const forwardEvent = (e: MouseEvent | TouchEvent) => {
+      if (!canvasRef.current || e.target === canvasRef.current) return;
+      
+      let clone: Event;
+      if (e.type.startsWith('mouse')) {
+        const mouseEvent = e as MouseEvent;
+        clone = new MouseEvent(e.type, {
+          clientX: mouseEvent.clientX,
+          clientY: mouseEvent.clientY,
+          bubbles: false
+        });
+      } else {
+        const touchEvent = e as TouchEvent;
+        clone = new TouchEvent(e.type, {
+          touches: touchEvent.touches,
+          changedTouches: touchEvent.changedTouches,
+          bubbles: false
+        });
+      }
+      canvasRef.current.dispatchEvent(clone);
+    };
+
+    window.addEventListener('mousemove', forwardEvent);
+    window.addEventListener('mousedown', forwardEvent);
+    window.addEventListener('mouseup', forwardEvent);
+    window.addEventListener('touchmove', forwardEvent, { passive: true });
+    window.addEventListener('touchstart', forwardEvent, { passive: true });
+    window.addEventListener('touchend', forwardEvent);
+
     return () => {
+      window.removeEventListener('mousemove', forwardEvent);
+      window.removeEventListener('mousedown', forwardEvent);
+      window.removeEventListener('mouseup', forwardEvent);
+      window.removeEventListener('touchmove', forwardEvent);
+      window.removeEventListener('touchstart', forwardEvent);
+      window.removeEventListener('touchend', forwardEvent);
+      
       if (fluidInstance && typeof fluidInstance.destroy === 'function') {
         fluidInstance.destroy();
       }
