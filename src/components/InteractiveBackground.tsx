@@ -25,7 +25,9 @@ export default function InteractiveBackground() {
   // Slight Zoom scale based on how far the mouse is from center (breathes in/out)
   const scaleTransform = useTransform(
     [smoothX, smoothY], 
-    ([x, y]: [number, number]) => {
+    (latest: number[]) => {
+      const x = latest[0] || 0;
+      const y = latest[1] || 0;
       const distance = Math.sqrt(x * x + y * y); // 0 to ~1.414
       return 1 + (distance * 0.05); // Scales up slightly as you move to edges
     }
