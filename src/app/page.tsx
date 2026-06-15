@@ -356,15 +356,14 @@ export default function LandingPage() {
                 const date = new Date(attempt.timestamp).toLocaleDateString();
                 
                 return (
-                  <div key={attempt.id} style={{ 
-                    border: '1px solid var(--color-border-light)', borderRadius: 16, overflow: 'hidden'
-                  }}>
+                  <div key={attempt.id} className="card interactive" style={{ 
+                    padding: 0, overflow: 'hidden', cursor: 'pointer'
+                  }} onClick={() => handleExpandAttempt(attempt)}>
                     {/* Header Row */}
                     <div 
-                      onClick={() => handleExpandAttempt(attempt)}
                       style={{ 
-                        padding: '16px 20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-                        background: isExpanded ? 'rgba(255,255,255,0.15)' : 'transparent', cursor: 'pointer', transition: 'background 0.2s'
+                        padding: '24px 32px', display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                        background: isExpanded ? 'var(--color-bg-tertiary)' : 'transparent', transition: 'background 0.2s'
                       }}
                     >
                       <div>
@@ -380,10 +379,10 @@ export default function LandingPage() {
                           <div style={{ fontSize: 11, color: 'var(--color-text-tertiary)' }}>Score</div>
                         </div>
                         <button 
+                          className="btn-secondary"
                           onClick={(e) => { e.stopPropagation(); handleRetryRound(attempt.round_index || 0); }}
                           style={{ 
-                            background: 'var(--color-text-primary)', color: 'var(--color-text-inverse)', border: '1px solid var(--color-border-light)', borderRadius: 8, 
-                            padding: '8px 16px', fontSize: 13, fontWeight: 600, cursor: 'pointer' 
+                            height: 40, padding: '0 16px', fontSize: 13
                           }}
                         >
                           Retry Round

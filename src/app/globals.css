@@ -88,9 +88,18 @@
     transition: transform 0.2s ease-out, box-shadow 0.2s ease-out;
   }
 
-  .card:hover {
-    transform: translate(-2px, -2px);
-    box-shadow: 4px 4px 0px rgba(0,0,0,0.05);
+  .card.interactive {
+    cursor: pointer;
+  }
+
+  .card.interactive:hover {
+    transform: translate(-3px, -3px);
+    box-shadow: 4px 4px 0px var(--color-brand-accent);
+  }
+
+  .card.interactive:active {
+    transform: translate(0px, 0px);
+    box-shadow: none;
   }
 
   /* Primary Button (Dark Red) */
