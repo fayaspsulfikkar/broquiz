@@ -197,7 +197,7 @@ export default function Spectator() {
     >
       {/* Container squashes and breathes */}
       <motion.div 
-        style={{ position: 'relative', width: 70, height: 80, transform: facingLeft ? 'scaleX(-1)' : 'scaleX(1)', pointerEvents: 'auto', cursor: 'grab' }}
+        style={{ position: 'relative', width: 80, height: 80, transform: facingLeft ? 'scaleX(-1)' : 'scaleX(1)', pointerEvents: 'auto', cursor: 'grab' }}
         onMouseEnter={handlePoke}
         onClick={handlePoke}
         animate={
@@ -249,72 +249,93 @@ export default function Spectator() {
           )}
         </AnimatePresence>
 
-        {/* High-Tech Drone SVG */}
-        <svg viewBox="0 0 100 120" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ width: '100%', height: '100%' }}>
+        {/* Antenna & Thruster (SVG in background) */}
+        <svg viewBox="0 0 80 100" style={{ position: 'absolute', top: -10, left: 0, width: '100%', height: 120, zIndex: 0 }}>
           {/* Antenna */}
-          <path d="M 50 20 L 50 5" stroke={bodyColor} strokeWidth="3" strokeLinecap="round" />
+          <path d="M 40 30 L 40 15" stroke={isMad ? 'rgba(255, 59, 48, 0.5)' : 'rgba(255,255,255,0.3)'} strokeWidth="3" strokeLinecap="round" />
           <motion.circle 
-            cx="50" cy="5" r="4" fill={isMad ? '#FF3B30' : '#00C7FF'} 
+            cx="40" cy="15" r="4" fill={isMad ? '#FF3B30' : '#00C7FF'} 
             animate={{ opacity: [0.4, 1, 0.4] }}
             transition={{ repeat: Infinity, duration: 1 }}
           />
-          
-          {/* Main Chassis */}
-          <path d="M 20 50 C 20 25 80 25 80 50 C 80 70 70 80 50 80 C 30 80 20 70 20 50 Z" fill={bodyColor} />
-          
-          {/* Stabilizer Fins */}
-          <path d="M 20 40 L 5 45 L 20 60 Z" fill={bodyColor} />
-          <path d="M 80 40 L 95 45 L 80 60 Z" fill={bodyColor} />
-
-          {/* Digital Visor */}
-          <rect x="25" y="35" width="50" height="25" rx="12" fill="#1D1D1F" />
-          
-          {/* Visor Expressions */}
-          {!blink ? (
-            state === 'angry' ? (
-              // Angry Eyes
-              <>
-                <path d="M 35 42 L 45 47" stroke="#FF3B30" strokeWidth="3" strokeLinecap="round" />
-                <path d="M 65 42 L 55 47" stroke="#FF3B30" strokeWidth="3" strokeLinecap="round" />
-                <circle cx="40" cy="52" r="3" fill="#FF3B30"/>
-                <circle cx="60" cy="52" r="3" fill="#FF3B30"/>
-              </>
-            ) : state === 'suspicious' ? (
-              // Suspicious Squint
-              <>
-                <line x1="30" y1="48" x2="45" y2="48" stroke="#FF3B30" strokeWidth="4" strokeLinecap="round" />
-                <line x1="55" y1="48" x2="70" y2="48" stroke="#FF3B30" strokeWidth="4" strokeLinecap="round" />
-              </>
-            ) : (
-              // Neutral / Happy Eyes (Cyan)
-              <>
-                <circle cx="38" cy="48" r="5" fill="#00C7FF"/>
-                <circle cx="62" cy="48" r="5" fill="#00C7FF"/>
-              </>
-            )
-          ) : (
-            // Blink (Horizontal line)
-            <>
-              <line x1="30" y1="48" x2="46" y2="48" stroke="#00C7FF" strokeWidth="3" strokeLinecap="round" />
-              <line x1="54" y1="48" x2="70" y2="48" stroke="#00C7FF" strokeWidth="3" strokeLinecap="round" />
-            </>
-          )}
 
           {/* Thruster Nozzle */}
-          <path d="M 40 80 L 60 80 L 55 90 L 45 90 Z" fill="#1D1D1F" />
+          <path d="M 30 75 L 50 75 L 45 85 L 35 85 Z" fill="rgba(0,0,0,0.6)" />
 
           {/* Thruster Flame (Animated) */}
           <motion.path 
-            d="M 45 90 C 45 100 50 120 50 120 C 50 120 55 100 55 90 Z" 
+            d="M 35 85 C 35 100 40 115 40 115 C 40 115 45 100 45 85 Z" 
             fill={isMad ? '#FF3B30' : '#00C7FF'}
             animate={{ 
-              scaleY: state === 'moving' ? [1, 1.4, 1] : [0.8, 1.1, 0.8],
+              scaleY: state === 'moving' ? [1, 1.5, 1] : [0.8, 1.1, 0.8],
               opacity: state === 'moving' ? [0.8, 1, 0.8] : [0.4, 0.8, 0.4]
             }}
             transition={{ repeat: Infinity, duration: state === 'moving' ? 0.08 : 0.3 }}
-            style={{ transformOrigin: '50% 90px' }}
+            style={{ transformOrigin: '50% 85px' }}
           />
         </svg>
+
+        {/* Glassmorphism Chassis (Foreground) */}
+        <div 
+          className="glass"
+          style={{
+             position: 'absolute',
+             top: 25, left: 0, width: 80, height: 50,
+             borderRadius: '40px', // pill shape
+             background: isMad ? 'rgba(255, 59, 48, 0.15)' : 'rgba(255, 255, 255, 0.05)',
+             border: isMad ? '1px solid rgba(255, 59, 48, 0.4)' : '1px solid rgba(255,255,255,0.2)',
+             boxShadow: isMad ? '0 0 20px rgba(255, 59, 48, 0.3), inset 0 0 10px rgba(255,59,48,0.2)' : '0 10px 30px rgba(0,0,0,0.3), inset 0 0 10px rgba(255,255,255,0.1)',
+             zIndex: 1,
+             display: 'flex', alignItems: 'center', justifyContent: 'center',
+             backdropFilter: 'blur(12px)',
+             WebkitBackdropFilter: 'blur(12px)'
+          }}
+        >
+           {/* Inner Visor */}
+           <div style={{
+              width: 50, height: 22, borderRadius: 11,
+              background: 'rgba(0,0,0,0.5)',
+              boxShadow: 'inset 0 2px 6px rgba(0,0,0,0.8), 0 1px 0 rgba(255,255,255,0.2)',
+              position: 'relative', overflow: 'hidden',
+              display: 'flex', alignItems: 'center', justifyContent: 'center'
+           }}>
+              {/* Visor Expressions (SVG) */}
+              <svg viewBox="0 0 50 22" style={{ width: '100%', height: '100%' }}>
+                {!blink ? (
+                  state === 'angry' ? (
+                    <>
+                      <path d="M 12 6 L 20 10" stroke="#FF3B30" strokeWidth="2.5" strokeLinecap="round" />
+                      <path d="M 38 6 L 30 10" stroke="#FF3B30" strokeWidth="2.5" strokeLinecap="round" />
+                      <circle cx="16" cy="14" r="3" fill="#FF3B30" filter="drop-shadow(0 0 4px #FF3B30)"/>
+                      <circle cx="34" cy="14" r="3" fill="#FF3B30" filter="drop-shadow(0 0 4px #FF3B30)"/>
+                    </>
+                  ) : state === 'suspicious' ? (
+                    <>
+                      <line x1="12" y1="11" x2="22" y2="11" stroke="#FF3B30" strokeWidth="3" strokeLinecap="round" filter="drop-shadow(0 0 4px #FF3B30)"/>
+                      <line x1="28" y1="11" x2="38" y2="11" stroke="#FF3B30" strokeWidth="3" strokeLinecap="round" filter="drop-shadow(0 0 4px #FF3B30)"/>
+                    </>
+                  ) : (
+                    <>
+                      <circle cx="16" cy="11" r="4" fill="#00C7FF" filter="drop-shadow(0 0 4px #00C7FF)"/>
+                      <circle cx="34" cy="11" r="4" fill="#00C7FF" filter="drop-shadow(0 0 4px #00C7FF)"/>
+                    </>
+                  )
+                ) : (
+                  <>
+                    <line x1="12" y1="11" x2="22" y2="11" stroke="#00C7FF" strokeWidth="2" strokeLinecap="round" />
+                    <line x1="28" y1="11" x2="38" y2="11" stroke="#00C7FF" strokeWidth="2" strokeLinecap="round" />
+                  </>
+                )}
+              </svg>
+           </div>
+           
+           {/* Glass reflections */}
+           <div style={{
+              position: 'absolute', top: 2, left: '10%', width: '80%', height: '30%',
+              background: 'linear-gradient(to bottom, rgba(255,255,255,0.4), transparent)',
+              borderRadius: '20px 20px 0 0', pointerEvents: 'none'
+           }} />
+        </div>
       </motion.div>
     </motion.div>
   );
