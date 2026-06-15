@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { AuthProvider } from "@/lib/auth-context";
 import { Toaster } from "react-hot-toast";
-import FluidBackground from "@/components/FluidBackground";
+import NeonBackground from "@/components/NeonBackground";
 
 export const metadata: Metadata = {
   title: "BroQuiz — Prove Your Code Logic. Earn Your Scholarship.",
@@ -18,7 +18,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <FluidBackground />
+        <NeonBackground />
         <AuthProvider>
           {children}
           <Toaster
