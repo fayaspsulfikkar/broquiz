@@ -34,7 +34,7 @@ export default function VantaBackground() {
             midtoneColor: 0x5a0010,   // Medium dark red
             lowlightColor: 0x050002,  // Almost black
             baseColor: 0x000000,      // Pitch black
-            blurFactor: 0.60,
+            blurFactor: 0.30,
             speed: 1.50,
             zoom: 1.00
           });
