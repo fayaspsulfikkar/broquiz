@@ -17,11 +17,11 @@ export default function VantaBackground() {
         // Vanta requires THREE to be available on window
         (window as any).THREE = THREE;
         
-        // Dynamically import the Vanta Fog effect
-        // Using require instead of dynamic import is sometimes safer for Vanta
-        const FOG = require('vanta/dist/vanta.fog.min.js');
+        // Dynamically import the Vanta Fog effect safely
+        const vantaModule = await import('vanta/dist/vanta.fog.min.js');
+        const FOG = vantaModule.default || vantaModule;
 
-        if (!vantaEffect && myRef.current) {
+        if (!effect && myRef.current) {
           effect = FOG({
             el: myRef.current,
             THREE: THREE,
@@ -49,9 +49,8 @@ export default function VantaBackground() {
 
     return () => {
       if (effect) effect.destroy();
-      if (vantaEffect) vantaEffect.destroy();
     };
-  }, [vantaEffect]);
+  }, []); // Run only once on mount to prevent instant destruction loop
 
   return (
     <div 
