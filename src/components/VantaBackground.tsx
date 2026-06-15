@@ -30,13 +30,13 @@ export default function VantaBackground() {
             gyroControls: false,
             minHeight: 200.00,
             minWidth: 200.00,
-            highlightColor: 0x8a0020, // Bright dark red
-            midtoneColor: 0x5a0010,   // Medium dark red
-            lowlightColor: 0x050002,  // Almost black
-            baseColor: 0x000000,      // Pitch black
-            blurFactor: 0.30,
-            speed: 1.50,
-            zoom: 1.00
+            highlightColor: 0xff0033, // Bright striking red
+            midtoneColor: 0xaa0022,   // Deep vibrant red
+            lowlightColor: 0x330005,  // Dark crimson glow
+            baseColor: 0x110002,      // Very dark red void instead of pure black
+            blurFactor: 0.50,         // Smoother blending
+            speed: 2.00,              // Slightly faster movement
+            zoom: 1.50                // Zoom in to make clouds bigger and more obvious
           });
           setVantaEffect(effect);
         }
