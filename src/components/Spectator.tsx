@@ -15,6 +15,8 @@ export default function Spectator() {
 
   // Use a ref to track mouse globally without triggering re-renders
   const mousePos = useRef({ x: 0, y: 0 });
+  const pokes = useRef(0);
+  const pokeTimer = useRef<NodeJS.Timeout | null>(null);
 
   // Initialize random starting position
   useEffect(() => {
@@ -127,6 +129,38 @@ export default function Spectator() {
     };
   }, [position.x]);
 
+  const handlePoke = () => {
+    pokes.current += 1;
+    
+    // Run away to a random spot
+    const newX = Math.max(50, Math.random() * (window.innerWidth - 150));
+    const newY = Math.max(50, Math.random() * (window.innerHeight - 200));
+    
+    setFacingLeft(newX < position.x);
+    setTarget({ x: newX, y: newY });
+
+    if (pokes.current >= 4) {
+      setState('angry');
+      const angryMessages = ["Stop poking me!", "Do your quiz!", "Quit chasing me!", "I'm not a toy!"];
+      setSpeech(angryMessages[Math.floor(Math.random() * angryMessages.length)]);
+      setTimeout(() => {
+        setSpeech(null);
+        setState('idle');
+      }, 3000);
+    } else {
+      setState('moving');
+      if (pokes.current === 2) {
+        setSpeech("Hey!");
+        setTimeout(() => setSpeech(null), 1000);
+      }
+    }
+
+    if (pokeTimer.current) clearTimeout(pokeTimer.current);
+    pokeTimer.current = setTimeout(() => {
+      pokes.current = 0;
+    }, 5000); // reset if left alone
+  };
+
   const isMad = state === 'angry' || state === 'suspicious';
   const bodyColor = isMad ? 'rgba(255, 59, 48, 0.85)' : 'rgba(255, 255, 255, 0.85)';
   const eyeColor = isMad ? '#fff' : '#1D1D1F';
@@ -163,7 +197,9 @@ export default function Spectator() {
     >
       {/* Container squashes and breathes */}
       <motion.div 
-        style={{ position: 'relative', width: 70, height: 80, transform: facingLeft ? 'scaleX(-1)' : 'scaleX(1)' }}
+        style={{ position: 'relative', width: 70, height: 80, transform: facingLeft ? 'scaleX(-1)' : 'scaleX(1)', pointerEvents: 'auto', cursor: 'grab' }}
+        onMouseEnter={handlePoke}
+        onClick={handlePoke}
         animate={
           state === 'moving' ? { scaleY: [1, 0.95, 1], scaleX: [1, 1.05, 1] } : 
           state === 'angry' ? { scaleY: [1, 0.9, 1.1, 1], x: [-3, 3, -3, 3, 0] } : 
