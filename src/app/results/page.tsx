@@ -59,7 +59,7 @@ export default function ResultsPage() {
   };
 
   return (
-    <div style={{ minHeight: '100vh', background: '#F5F5F7', padding: '40px 24px' }}>
+    <div style={{ minHeight: '100vh', padding: '40px 24px' }}>
       <div style={{ maxWidth: 700, margin: '0 auto' }}>
         {/* Back */}
         <button
@@ -73,19 +73,20 @@ export default function ResultsPage() {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
+          className="glass"
           style={{
-            background: '#fff', borderRadius: 24, padding: 'clamp(32px, 5vw, 48px)',
-            border: '1px solid #E8E8ED', textAlign: 'center', marginBottom: 24,
+            borderRadius: 24, padding: 'clamp(32px, 5vw, 48px)',
+            textAlign: 'center', marginBottom: 24,
           }}
         >
-          <div style={{ fontSize: 13, fontWeight: 600, color: '#86868B', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 24 }}>
+          <div style={{ fontSize: 13, fontWeight: 600, color: 'rgba(255,255,255,0.6)', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 24 }}>
             Round Completed
           </div>
 
           {/* Score Circle */}
           <div style={{ position: 'relative', display: 'inline-block', marginBottom: 24 }}>
             <svg width="200" height="200" viewBox="0 0 200 200">
-              <circle cx="100" cy="100" r={radius} fill="none" stroke="#E8E8ED" strokeWidth="8" />
+              <circle cx="100" cy="100" r={radius} fill="none" stroke="rgba(255,255,255,0.1)" strokeWidth="8" />
               <motion.circle
                 cx="100" cy="100" r={radius} fill="none"
                 stroke={scoreColor} strokeWidth="8" strokeLinecap="round"
@@ -103,7 +104,7 @@ export default function ResultsPage() {
               <div style={{ fontSize: 44, fontWeight: 700, color: scoreColor, letterSpacing: '-0.03em' }}>
                 {Math.floor(animatedScore)}
               </div>
-              <div style={{ fontSize: 16, color: '#86868B' }}>out of {results.total_questions}</div>
+              <div style={{ fontSize: 16, color: 'rgba(255,255,255,0.6)' }}>out of {results.total_questions}</div>
             </div>
           </div>
 
@@ -112,21 +113,21 @@ export default function ResultsPage() {
             display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(100px, 1fr))',
             gap: 16, marginBottom: 24,
           }}>
-            <div style={{ background: '#F5F5F7', borderRadius: 12, padding: 14 }}>
-              <div style={{ fontSize: 11, color: '#86868B', marginBottom: 4 }}>Accuracy</div>
-              <div style={{ fontSize: 20, fontWeight: 600, color: '#1D1D1F' }}>{results.accuracy_percentage}%</div>
+            <div className="glass" style={{ borderRadius: 12, padding: 14 }}>
+              <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.6)', marginBottom: 4 }}>Accuracy</div>
+              <div style={{ fontSize: 20, fontWeight: 600, color: 'inherit' }}>{results.accuracy_percentage}%</div>
             </div>
-            <div style={{ background: '#34C75915', borderRadius: 12, padding: 14 }}>
-              <div style={{ fontSize: 11, color: '#34C759', marginBottom: 4 }}>Correct</div>
-              <div style={{ fontSize: 20, fontWeight: 600, color: '#34C759' }}>{results.score}</div>
+            <div className="glass" style={{ background: 'rgba(74, 222, 128, 0.15)', borderRadius: 12, padding: 14, borderColor: 'rgba(74, 222, 128, 0.3)' }}>
+              <div style={{ fontSize: 11, color: '#4ADE80', marginBottom: 4 }}>Correct</div>
+              <div style={{ fontSize: 20, fontWeight: 600, color: '#4ADE80' }}>{results.score}</div>
             </div>
-            <div style={{ background: '#FF3B3015', borderRadius: 12, padding: 14 }}>
-              <div style={{ fontSize: 11, color: '#FF3B30', marginBottom: 4 }}>Wrong</div>
-              <div style={{ fontSize: 20, fontWeight: 600, color: '#FF3B30' }}>{results.wrong_count}</div>
+            <div className="glass" style={{ background: 'rgba(248, 113, 113, 0.15)', borderRadius: 12, padding: 14, borderColor: 'rgba(248, 113, 113, 0.3)' }}>
+              <div style={{ fontSize: 11, color: '#F87171', marginBottom: 4 }}>Wrong</div>
+              <div style={{ fontSize: 20, fontWeight: 600, color: '#F87171' }}>{results.wrong_count}</div>
             </div>
-            <div style={{ background: '#F5F5F7', borderRadius: 12, padding: 14 }}>
-              <div style={{ fontSize: 11, color: '#86868B', marginBottom: 4 }}>Time Taken</div>
-              <div style={{ fontSize: 20, fontWeight: 600, color: '#1D1D1F' }}>{formatDuration(results.duration_seconds)}</div>
+            <div className="glass" style={{ borderRadius: 12, padding: 14 }}>
+              <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.6)', marginBottom: 4 }}>Time Taken</div>
+              <div style={{ fontSize: 20, fontWeight: 600, color: 'inherit' }}>{formatDuration(results.duration_seconds)}</div>
             </div>
           </div>
 
@@ -160,12 +161,13 @@ export default function ResultsPage() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.5 }}
+          className="glass"
           style={{
-            background: '#fff', borderRadius: 20, padding: 28,
-            border: '1px solid #E8E8ED', marginBottom: 24,
+            borderRadius: 20, padding: 28,
+            marginBottom: 24,
           }}
         >
-          <h3 style={{ fontSize: 17, fontWeight: 600, color: '#1D1D1F', marginBottom: 20 }}>
+          <h3 style={{ fontSize: 17, fontWeight: 600, color: 'inherit', marginBottom: 20 }}>
             Answer Review
           </h3>
 
@@ -177,8 +179,8 @@ export default function ResultsPage() {
                   style={{
                     width: '100%', textAlign: 'left',
                     padding: '14px 18px', borderRadius: 12,
-                    border: '1px solid #E8E8ED',
-                    background: r.is_correct ? '#34C75908' : '#FF3B3008',
+                    border: r.is_correct ? '1px solid rgba(74, 222, 128, 0.2)' : '1px solid rgba(248, 113, 113, 0.2)',
+                    background: r.is_correct ? 'rgba(74, 222, 128, 0.05)' : 'rgba(248, 113, 113, 0.05)',
                     cursor: 'pointer',
                     display: 'flex', alignItems: 'center', gap: 12,
                     transition: 'all 0.15s ease',
@@ -186,19 +188,20 @@ export default function ResultsPage() {
                 >
                   <div style={{
                     width: 28, height: 28, borderRadius: 14,
-                    background: r.is_correct ? '#34C759' : '#FF3B30',
-                    color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    background: r.is_correct ? 'rgba(74, 222, 128, 0.15)' : 'rgba(248, 113, 113, 0.15)',
+                    color: r.is_correct ? '#4ADE80' : '#F87171', display: 'flex', alignItems: 'center', justifyContent: 'center',
                     fontSize: 13, fontWeight: 600, flexShrink: 0,
+                    border: r.is_correct ? '1px solid rgba(74, 222, 128, 0.3)' : '1px solid rgba(248, 113, 113, 0.3)',
                   }}>
                     {i + 1}
                   </div>
-                  <div style={{ flex: 1, fontSize: 15, fontWeight: 500, color: '#1D1D1F' }}>
-                    <div style={{ fontSize: 11, color: '#6E6E73', textTransform: 'uppercase', marginBottom: 2 }}>
+                  <div style={{ flex: 1, fontSize: 15, fontWeight: 500, color: 'inherit' }}>
+                    <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.6)', textTransform: 'uppercase', marginBottom: 2 }}>
                       {QUESTION_TYPE_LABELS[r.question_type as keyof typeof QUESTION_TYPE_LABELS]}
                     </div>
                     {r.question_text.slice(0, 60)}...
                   </div>
-                  <div style={{ fontSize: 20, color: '#86868B', transform: expandedQ === r.question_id ? 'rotate(180deg)' : 'none', transition: 'transform 0.2s ease' }}>
+                  <div style={{ fontSize: 20, color: 'rgba(255,255,255,0.6)', transform: expandedQ === r.question_id ? 'rotate(180deg)' : 'none', transition: 'transform 0.2s ease' }}>
                     ↓
                   </div>
                 </button>
@@ -211,8 +214,8 @@ export default function ResultsPage() {
                       exit={{ height: 0, opacity: 0 }}
                       style={{ overflow: 'hidden' }}
                     >
-                      <div style={{ padding: '16px 18px', borderLeft: '2px solid #E8E8ED', marginLeft: 14, marginTop: 8 }}>
-                        <div style={{ fontSize: 15, color: '#1D1D1F', marginBottom: 12 }}>
+                      <div style={{ padding: '16px 18px', borderLeft: '2px solid rgba(255,255,255,0.2)', marginLeft: 14, marginTop: 8 }}>
+                        <div style={{ fontSize: 15, color: 'inherit', marginBottom: 12 }}>
                           {r.question_text}
                         </div>
                         {r.code_snippet && (
@@ -222,18 +225,18 @@ export default function ResultsPage() {
                         )}
                         
                         <div style={{ display: 'flex', flexDirection: 'column', gap: 8, fontSize: 14 }}>
-                          <div style={{ color: r.is_correct ? '#34C759' : '#FF3B30' }}>
+                          <div style={{ color: r.is_correct ? '#4ADE80' : '#F87171' }}>
                             <strong>Your Answer:</strong> {Array.isArray(r.user_answer) ? r.user_answer.join(', ') : r.user_answer}
                           </div>
                           {!r.is_correct && (
-                            <div style={{ color: '#34C759' }}>
+                            <div style={{ color: '#4ADE80' }}>
                               <strong>Correct Answer:</strong> {Array.isArray(r.correct_answer) ? r.correct_answer.join(', ') : r.correct_answer}
                             </div>
                           )}
                         </div>
 
                         {r.explanation && (
-                          <div style={{ marginTop: 12, padding: 12, background: '#F5F5F7', borderRadius: 8, fontSize: 14, color: '#6E6E73', lineHeight: 1.5 }}>
+                          <div style={{ marginTop: 12, padding: 12, background: 'rgba(255,255,255,0.05)', borderRadius: 8, fontSize: 14, color: 'rgba(255,255,255,0.7)', lineHeight: 1.5 }}>
                             <strong>Explanation:</strong> {r.explanation}
                           </div>
                         )}
