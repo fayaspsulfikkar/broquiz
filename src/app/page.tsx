@@ -362,25 +362,31 @@ export default function LandingPage() {
                   }} onClick={() => handleExpandAttempt(attempt)}>
                     {/* Header Row */}
                     <div 
-                      style={{ 
-                        padding: '24px 32px', display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-                        background: isExpanded ? 'var(--color-bg-tertiary)' : 'transparent', transition: 'background 0.2s'
-                      }}
+                      className={`flex flex-col md:flex-row md:items-center justify-between p-4 md:p-8 gap-4 md:gap-0 transition-colors duration-200 ${isExpanded ? 'bg-[var(--color-bg-tertiary)]' : 'bg-transparent'}`}
                     >
-                      <div>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4 }}>
-                          <span style={{ fontSize: 16, fontWeight: 700, color: 'inherit' }}>Round {roundNum}</span>
-                          {attempt.is_retry && <span style={{ fontSize: 11, fontWeight: 700, background: 'var(--color-border-light)', color: 'var(--color-text-secondary)', padding: '2px 6px', borderRadius: 6 }}>RETRY</span>}
+                      <div className="flex justify-between items-start w-full md:w-auto">
+                        <div>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4 }}>
+                            <span style={{ fontSize: 16, fontWeight: 700, color: 'inherit' }}>Round {roundNum}</span>
+                            {attempt.is_retry && <span style={{ fontSize: 11, fontWeight: 700, background: 'var(--color-border-light)', color: 'var(--color-text-secondary)', padding: '2px 6px', borderRadius: 6 }}>RETRY</span>}
+                          </div>
+                          <div style={{ fontSize: 13, color: 'var(--color-text-tertiary)' }}>{date} • {attempt.duration_seconds}s</div>
                         </div>
-                        <div style={{ fontSize: 13, color: 'var(--color-text-tertiary)' }}>{date} • {attempt.duration_seconds}s</div>
+                        {/* Mobile Score (visible only on small screens) */}
+                        <div className="md:hidden text-right">
+                          <div style={{ fontSize: 15, fontWeight: 700, color: '#4ADE80' }}>{attempt.score} / {attempt.answers.length}</div>
+                          <div style={{ fontSize: 11, color: 'var(--color-text-tertiary)' }}>Score</div>
+                        </div>
                       </div>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: 24 }}>
-                        <div style={{ textAlign: 'right' }}>
+
+                      <div className="flex items-center justify-between md:justify-end gap-6 w-full md:w-auto">
+                        {/* Desktop Score (visible only on md+ screens) */}
+                        <div className="hidden md:block text-right">
                           <div style={{ fontSize: 15, fontWeight: 700, color: '#4ADE80' }}>{attempt.score} / {attempt.answers.length}</div>
                           <div style={{ fontSize: 11, color: 'var(--color-text-tertiary)' }}>Score</div>
                         </div>
                         <button 
-                          className="btn-secondary"
+                          className="btn-secondary w-full md:w-auto"
                           onClick={(e) => { e.stopPropagation(); handleRetryRound(attempt.round_index || 0); }}
                           style={{ 
                             height: 40, padding: '0 16px', fontSize: 13
