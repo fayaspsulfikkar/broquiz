@@ -58,6 +58,7 @@ export interface UserProfile {
   scholarship_eligible: boolean;
   anonymous_leaderboard: boolean;
   is_admin: boolean;
+  fraud_detected?: boolean;
 }
 
 // --- Question ---
