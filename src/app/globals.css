@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Bitcount+Single:slnt,wght,CRSV,ELSH@-8,100..900,1,100&display=swap');
 @import "tailwindcss";
 
 /* ============================================
@@ -49,8 +49,8 @@
   --color-tier-platinum: #E5E4E2;
 
   /* Typography */
-  --font-sans: 'VT323', monospace;
-  --font-mono: 'VT323', monospace;
+  --font-sans: "Bitcount Single", system-ui, sans-serif;
+  --font-mono: "Bitcount Single", monospace;
 
   /* Spacing */
   --radius-sm: 6px;
@@ -84,6 +84,9 @@
 
   body {
     font-family: var(--font-sans);
+    font-optical-sizing: auto;
+    font-style: normal;
+    font-variation-settings: "slnt" -8, "CRSV" 1, "ELSH" 100, "ELXP" 0;
     color: var(--color-text-primary);
     background-color: var(--color-bg-primary);
     line-height: 1.6;
