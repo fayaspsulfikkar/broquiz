@@ -45,7 +45,7 @@ export default function VerifyPage() {
         <div  style={{ padding: 48, borderRadius: 24, textAlign: 'center', maxWidth: 400 }}>
           <div style={{ fontSize: 48, marginBottom: 16 }}>⚠️</div>
           <h1 style={{ fontSize: 24, fontWeight: 700, color: 'inherit', marginBottom: 8 }}>Invalid Certificate</h1>
-          <p style={{ fontSize: 15, color: 'rgba(255,255,255,0.7)', marginBottom: 24 }}>This certificate ID could not be found or has been revoked.</p>
+          <p style={{ fontSize: 15, color: 'var(--color-text-secondary)', marginBottom: 24 }}>This certificate ID could not be found or has been revoked.</p>
           <button className="btn-primary" onClick={() => router.push('/')}>Go to CodIQ</button>
         </div>
       </div>
@@ -74,29 +74,29 @@ export default function VerifyPage() {
         </div>
         
         <h1 style={{ fontSize: 28, fontWeight: 700, color: 'inherit', marginBottom: 8 }}>Verified Certificate</h1>
-        <p style={{ fontSize: 15, color: 'rgba(255,255,255,0.7)', marginBottom: 32 }}>This certificate is valid and issued by CodIQ.</p>
+        <p style={{ fontSize: 15, color: 'var(--color-text-secondary)', marginBottom: 32 }}>This certificate is valid and issued by CodIQ.</p>
 
-        <div style={{ background: 'rgba(255,255,255,0.05)', borderRadius: 16, padding: 24, textAlign: 'left', marginBottom: 32 }}>
+        <div style={{ background: 'var(--color-bg-secondary)', borderRadius: 16, padding: 24, textAlign: 'left', marginBottom: 32 }}>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20 }}>
             <div>
-              <div style={{ fontSize: 12, color: 'rgba(255,255,255,0.5)', marginBottom: 4, textTransform: 'uppercase', letterSpacing: '0.05em' }}>Recipient</div>
+              <div style={{ fontSize: 12, color: 'var(--color-text-tertiary)', marginBottom: 4, textTransform: 'uppercase', letterSpacing: '0.05em' }}>Recipient</div>
               <div style={{ fontSize: 16, fontWeight: 600, color: 'inherit' }}>{cert.user_name}</div>
             </div>
             <div>
-              <div style={{ fontSize: 12, color: 'rgba(255,255,255,0.5)', marginBottom: 4, textTransform: 'uppercase', letterSpacing: '0.05em' }}>Achievement</div>
+              <div style={{ fontSize: 12, color: 'var(--color-text-tertiary)', marginBottom: 4, textTransform: 'uppercase', letterSpacing: '0.05em' }}>Achievement</div>
               <div style={{ fontSize: 16, fontWeight: 600, color: 'inherit' }}>{cert.level_name}</div>
             </div>
             <div>
-              <div style={{ fontSize: 12, color: 'rgba(255,255,255,0.5)', marginBottom: 4, textTransform: 'uppercase', letterSpacing: '0.05em' }}>Score</div>
+              <div style={{ fontSize: 12, color: 'var(--color-text-tertiary)', marginBottom: 4, textTransform: 'uppercase', letterSpacing: '0.05em' }}>Score</div>
               <div style={{ fontSize: 16, fontWeight: 600, color: 'inherit' }}>{cert.score} / 10</div>
             </div>
             <div>
-              <div style={{ fontSize: 12, color: 'rgba(255,255,255,0.5)', marginBottom: 4, textTransform: 'uppercase', letterSpacing: '0.05em' }}>Issue Date</div>
+              <div style={{ fontSize: 12, color: 'var(--color-text-tertiary)', marginBottom: 4, textTransform: 'uppercase', letterSpacing: '0.05em' }}>Issue Date</div>
               <div style={{ fontSize: 16, fontWeight: 600, color: 'inherit' }}>{dateStr}</div>
             </div>
           </div>
-          <div style={{ marginTop: 20, paddingTop: 20, borderTop: '1px solid rgba(255,255,255,0.1)' }}>
-            <div style={{ fontSize: 12, color: 'rgba(255,255,255,0.5)', marginBottom: 4, textTransform: 'uppercase', letterSpacing: '0.05em' }}>Verification ID</div>
+          <div style={{ marginTop: 20, paddingTop: 20, borderTop: '1px solid var(--color-border-light)' }}>
+            <div style={{ fontSize: 12, color: 'var(--color-text-tertiary)', marginBottom: 4, textTransform: 'uppercase', letterSpacing: '0.05em' }}>Verification ID</div>
             <div style={{ fontSize: 14, fontFamily: 'var(--font-mono)', color: 'inherit' }}>{cert.verification_id}</div>
           </div>
         </div>

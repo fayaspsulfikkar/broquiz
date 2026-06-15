@@ -237,16 +237,16 @@ function QuizContent() {
           <div style={{ fontSize: 15, fontWeight: 700, color: 'inherit' }}>
             Round {(profile?.total_rounds_played || 0) + 1}
           </div>
-          <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.6)', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+          <div style={{ fontSize: 11, color: 'var(--color-text-tertiary)', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
             Global Progress
           </div>
         </div>
 
         {/* Global Progress */}
         <div style={{ flex: 1, maxWidth: 400, margin: '0 24px' }}>
-          <div style={{ width: '100%', height: 6, background: 'rgba(255,255,255,0.2)', borderRadius: 3, overflow: 'hidden' }}>
+          <div style={{ width: '100%', height: 6, background: 'var(--color-border-light)', borderRadius: 3, overflow: 'hidden' }}>
             <div
-              style={{ height: '100%', background: '#fff', borderRadius: 3, boxShadow: '0 0 10px rgba(255,255,255,0.8)' }}
+              style={{ height: '100%', background: '#fff', borderRadius: 3, boxShadow: '0 0 10px var(--color-text-secondary)' }}
             />
           </div>
         </div>
@@ -255,7 +255,7 @@ function QuizContent() {
           <div style={{ fontSize: 14, fontWeight: 600, color: 'inherit' }}>
             {totalSeen} / {totalAvailable}
           </div>
-          <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.6)' }}>Mastered</div>
+          <div style={{ fontSize: 11, color: 'var(--color-text-tertiary)' }}>Mastered</div>
         </div>
       </div>
 
@@ -273,9 +273,9 @@ function QuizContent() {
               onClick={() => goToQuestion(i)}
               style={{
                 width: 32, height: 32, borderRadius: 8,
-                border: i === currentIndex ? '2px solid #fff' : '1px solid rgba(255,255,255,0.2)',
-                background: answered ? 'rgba(255,255,255,0.9)' : flagged ? '#FF9F0A' : 'rgba(0,0,0,0.2)',
-                color: answered ? '#000' : 'rgba(255,255,255,0.9)',
+                border: i === currentIndex ? '2px solid #fff' : '1px solid var(--color-border-light)',
+                background: answered ? 'var(--color-text-secondary)' : flagged ? '#FF9F0A' : 'var(--color-bg-secondary)',
+                color: answered ? '#000' : 'var(--color-text-secondary)',
                 fontSize: 12, fontWeight: 600, cursor: 'pointer',
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
                 transition: 'all 0.15s ease',
@@ -304,8 +304,8 @@ function QuizContent() {
             {/* Type badge */}
             <div style={{
               display: 'inline-block', padding: '4px 10px', borderRadius: 6,
-              background: 'rgba(255,255,255,0.15)', fontSize: 11, fontWeight: 600,
-              color: 'rgba(255,255,255,0.9)', textTransform: 'uppercase', letterSpacing: '0.04em',
+              background: 'var(--color-bg-tertiary)', fontSize: 11, fontWeight: 600,
+              color: 'var(--color-text-secondary)', textTransform: 'uppercase', letterSpacing: '0.04em',
               marginBottom: 20,
             }}>
               {QUESTION_TYPE_LABELS[currentQuestion.type]}
@@ -382,7 +382,7 @@ function QuizContent() {
         {showConfirm && (
           <div
             style={{
-              position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.4)',
+              position: 'fixed', inset: 0, background: 'var(--color-bg-secondary)',
               display: 'flex', alignItems: 'center', justifyContent: 'center',
               zIndex: 100, padding: 24,
             }}
@@ -398,7 +398,7 @@ function QuizContent() {
             >
               <div style={{ fontSize: 48, marginBottom: 16 }}>📝</div>
               <h3 style={{ fontSize: 20, fontWeight: 600, color: 'inherit', marginBottom: 8 }}>Submit Your Answers?</h3>
-              <p style={{ fontSize: 15, color: 'rgba(255,255,255,0.8)', marginBottom: 8 }}>
+              <p style={{ fontSize: 15, color: 'var(--color-text-secondary)', marginBottom: 8 }}>
                 You&apos;ve answered {answers.size}/{questions.length} questions.
                 {flaggedQuestions.size > 0 && ` ${flaggedQuestions.size} flagged for review.`}
               </p>
@@ -428,14 +428,14 @@ function QuizContent() {
               style={{
                 borderRadius: 24, padding: 32,
                 maxWidth: 400, width: '100%', textAlign: 'center',
-                boxShadow: '0 20px 40px rgba(0,0,0,0.2)'
+                boxShadow: '0 20px 40px var(--color-bg-secondary)'
               }}
             >
               <div style={{ fontSize: 48, marginBottom: 16 }}>⚠️</div>
               <h3 style={{ fontSize: 20, fontWeight: 700, color: 'inherit', marginBottom: 12 }}>
                 Tab Switching Detected
               </h3>
-              <p style={{ fontSize: 15, color: 'rgba(255,255,255,0.8)', lineHeight: 1.5, marginBottom: 24 }}>
+              <p style={{ fontSize: 15, color: 'var(--color-text-secondary)', lineHeight: 1.5, marginBottom: 24 }}>
                 Please stay on this tab during the quiz! You have switched tabs {fraudWarnings} time(s). 
                 <strong> If you switch tabs more than 3 times, your current question will be marked wrong and a "Fraud Detected" badge will permanently appear on your public leaderboard profile.</strong>
               </p>
@@ -480,8 +480,8 @@ function QuestionAnswerArea({
                 style={{
                   textAlign: 'left',
                   padding: '14px 18px', borderRadius: 12,
-                  border: `1px solid ${selected ? 'rgba(255,255,255,0.4)' : 'rgba(255,255,255,0.1)'}`,
-                  background: selected ? 'rgba(255,255,255,0.2)' : 'rgba(255,255,255,0.05)',
+                  border: `1px solid ${selected ? 'var(--color-text-tertiary)' : 'var(--color-border-light)'}`,
+                  background: selected ? 'var(--color-border-light)' : 'var(--color-bg-secondary)',
                   color: 'inherit',
                   fontSize: 15, cursor: 'pointer',
                   display: 'flex', alignItems: 'center', gap: 12,
@@ -490,7 +490,7 @@ function QuestionAnswerArea({
               >
                 <div style={{
                   width: 20, height: 20, borderRadius: '50%',
-                  border: `2px solid ${selected ? '#fff' : 'rgba(255,255,255,0.3)'}`,
+                  border: `2px solid ${selected ? '#fff' : 'var(--color-border-light)'}`,
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
                 }}>
                   {selected && <div style={{ width: 10, height: 10, borderRadius: '50%', background: '#fff' }} />}
@@ -525,8 +525,8 @@ function QuestionAnswerArea({
                   style={{
                     textAlign: 'left',
                     padding: '14px 18px', borderRadius: 12,
-                    border: `1px solid ${selected ? 'rgba(255,255,255,0.4)' : 'rgba(255,255,255,0.1)'}`,
-                    background: selected ? 'rgba(255,255,255,0.2)' : 'rgba(255,255,255,0.05)',
+                    border: `1px solid ${selected ? 'var(--color-text-tertiary)' : 'var(--color-border-light)'}`,
+                    background: selected ? 'var(--color-border-light)' : 'var(--color-bg-secondary)',
                     color: 'inherit',
                     fontSize: 15, cursor: 'pointer',
                     display: 'flex', alignItems: 'center', gap: 12,
@@ -535,7 +535,7 @@ function QuestionAnswerArea({
                 >
                   <div style={{
                     width: 20, height: 20, borderRadius: 4,
-                    border: `2px solid ${selected ? '#fff' : 'rgba(255,255,255,0.3)'}`,
+                    border: `2px solid ${selected ? '#fff' : 'var(--color-border-light)'}`,
                     display: 'flex', alignItems: 'center', justifyContent: 'center',
                     background: selected ? '#fff' : 'transparent',
                   }}>
@@ -571,7 +571,7 @@ function QuestionAnswerArea({
             }}
             autoFocus
           />
-          <p style={{ fontSize: 12, color: 'rgba(255,255,255,0.7)', textAlign: 'center', marginTop: 8 }}>
+          <p style={{ fontSize: 12, color: 'var(--color-text-secondary)', textAlign: 'center', marginTop: 8 }}>
             Case-insensitive. Type the exact answer.
           </p>
         </div>

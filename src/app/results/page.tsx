@@ -76,14 +76,14 @@ export default function ResultsPage() {
             textAlign: 'center', marginBottom: 24,
           }}
         >
-          <div style={{ fontSize: 13, fontWeight: 600, color: 'rgba(255,255,255,0.6)', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 24 }}>
+          <div style={{ fontSize: 13, fontWeight: 600, color: 'var(--color-text-tertiary)', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 24 }}>
             Round Completed
           </div>
 
           {/* Score Circle */}
           <div style={{ position: 'relative', display: 'inline-block', marginBottom: 24 }}>
             <svg width="200" height="200" viewBox="0 0 200 200">
-              <circle cx="100" cy="100" r={radius} fill="none" stroke="rgba(255,255,255,0.1)" strokeWidth="8" />
+              <circle cx="100" cy="100" r={radius} fill="none" stroke="var(--color-border-light)" strokeWidth="8" />
               <circle
                 cx="100" cy="100" r={radius} fill="none"
                 stroke={scoreColor} strokeWidth="8" strokeLinecap="round"
@@ -98,7 +98,7 @@ export default function ResultsPage() {
               <div style={{ fontSize: 44, fontWeight: 700, color: scoreColor, letterSpacing: '-0.03em' }}>
                 {Math.floor(animatedScore)}
               </div>
-              <div style={{ fontSize: 16, color: 'rgba(255,255,255,0.6)' }}>out of {results.total_questions}</div>
+              <div style={{ fontSize: 16, color: 'var(--color-text-tertiary)' }}>out of {results.total_questions}</div>
             </div>
           </div>
 
@@ -108,7 +108,7 @@ export default function ResultsPage() {
             gap: 16, marginBottom: 24,
           }}>
             <div  style={{ borderRadius: 12, padding: 14 }}>
-              <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.6)', marginBottom: 4 }}>Accuracy</div>
+              <div style={{ fontSize: 11, color: 'var(--color-text-tertiary)', marginBottom: 4 }}>Accuracy</div>
               <div style={{ fontSize: 20, fontWeight: 600, color: 'inherit' }}>{results.accuracy_percentage}%</div>
             </div>
             <div  style={{ background: 'rgba(74, 222, 128, 0.15)', borderRadius: 12, padding: 14, borderColor: 'rgba(74, 222, 128, 0.3)' }}>
@@ -120,7 +120,7 @@ export default function ResultsPage() {
               <div style={{ fontSize: 20, fontWeight: 600, color: '#F87171' }}>{results.wrong_count}</div>
             </div>
             <div  style={{ borderRadius: 12, padding: 14 }}>
-              <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.6)', marginBottom: 4 }}>Time Taken</div>
+              <div style={{ fontSize: 11, color: 'var(--color-text-tertiary)', marginBottom: 4 }}>Time Taken</div>
               <div style={{ fontSize: 20, fontWeight: 600, color: 'inherit' }}>{formatDuration(results.duration_seconds)}</div>
             </div>
           </div>
@@ -187,12 +187,12 @@ export default function ResultsPage() {
                     {i + 1}
                   </div>
                   <div style={{ flex: 1, fontSize: 15, fontWeight: 500, color: 'inherit' }}>
-                    <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.6)', textTransform: 'uppercase', marginBottom: 2 }}>
+                    <div style={{ fontSize: 11, color: 'var(--color-text-tertiary)', textTransform: 'uppercase', marginBottom: 2 }}>
                       {QUESTION_TYPE_LABELS[r.question_type as keyof typeof QUESTION_TYPE_LABELS]}
                     </div>
                     {r.question_text.slice(0, 60)}...
                   </div>
-                  <div style={{ fontSize: 20, color: 'rgba(255,255,255,0.6)', transform: expandedQ === r.question_id ? 'rotate(180deg)' : 'none', transition: 'transform 0.2s ease' }}>
+                  <div style={{ fontSize: 20, color: 'var(--color-text-tertiary)', transform: expandedQ === r.question_id ? 'rotate(180deg)' : 'none', transition: 'transform 0.2s ease' }}>
                     ↓
                   </div>
                 </button>
@@ -202,7 +202,7 @@ export default function ResultsPage() {
                     <div
                       style={{ overflow: 'hidden' }}
                     >
-                      <div style={{ padding: '16px 18px', borderLeft: '2px solid rgba(255,255,255,0.2)', marginLeft: 14, marginTop: 8 }}>
+                      <div style={{ padding: '16px 18px', borderLeft: '2px solid var(--color-border-light)', marginLeft: 14, marginTop: 8 }}>
                         <div style={{ fontSize: 15, color: 'inherit', marginBottom: 12 }}>
                           {r.question_text}
                         </div>
@@ -224,7 +224,7 @@ export default function ResultsPage() {
                         </div>
 
                         {r.explanation && (
-                          <div style={{ marginTop: 12, padding: 12, background: 'rgba(255,255,255,0.05)', borderRadius: 8, fontSize: 14, color: 'rgba(255,255,255,0.7)', lineHeight: 1.5 }}>
+                          <div style={{ marginTop: 12, padding: 12, background: 'var(--color-bg-secondary)', borderRadius: 8, fontSize: 14, color: 'var(--color-text-secondary)', lineHeight: 1.5 }}>
                             <strong>Explanation:</strong> {r.explanation}
                           </div>
                         )}

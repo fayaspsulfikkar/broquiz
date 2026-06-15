@@ -172,7 +172,7 @@ export default function AdminUsersPage() {
       {/* User Detail Modal */}
       {selectedUser && (
         <div style={{
-          position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.4)',
+          position: 'fixed', inset: 0, background: 'var(--color-bg-secondary)',
           display: 'flex', alignItems: 'center', justifyContent: 'center',
           zIndex: 100, padding: 24,
         }} onClick={() => setSelectedUser(null)}>

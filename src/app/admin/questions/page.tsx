@@ -273,7 +273,7 @@ export default function AdminQuestionsPage() {
       
         {isModalOpen && editingQuestion && (
           <div style={{
-            position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)', zIndex: 100,
+            position: 'fixed', inset: 0, background: 'var(--color-bg-secondary)', zIndex: 100,
             display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 24,
           }}>
             <div

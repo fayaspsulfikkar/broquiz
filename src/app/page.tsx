@@ -168,9 +168,9 @@ export default function LandingPage() {
         >
           <div style={{
             width: 64, height: 64, borderRadius: 16,
-            background: 'rgba(255,255,255,0.2)', display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+            background: 'var(--color-border-light)', display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
             color: 'inherit', fontSize: 32, fontWeight: 700, marginBottom: 24,
-            border: '1px solid rgba(255,255,255,0.4)',
+            border: '1px solid var(--color-border)',
           }}>B</div>
           
           <h1 style={{
@@ -180,7 +180,7 @@ export default function LandingPage() {
           </h1>
           
           <p style={{
-            fontSize: 17, color: 'rgba(255,255,255,0.8)', lineHeight: 1.6, marginBottom: 32,
+            fontSize: 17, color: 'var(--color-text-secondary)', lineHeight: 1.6, marginBottom: 32,
           }}>
             Test your programming fundamentals. <strong>Taking repeated quiz rounds will improve your chances of getting selected.</strong> The more questions you master, the higher you climb on the leaderboard.
           </p>
@@ -209,12 +209,12 @@ export default function LandingPage() {
           {profile.is_admin && (
             <button 
               onClick={() => router.push('/admin')}
-              style={{ color: 'rgba(255,255,255,0.8)', fontSize: 14, fontWeight: 500, background: 'none', border: 'none', cursor: 'pointer' }}
+              style={{ color: 'var(--color-text-secondary)', fontSize: 14, fontWeight: 500, background: 'none', border: 'none', cursor: 'pointer' }}
             >
               Admin Panel
             </button>
           )}
-          <button onClick={() => router.push('/profile')} style={{ background: 'none', border: 'none', color: 'rgba(255,255,255,0.8)', fontWeight: 500, cursor: 'pointer' }}>
+          <button onClick={() => router.push('/profile')} style={{ background: 'none', border: 'none', color: 'var(--color-text-secondary)', fontWeight: 500, cursor: 'pointer' }}>
             Profile
           </button>
         </div>
@@ -226,7 +226,7 @@ export default function LandingPage() {
           <h2 style={{ fontSize: 28, fontWeight: 700, color: 'inherit', marginBottom: 8 }}>
             Welcome back, {profile.name?.split(' ')[0] || 'Bro'}! 👋
           </h2>
-          <p style={{ color: 'rgba(255,255,255,0.8)', fontSize: 16 }}>Ready to master some code today?</p>
+          <p style={{ color: 'var(--color-text-secondary)', fontSize: 16 }}>Ready to master some code today?</p>
         </div>
 
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: 24, marginBottom: 32 }}>
@@ -234,15 +234,15 @@ export default function LandingPage() {
           <div  style={{
             borderRadius: 20, padding: 24,
           }}>
-            <h3 style={{ fontSize: 15, fontWeight: 600, color: 'rgba(255,255,255,0.6)', marginBottom: 16, textTransform: 'uppercase', letterSpacing: '0.05em' }}>Your Progress</h3>
+            <h3 style={{ fontSize: 15, fontWeight: 600, color: 'var(--color-text-tertiary)', marginBottom: 16, textTransform: 'uppercase', letterSpacing: '0.05em' }}>Your Progress</h3>
             <div style={{ display: 'flex', alignItems: 'flex-end', gap: 8, marginBottom: 16 }}>
               <span style={{ fontSize: 36, fontWeight: 700, color: 'inherit', lineHeight: 1 }}>{profile.total_rounds_played || 0}</span>
-              <span style={{ fontSize: 16, color: 'rgba(255,255,255,0.7)', paddingBottom: 4 }}>/ 26 Rounds</span>
+              <span style={{ fontSize: 16, color: 'var(--color-text-secondary)', paddingBottom: 4 }}>/ 26 Rounds</span>
             </div>
-            <div style={{ height: 8, background: 'rgba(255,255,255,0.2)', borderRadius: 4, overflow: 'hidden', marginBottom: 8 }}>
-              <div style={{ height: '100%', background: '#fff', width: `${Math.min(100, ((profile.total_rounds_played || 0) / 26) * 100)}%`, borderRadius: 4, transition: 'width 1s ease-out', boxShadow: '0 0 10px rgba(255,255,255,0.8)' }} />
+            <div style={{ height: 8, background: 'var(--color-border-light)', borderRadius: 4, overflow: 'hidden', marginBottom: 8 }}>
+              <div style={{ height: '100%', background: '#fff', width: `${Math.min(100, ((profile.total_rounds_played || 0) / 26) * 100)}%`, borderRadius: 4, transition: 'width 1s ease-out', boxShadow: '0 0 10px var(--color-text-secondary)' }} />
             </div>
-            <div style={{ fontSize: 13, color: 'rgba(255,255,255,0.6)', textAlign: 'right' }}>{profile.total_correct_answers || 0} Questions Mastered</div>
+            <div style={{ fontSize: 13, color: 'var(--color-text-tertiary)', textAlign: 'right' }}>{profile.total_correct_answers || 0} Questions Mastered</div>
           </div>
 
           {/* Streak Card */}
@@ -252,7 +252,7 @@ export default function LandingPage() {
           }}>
             <div style={{ fontSize: 48, marginBottom: 8 }}>🔥</div>
             <div style={{ fontSize: 24, fontWeight: 700, color: 'inherit' }}>{profile.streak_count || 0} Day Streak</div>
-            <div style={{ fontSize: 14, color: 'rgba(255,255,255,0.8)', marginTop: 4 }}>Keep coming back to climb the ranks!</div>
+            <div style={{ fontSize: 14, color: 'var(--color-text-secondary)', marginTop: 4 }}>Keep coming back to climb the ranks!</div>
           </div>
         </div>
 
@@ -260,7 +260,7 @@ export default function LandingPage() {
         {(profile.total_rounds_played || 0) >= 26 && (
           <div style={{
             background: 'linear-gradient(135deg, #34C759 0%, #28A745 100%)', borderRadius: 20, padding: 24, marginBottom: 32,
-            color: '#fff', textAlign: 'center', boxShadow: '0 8px 24px rgba(52, 199, 89, 0.25)'
+            color: 'inherit', textAlign: 'center', boxShadow: '0 8px 24px rgba(52, 199, 89, 0.25)'
           }}>
             <div style={{ fontSize: 40, marginBottom: 12 }}>🎓</div>
             <h3 style={{ fontSize: 20, fontWeight: 700, marginBottom: 8 }}>Curriculum Completed!</h3>
@@ -294,7 +294,7 @@ export default function LandingPage() {
             <h3 style={{ fontSize: 18, fontWeight: 600, color: 'inherit' }}>Top Players</h3>
             <button 
               onClick={() => router.push('/leaderboard')}
-              style={{ background: 'none', border: 'none', color: 'rgba(255,255,255,0.8)', fontSize: 14, fontWeight: 500, cursor: 'pointer' }}
+              style={{ background: 'none', border: 'none', color: 'var(--color-text-secondary)', fontSize: 14, fontWeight: 500, cursor: 'pointer' }}
             >
               View Full Leaderboard →
             </button>
@@ -309,25 +309,25 @@ export default function LandingPage() {
               {topUsers.map((u, idx) => (
                 <div key={u.uid} style={{ 
                   display: 'flex', alignItems: 'center', padding: '12px 16px', 
-                  background: u.uid === user.uid ? 'rgba(255,255,255,0.15)' : 'rgba(255,255,255,0.05)', 
-                  borderRadius: 12, border: '1px solid rgba(255,255,255,0.1)'
+                  background: u.uid === user.uid ? 'rgba(255,255,255,0.15)' : 'var(--color-bg-secondary)', 
+                  borderRadius: 12, border: '1px solid var(--color-border-light)'
                 }}>
-                  <div style={{ width: 32, fontSize: 16, fontWeight: 700, color: idx < 3 ? '#4ADE80' : 'rgba(255,255,255,0.6)' }}>#{idx + 1}</div>
+                  <div style={{ width: 32, fontSize: 16, fontWeight: 700, color: idx < 3 ? '#4ADE80' : 'var(--color-text-tertiary)' }}>#{idx + 1}</div>
                   <div style={{ flex: 1 }}>
                     <div style={{ fontSize: 15, fontWeight: 600, color: 'inherit', display: 'flex', alignItems: 'center', gap: 6, flexWrap: 'wrap' }}>
                       {u.anonymous_leaderboard ? 'Anonymous Learner' : u.name}
-                      {u.uid === user.uid && <span style={{ fontSize: 10, background: 'rgba(255,255,255,0.2)', color: 'inherit', padding: '2px 6px', borderRadius: 4 }}>YOU</span>}
+                      {u.uid === user.uid && <span style={{ fontSize: 10, background: 'var(--color-border-light)', color: 'inherit', padding: '2px 6px', borderRadius: 4 }}>YOU</span>}
                       {u.fraud_detected && <span style={{ fontSize: 10, background: '#FF3B30', color: '#fff', padding: '2px 6px', borderRadius: 4, letterSpacing: '0.02em', textTransform: 'uppercase' }}>FRAUD DETECTED</span>}
                     </div>
                   </div>
                   <div style={{ textAlign: 'right', display: 'flex', gap: 16 }}>
                     <div>
                       <div style={{ fontSize: 15, fontWeight: 700, color: 'inherit' }}>{u.total_correct_answers}</div>
-                      <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.6)' }}>Mastered</div>
+                      <div style={{ fontSize: 11, color: 'var(--color-text-tertiary)' }}>Mastered</div>
                     </div>
                     <div>
                       <div style={{ fontSize: 15, fontWeight: 700, color: '#4ADE80' }}>{getAccuracy(u)}%</div>
-                      <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.6)' }}>Accuracy</div>
+                      <div style={{ fontSize: 11, color: 'var(--color-text-tertiary)' }}>Accuracy</div>
                     </div>
                   </div>
                 </div>
@@ -355,7 +355,7 @@ export default function LandingPage() {
                 
                 return (
                   <div key={attempt.id} style={{ 
-                    border: '1px solid rgba(255,255,255,0.2)', borderRadius: 16, overflow: 'hidden'
+                    border: '1px solid var(--color-border-light)', borderRadius: 16, overflow: 'hidden'
                   }}>
                     {/* Header Row */}
                     <div 
@@ -368,19 +368,19 @@ export default function LandingPage() {
                       <div>
                         <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4 }}>
                           <span style={{ fontSize: 16, fontWeight: 700, color: 'inherit' }}>Round {roundNum}</span>
-                          {attempt.is_retry && <span style={{ fontSize: 11, fontWeight: 700, background: 'rgba(255,255,255,0.2)', color: 'rgba(255,255,255,0.8)', padding: '2px 6px', borderRadius: 6 }}>RETRY</span>}
+                          {attempt.is_retry && <span style={{ fontSize: 11, fontWeight: 700, background: 'var(--color-border-light)', color: 'var(--color-text-secondary)', padding: '2px 6px', borderRadius: 6 }}>RETRY</span>}
                         </div>
-                        <div style={{ fontSize: 13, color: 'rgba(255,255,255,0.6)' }}>{date} • {attempt.duration_seconds}s</div>
+                        <div style={{ fontSize: 13, color: 'var(--color-text-tertiary)' }}>{date} • {attempt.duration_seconds}s</div>
                       </div>
                       <div style={{ display: 'flex', alignItems: 'center', gap: 24 }}>
                         <div style={{ textAlign: 'right' }}>
                           <div style={{ fontSize: 15, fontWeight: 700, color: '#4ADE80' }}>{attempt.score} / {attempt.answers.length}</div>
-                          <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.6)' }}>Score</div>
+                          <div style={{ fontSize: 11, color: 'var(--color-text-tertiary)' }}>Score</div>
                         </div>
                         <button 
                           onClick={(e) => { e.stopPropagation(); handleRetryRound(attempt.round_index || 0); }}
                           style={{ 
-                            background: 'rgba(255,255,255,0.2)', color: '#fff', border: '1px solid rgba(255,255,255,0.3)', borderRadius: 8, 
+                            background: 'var(--color-text-primary)', color: 'var(--color-text-inverse)', border: '1px solid var(--color-border-light)', borderRadius: 8, 
                             padding: '8px 16px', fontSize: 13, fontWeight: 600, cursor: 'pointer' 
                           }}
                         >
@@ -393,18 +393,18 @@ export default function LandingPage() {
                     
                       {isExpanded && (
                         <div
-                          style={{ borderTop: '1px solid rgba(255,255,255,0.2)', background: 'rgba(0,0,0,0.2)' }}
+                          style={{ borderTop: '1px solid var(--color-border-light)', background: 'var(--color-bg-secondary)' }}
                         >
                           <div style={{ padding: 20 }}>
                             {loadingQuestions[attempt.id] ? (
-                              <div style={{ textAlign: 'center', color: 'rgba(255,255,255,0.6)', fontSize: 14 }}>Loading questions...</div>
+                              <div style={{ textAlign: 'center', color: 'var(--color-text-tertiary)', fontSize: 14 }}>Loading questions...</div>
                             ) : (
                               <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
                                 {attempt.answers.map((ans, i) => {
                                   const q = attemptQuestions[ans.question_id];
                                   if (!q) return <div key={i}>Loading...</div>;
                                   return (
-                                    <div key={i} style={{ paddingBottom: 24, borderBottom: i < attempt.answers.length - 1 ? '1px solid rgba(255,255,255,0.1)' : 'none' }}>
+                                    <div key={i} style={{ paddingBottom: 24, borderBottom: i < attempt.answers.length - 1 ? '1px solid var(--color-border-light)' : 'none' }}>
                                       <div style={{ display: 'flex', gap: 12, marginBottom: 12 }}>
                                         <div style={{ 
                                           width: 24, height: 24, borderRadius: 12, display: 'flex', alignItems: 'center', justifyContent: 'center',
@@ -420,16 +420,16 @@ export default function LandingPage() {
                                       </div>
                                       
                                       <div style={{ paddingLeft: 36, display: 'flex', flexDirection: 'column', gap: 8 }}>
-                                        <div style={{ fontSize: 14, color: 'rgba(255,255,255,0.8)' }}>
+                                        <div style={{ fontSize: 14, color: 'var(--color-text-secondary)' }}>
                                           <strong>Your Answer:</strong> <span style={{ color: ans.is_correct ? '#4ADE80' : '#FF3B30' }}>{Array.isArray(ans.user_answer) ? ans.user_answer.join(', ') : ans.user_answer}</span>
                                         </div>
                                         {!ans.is_correct && (
-                                          <div style={{ fontSize: 14, color: 'rgba(255,255,255,0.8)' }}>
+                                          <div style={{ fontSize: 14, color: 'var(--color-text-secondary)' }}>
                                             <strong>Correct Answer:</strong> {Array.isArray(q.correct_answer) ? q.correct_answer.join(', ') : q.correct_answer}
                                           </div>
                                         )}
                                         {q.explanation && (
-                                          <div style={{ fontSize: 14, color: 'rgba(255,255,255,0.7)', marginTop: 4, padding: 12, background: 'rgba(255,255,255,0.1)', borderRadius: 8 }}>
+                                          <div style={{ fontSize: 14, color: 'var(--color-text-secondary)', marginTop: 4, padding: 12, background: 'var(--color-bg-tertiary)', borderRadius: 8 }}>
                                             💡 {q.explanation}
                                           </div>
                                         )}
