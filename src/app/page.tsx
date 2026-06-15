@@ -362,37 +362,28 @@ export default function LandingPage() {
                   }} onClick={() => handleExpandAttempt(attempt)}>
                     {/* Header Row */}
                     <div 
-                      className={`flex flex-col md:flex-row md:items-center justify-between p-4 md:p-8 gap-4 md:gap-0 transition-colors duration-200 ${isExpanded ? 'bg-[var(--color-bg-tertiary)]' : 'bg-transparent'}`}
+                      className={`flex items-center justify-between p-3 md:p-5 transition-colors duration-200 ${isExpanded ? 'bg-[var(--color-bg-tertiary)]' : 'bg-transparent'}`}
                     >
-                      <div className="flex justify-between items-start w-full md:w-auto">
-                        <div>
-                          <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4 }}>
-                            <span style={{ fontSize: 16, fontWeight: 700, color: 'inherit' }}>Round {roundNum}</span>
-                            {attempt.is_retry && <span style={{ fontSize: 11, fontWeight: 700, background: 'var(--color-border-light)', color: 'var(--color-text-secondary)', padding: '2px 6px', borderRadius: 6 }}>RETRY</span>}
-                          </div>
-                          <div style={{ fontSize: 13, color: 'var(--color-text-tertiary)' }}>{date} • {attempt.duration_seconds}s</div>
+                      <div className="flex flex-col gap-0.5">
+                        <div className="flex items-center gap-2">
+                          <span className="text-sm md:text-base font-bold leading-tight">Round {roundNum}</span>
+                          {attempt.is_retry && <span className="text-[9px] font-bold bg-[var(--color-border-light)] text-[var(--color-text-secondary)] px-1.5 py-0.5 rounded">RETRY</span>}
                         </div>
-                        {/* Mobile Score (visible only on small screens) */}
-                        <div className="md:hidden text-right">
-                          <div style={{ fontSize: 15, fontWeight: 700, color: '#4ADE80' }}>{attempt.score} / {attempt.answers.length}</div>
-                          <div style={{ fontSize: 11, color: 'var(--color-text-tertiary)' }}>Score</div>
-                        </div>
+                        <span className="text-xs text-[var(--color-text-tertiary)] leading-tight">{date} • {attempt.duration_seconds}s</span>
                       </div>
 
-                      <div className="flex items-center justify-between md:justify-end gap-6 w-full md:w-auto">
-                        {/* Desktop Score (visible only on md+ screens) */}
-                        <div className="hidden md:block text-right">
-                          <div style={{ fontSize: 15, fontWeight: 700, color: '#4ADE80' }}>{attempt.score} / {attempt.answers.length}</div>
-                          <div style={{ fontSize: 11, color: 'var(--color-text-tertiary)' }}>Score</div>
+                      <div className="flex items-center gap-3 md:gap-6">
+                        <div className="text-right">
+                          <div className="text-sm md:text-base font-bold text-[#4ADE80] leading-tight">{attempt.score}/{attempt.answers.length}</div>
                         </div>
                         <button 
-                          className="btn-secondary w-full md:w-auto"
+                          className="btn-secondary"
                           onClick={(e) => { e.stopPropagation(); handleRetryRound(attempt.round_index || 0); }}
                           style={{ 
-                            height: 40, padding: '0 16px', fontSize: 13
+                            height: 32, padding: '0 12px', fontSize: 11, minWidth: 'max-content'
                           }}
                         >
-                          Retry Round
+                          Retry
                         </button>
                       </div>
                     </div>
