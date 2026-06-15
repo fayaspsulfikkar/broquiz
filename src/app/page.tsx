@@ -274,12 +274,10 @@ export default function LandingPage() {
         {/* Start Quiz Action */}
         <div style={{ marginBottom: 40 }}>
           <button 
-            className="btn-primary" 
+            className="btn-primary btn-cta" 
             onClick={handleStart}
             style={{ 
               width: '100%', 
-              height: 64, 
-              fontSize: 18, 
               display: 'flex', 
               flexDirection: 'column', 
               alignItems: 'center', 
