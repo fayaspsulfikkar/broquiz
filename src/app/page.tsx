@@ -81,14 +81,15 @@ export default function LandingPage() {
     try {
       const q = query(
         collection(db, 'attempts'),
-        where('user_id', '==', user.uid),
-        orderBy('timestamp', 'desc')
+        where('user_id', '==', user.uid)
       );
       const snapshot = await getDocs(q);
       const data: Attempt[] = [];
       snapshot.forEach((doc) => {
         data.push({ id: doc.id, ...doc.data() } as Attempt);
       });
+      // Sort locally to avoid Firestore composite index requirement
+      data.sort((a, b) => b.timestamp - a.timestamp);
       setAttempts(data);
     } catch (e) {
       console.error('Error fetching attempts:', e);
