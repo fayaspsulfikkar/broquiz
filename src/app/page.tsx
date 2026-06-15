@@ -89,7 +89,7 @@ export default function LandingPage() {
         data.push({ id: doc.id, ...doc.data() } as Attempt);
       });
       // Sort locally to avoid Firestore composite index requirement
-      data.sort((a, b) => b.timestamp - a.timestamp);
+      data.sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
       setAttempts(data);
     } catch (e) {
       console.error('Error fetching attempts:', e);
