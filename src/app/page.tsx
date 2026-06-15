@@ -276,13 +276,22 @@ export default function LandingPage() {
           <button 
             className="btn-primary" 
             onClick={handleStart}
-            style={{ width: '100%', height: 64, fontSize: 18, borderRadius: 16, boxShadow: '0 8px 20px rgba(0, 113, 227, 0.24)', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}
+            style={{ 
+              width: '100%', 
+              height: 64, 
+              fontSize: 18, 
+              display: 'flex', 
+              flexDirection: 'column', 
+              alignItems: 'center', 
+              justifyContent: 'center',
+              transition: 'transform 0.15s ease-out, box-shadow 0.15s ease-out, background 0.15s ease-out'
+            }}
           >
-            <div style={{ fontWeight: 600 }}>
+            <div style={{ fontWeight: 700, textTransform: 'uppercase' }}>
               {(profile.total_rounds_played || 0) >= 26 ? 'Play Again from Round 1 →' : `Start Round ${(profile.total_rounds_played || 0) + 1} →`}
             </div>
             {(profile.total_rounds_played || 0) >= 26 && (
-              <div style={{ fontSize: 13, fontWeight: 400, opacity: 0.9, marginTop: 4 }}>Keep earning points</div>
+              <div style={{ fontSize: 13, fontWeight: 400, marginTop: 4 }}>Keep earning points</div>
             )}
           </button>
         </div>
