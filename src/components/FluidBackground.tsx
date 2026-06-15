@@ -32,13 +32,13 @@ export default function FluidBackground() {
             PAUSED: false,
             BACK_COLOR: { r: 5, g: 0, b: 2 }, // #050002 Very dark abyss
             TRANSPARENT: false,
-            BLOOM: true,
+            BLOOM: false, // Turned off bloom entirely to remove the glow
             BLOOM_ITERATIONS: 8,
             BLOOM_RESOLUTION: 256,
-            BLOOM_INTENSITY: 0.3, // Greatly reduced bloom so it doesn't wash out text
-            BLOOM_THRESHOLD: 0.5, // Increased threshold so only the centers glow
+            BLOOM_INTENSITY: 0.1, 
+            BLOOM_THRESHOLD: 0.8, 
             BLOOM_SOFT_KNEE: 0.7,
-            SUNRAYS: true,
+            SUNRAYS: false, // Turned off sunrays to further reduce brightness
             SUNRAYS_RESOLUTION: 196,
             SUNRAYS_WEIGHT: 1.0,
             // Deep, glowing dark reds, blood red, and pitch black. 
