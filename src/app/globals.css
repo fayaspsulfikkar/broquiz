@@ -6,7 +6,7 @@
    ============================================ */
 
 @theme {
-  --color-brand-accent: #FF3B30;
+  --color-brand-accent: #1D1D1F;
   --color-brand-success: #000000;
   --color-brand-warning: #000000;
   --color-brand-danger: #FF3B30;
@@ -53,8 +53,7 @@
     font-style: normal;
     font-variation-settings: "slnt" -8, "CRSV" 1, "ELSH" 100, "ELXP" 0;
     color: var(--color-text-primary);
-    background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAIAAACRXR/mAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAIGNIUk0AAHolAACAgwAA+f8AAIDpAAB1MAAA6mAAADqYAAAXb5JfxUYAAABnSURBVHja7M5RDYAwDEXRDgmvEocnlrQS2SwUFST9uEfBGWs9c97nbGtDcquqiKhOImLs/UpuzVzWEi1atGjRokWLFi1atGjRokWLFi1atGjRokWLFi1af7Ukz8xWp8z8AAAA//8DAJ4LoEAAlL1nAAAAAElFTkSuQmCC') repeat 0 0 var(--color-bg-primary);
-    animation: bg-scrolling-reverse .92s infinite linear;
+    background-color: var(--color-bg-primary);
     line-height: 1.5;
     margin: 0;
     padding: 0;
