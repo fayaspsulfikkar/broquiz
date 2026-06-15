@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState, useRef } from 'react';
-
+import { motion, AnimatePresence } from 'framer-motion';
 type SpectatorState = 'idle' | 'moving' | 'suspicious' | 'angry';
 
 export default function Spectator() {
@@ -169,21 +169,41 @@ export default function Spectator() {
   const pupilColor = isMad ? '#000' : '#fff';
 
   return (
-    <div
+    <motion.div
       style={{
         position: 'fixed',
         left: 0,
         top: 0,
         zIndex: 100, // Floats above everything
         pointerEvents: 'none', // Don't block clicks on answers
-        transform: `translate(${target.x}px, ${target.y}px) scaleX(${facingLeft ? -1 : 1})`,
+        filter: 'drop-shadow(0px 8px 16px rgba(0,0,0,0.4))'
+      }}
+      animate={{ x: target.x, y: target.y }}
+      transition={{ type: "spring", damping: 20, stiffness: 100 }}
+      onUpdate={(latest) => {
+        // Track current position for orientation calculations
+        const currentX = latest.x;
+        const currentY = latest.y;
+        if (typeof currentX === 'number' && typeof currentY === 'number') {
+          setPosition({ x: currentX, y: currentY });
+        }
       }}
     >
       {/* Container squashes and breathes */}
-      <div 
-        style={{ position: 'relative', width: 80, height: 80, pointerEvents: 'auto', cursor: 'grab' }}
+      <motion.div 
+        style={{ position: 'relative', width: 80, height: 80, transform: facingLeft ? 'scaleX(-1)' : 'scaleX(1)', pointerEvents: 'auto', cursor: 'grab' }}
         onMouseEnter={handlePoke}
         onClick={handlePoke}
+        animate={
+          state === 'moving' ? { scaleY: [1, 0.95, 1], scaleX: [1, 1.05, 1] } : 
+          state === 'angry' ? { scaleY: [1, 0.95, 1.05, 1], x: [-1.5, 1.5, -1.5, 1.5, 0] } : 
+          { scaleY: [1, 0.98, 1] } // gentle breathing when idle
+        }
+        transition={{
+          repeat: Infinity,
+          duration: state === 'moving' ? 1.5 : state === 'angry' ? 0.6 : 3,
+          ease: "easeInOut"
+        }}
       >
         {/* Speech Bubble */}
         
@@ -224,8 +244,10 @@ export default function Spectator() {
         <svg viewBox="0 0 100 120" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ width: '100%', height: '100%' }}>
           {/* Antenna */}
           <path d="M 50 20 L 50 5" stroke={bodyColor} strokeWidth="3" strokeLinecap="round" />
-          <circle 
+          <motion.circle 
             cx="50" cy="5" r="4" fill={isMad ? '#FF3B30' : '#00C7FF'}
+            animate={{ opacity: [0.4, 1, 0.4] }}
+            transition={{ repeat: Infinity, duration: 1 }}
           />
           
           {/* Main Chassis */}
@@ -272,13 +294,19 @@ export default function Spectator() {
           {/* Thruster Nozzle */}
           <path d="M 40 80 L 60 80 L 55 90 L 45 90 Z" fill="#1D1D1F" />
 
-          {/* Thruster Flame (Static) */}
-          <path 
+          {/* Thruster Flame (Animated) */}
+          <motion.path 
             d="M 45 90 C 45 100 50 120 50 120 C 50 120 55 100 55 90 Z" 
             fill={isMad ? '#FF3B30' : '#00C7FF'}
+            animate={{ 
+              scaleY: state === 'moving' ? [1, 1.4, 1] : [0.8, 1.1, 0.8],
+              opacity: state === 'moving' ? [0.8, 1, 0.8] : [0.4, 0.8, 0.4]
+            }}
+            transition={{ repeat: Infinity, duration: state === 'moving' ? 0.08 : 0.3 }}
+            style={{ transformOrigin: '50% 90px' }}
           />
         </svg>
-      </div>
-    </div>
+      </motion.div>
+    </motion.div>
   );
 }
