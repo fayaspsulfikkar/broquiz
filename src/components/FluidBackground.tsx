@@ -68,8 +68,8 @@ export default function FluidBackground() {
       } else {
         const touchEvent = e as TouchEvent;
         clone = new TouchEvent(e.type, {
-          touches: touchEvent.touches,
-          changedTouches: touchEvent.changedTouches,
+          touches: Array.from(touchEvent.touches),
+          changedTouches: Array.from(touchEvent.changedTouches),
           bubbles: false
         });
       }
