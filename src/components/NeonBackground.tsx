@@ -93,12 +93,13 @@ export default function NeonBackground() {
               height: `${tube.thickness}px`,
               backgroundColor: '#fff', // White hot core
               borderRadius: '10px',
-              // Multi-layered box shadow to create the massive soft volumetric glow
+              // Classic Neon CSS: No spread radius, just blur. This makes the shadow hug the line horizontally.
               boxShadow: `
-                0 0 10px 2px ${tube.color},
-                0 0 30px 10px ${tube.color},
-                0 0 80px 40px ${tube.color},
-                0 0 150px 80px ${tube.color}
+                0 0 5px #fff,
+                0 0 15px ${tube.color},
+                0 0 30px ${tube.color},
+                0 0 60px ${tube.color},
+                0 0 100px ${tube.color}
               `,
             }}
           />
