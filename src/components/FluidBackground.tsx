@@ -24,8 +24,8 @@ export default function FluidBackground() {
             PRESSURE: 0.8,
             PRESSURE_ITERATIONS: 20,
             CURL: 30, // High curl for lots of swirling
-            SPLAT_RADIUS: 0.35, // Thick splats
-            SPLAT_FORCE: 6000,
+            SPLAT_RADIUS: 0.15, // Thinner splats so it doesn't cover the whole screen
+            SPLAT_FORCE: 4000, // Slightly gentler force
             SHADING: true,
             COLORFUL: true, // Allow multiple colors, but restrict the palette
             COLOR_UPDATE_SPEED: 10,
@@ -35,8 +35,8 @@ export default function FluidBackground() {
             BLOOM: true,
             BLOOM_ITERATIONS: 8,
             BLOOM_RESOLUTION: 256,
-            BLOOM_INTENSITY: 0.9,
-            BLOOM_THRESHOLD: 0.2,
+            BLOOM_INTENSITY: 0.3, // Greatly reduced bloom so it doesn't wash out text
+            BLOOM_THRESHOLD: 0.5, // Increased threshold so only the centers glow
             BLOOM_SOFT_KNEE: 0.7,
             SUNRAYS: true,
             SUNRAYS_RESOLUTION: 196,
