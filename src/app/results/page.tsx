@@ -133,12 +133,14 @@ export default function ResultsPage() {
             }}>
               Take Another Round →
             </button>
-            <button className="btn-secondary" onClick={() => {
-              reset();
-              router.push('/leaderboard');
-            }}>
-              View Leaderboard
-            </button>
+            {profile?.role === 'admin' && (
+              <button className="btn-secondary" onClick={() => {
+                reset();
+                router.push('/leaderboard');
+              }}>
+                View Leaderboard
+              </button>
+            )}
             <button className="btn-secondary" onClick={() => {
               // LinkedIn share
               const origin = typeof window !== 'undefined' ? window.location.origin : '';

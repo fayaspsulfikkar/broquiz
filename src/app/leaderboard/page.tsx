@@ -20,7 +20,7 @@ interface LeaderboardUser {
 
 export default function LeaderboardPage() {
   const router = useRouter();
-  const { user, profile } = useAuth();
+  const { user, profile, loading: authLoading } = useAuth();
   const [users, setUsers] = useState<LeaderboardUser[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -91,8 +91,16 @@ export default function LeaderboardPage() {
 
       <div style={{ maxWidth: 1200, margin: '0 auto', padding: '24px 24px' }}>
         {/* Loading */}
-        {loading ? (
-          <div style={{ textAlign: 'center', padding: 60, color: '#6E6E73' }}>Loading leaderboard...</div>
+        {loading || authLoading ? (
+          <div style={{ textAlign: 'center', padding: 60, color: 'var(--color-text-secondary)' }}>Loading leaderboard...</div>
+        ) : profile?.role !== 'admin' ? (
+          <div style={{ textAlign: 'center', padding: 80, maxWidth: 600, margin: '0 auto' }}>
+            <h2 style={{ fontSize: 24, fontWeight: 700, marginBottom: 16 }}>Access Denied</h2>
+            <p style={{ color: 'var(--color-text-secondary)', marginBottom: 24 }}>The global leaderboard is currently restricted to administrators only.</p>
+            <button onClick={() => router.push('/')} style={{ background: 'var(--color-brand-accent)', color: 'var(--color-text-inverse)', padding: '12px 24px', borderRadius: 12, fontWeight: 600, border: 'none', cursor: 'pointer' }}>
+              Return Home
+            </button>
+          </div>
         ) : users.length === 0 ? (
           <div style={{ textAlign: 'center', padding: 60, color: '#6E6E73' }}>No users found</div>
         ) : (

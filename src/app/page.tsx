@@ -286,7 +286,8 @@ export default function LandingPage() {
           </button>
         </div>
 
-        {/* Top 5 Leaderboard Preview */}
+        {/* Top 5 Leaderboard Preview (Admin Only) */}
+        {profile?.role === 'admin' && (
         <div  style={{
           borderRadius: 20, padding: 24,
         }}>
@@ -335,6 +336,7 @@ export default function LandingPage() {
             </div>
           )}
         </div>
+        )}
 
         {/* Round History */}
         <div  style={{
