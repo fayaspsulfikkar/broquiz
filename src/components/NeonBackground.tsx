@@ -58,18 +58,7 @@ export default function NeonBackground() {
         pointerEvents: 'none', // Don't block UI interactions
       }}
     >
-      {/* Background Volumetric Ambient Glow */}
-      <div 
-        style={{
-          position: 'absolute',
-          top: '20%',
-          left: '30%',
-          width: '40%',
-          height: '40%',
-          background: 'radial-gradient(circle, rgba(255, 60, 0, 0.04) 0%, rgba(0,0,0,0) 70%)',
-          filter: 'blur(100px)',
-        }}
-      />
+      {/* Background Volumetric Ambient Glow removed for sharpness */}
 
       {tubes.map((tube) => {
         // Calculate the drift path. It slowly moves back and forth.
