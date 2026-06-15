@@ -371,25 +371,26 @@ export default function LandingPage() {
                   }} onClick={() => handleExpandAttempt(attempt)}>
                     {/* Header Row */}
                     <div 
-                      className={`flex items-center justify-between p-3 md:p-5 transition-colors duration-200 ${isExpanded ? 'bg-[var(--color-bg-tertiary)]' : 'bg-transparent'}`}
+                      className={`flex items-center justify-between py-2 px-3 md:py-3 md:px-4 transition-colors duration-200 ${isExpanded ? 'bg-[var(--color-bg-tertiary)]' : 'bg-transparent'}`}
                     >
-                      <div className="flex flex-col gap-0.5">
+                      <div className="flex flex-col">
                         <div className="flex items-center gap-2">
-                          <span className="text-sm md:text-base font-bold leading-tight">Round {roundNum}</span>
-                          {attempt.is_retry && <span className="text-[9px] font-bold bg-[var(--color-border-light)] text-[var(--color-text-secondary)] px-1.5 py-0.5 rounded">RETRY</span>}
+                          <span className="text-sm font-bold leading-none">Round {roundNum}</span>
+                          {attempt.is_retry && <span className="text-[9px] font-bold bg-[var(--color-border-light)] text-[var(--color-text-secondary)] px-1.5 py-0.5 rounded leading-none">RETRY</span>}
                         </div>
-                        <span className="text-xs text-[var(--color-text-tertiary)] leading-tight">{date} • {attempt.duration_seconds}s</span>
+                        <span className="text-[10px] text-[var(--color-text-tertiary)] mt-1 leading-none">{date} • {attempt.duration_seconds}s</span>
                       </div>
 
-                      <div className="flex items-center gap-3 md:gap-6">
+                      <div className="flex items-center gap-3">
                         <div className="text-right">
-                          <div className="text-sm md:text-base font-bold text-[#4ADE80] leading-tight">{attempt.score}/{attempt.answers.length}</div>
+                          <div className="text-sm font-bold text-[#4ADE80] leading-none">{attempt.score}/{attempt.answers.length}</div>
                         </div>
                         <button 
                           className="btn-secondary"
                           onClick={(e) => { e.stopPropagation(); handleRetryRound(attempt.round_index || 0); }}
                           style={{ 
-                            height: 32, padding: '0 12px', fontSize: 11, minWidth: 'max-content'
+                            height: 26, padding: '0 10px', fontSize: 10, minWidth: 'max-content',
+                            borderWidth: 1
                           }}
                         >
                           Retry
