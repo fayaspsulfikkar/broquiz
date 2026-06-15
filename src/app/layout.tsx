@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { AuthProvider } from "@/lib/auth-context";
 import { Toaster } from "react-hot-toast";
-import VantaBackground from "@/components/VantaBackground";
+import FluidBackground from "@/components/FluidBackground";
 
 export const metadata: Metadata = {
   title: "BroQuiz — Prove Your Code Logic. Earn Your Scholarship.",
@@ -18,7 +18,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <VantaBackground />
+        <FluidBackground />
         <AuthProvider>
           {children}
           <Toaster
