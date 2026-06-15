@@ -347,9 +347,7 @@ export default function LandingPage() {
         )}
 
         {/* Round History */}
-        <div  style={{
-          borderRadius: 20, padding: 24, marginTop: 32
-        }}>
+        <div style={{ marginTop: 32 }}>
           <h3 style={{ fontSize: 18, fontWeight: 600, color: 'inherit', marginBottom: 20 }}>Round History</h3>
 
           {loadingAttempts ? (

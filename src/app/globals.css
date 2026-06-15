@@ -250,4 +250,11 @@
     height: 64px !important;
     font-size: 18px !important;
   }
+  
+  @media (max-width: 768px) {
+    .btn-cta {
+      height: 56px !important;
+      font-size: 16px !important;
+    }
+  }
 }
