@@ -228,6 +228,9 @@
     .card {
       padding: 20px !important;
     }
+    .card.p-0 {
+      padding: 0 !important;
+    }
     .btn-primary, .btn-secondary, .input {
       height: 42px !important;
       font-size: 14px !important;

@@ -364,8 +364,8 @@ export default function LandingPage() {
                 const date = new Date(attempt.timestamp).toLocaleDateString();
                 
                 return (
-                  <div key={attempt.id} className="card interactive" style={{ 
-                    padding: 0, overflow: 'hidden', cursor: 'pointer'
+                  <div key={attempt.id} className="card interactive !p-0" style={{ 
+                    overflow: 'hidden', cursor: 'pointer'
                   }} onClick={() => handleExpandAttempt(attempt)}>
                     {/* Header Row */}
                     <div 
