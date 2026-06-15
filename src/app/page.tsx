@@ -287,7 +287,7 @@ export default function LandingPage() {
         </div>
 
         {/* Top 5 Leaderboard Preview (Admin Only) */}
-        {profile?.role === 'admin' && (
+        {profile?.is_admin && (
         <div  style={{
           borderRadius: 20, padding: 24,
         }}>

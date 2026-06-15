@@ -93,7 +93,7 @@ export default function LeaderboardPage() {
         {/* Loading */}
         {loading || authLoading ? (
           <div style={{ textAlign: 'center', padding: 60, color: 'var(--color-text-secondary)' }}>Loading leaderboard...</div>
-        ) : profile?.role !== 'admin' ? (
+        ) : !profile?.is_admin ? (
           <div style={{ textAlign: 'center', padding: 80, maxWidth: 600, margin: '0 auto' }}>
             <h2 style={{ fontSize: 24, fontWeight: 700, marginBottom: 16 }}>Access Denied</h2>
             <p style={{ color: 'var(--color-text-secondary)', marginBottom: 24 }}>The global leaderboard is currently restricted to administrators only.</p>

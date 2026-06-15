@@ -133,7 +133,7 @@ export default function ResultsPage() {
             }}>
               Take Another Round →
             </button>
-            {profile?.role === 'admin' && (
+            {profile?.is_admin && (
               <button className="btn-secondary" onClick={() => {
                 reset();
                 router.push('/leaderboard');
