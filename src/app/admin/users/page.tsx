@@ -70,8 +70,8 @@ export default function AdminUsersPage() {
     try {
       const { deleteField } = await import('firebase/firestore');
       for (const u of users) {
-        if (u.fraud_detected === true) {
-          await updateDoc(doc(db, 'users', u.uid), { fraud_detected: deleteField() });
+        if (u.fraud_detected) {
+          await updateDoc(doc(db, 'users', u.uid), { fraud_detected: false });
           count++;
         }
       }
