@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import { motion, useMotionValue } from 'framer-motion';
+import { motion, useMotionValue, useVelocity, useSpring, useTransform } from 'framer-motion';
 
 const CODE_STRING = "const magic = new Proxy(universe, { get: (target, prop) => transcend(prop) }); function materialize() { return quantum.compute(); } ";
 
@@ -21,6 +21,12 @@ export default function CustomCursor() {
 
   const cursorX = useMotionValue(-100);
   const cursorY = useMotionValue(-100);
+
+  // Physics Drag logic
+  const velocityX = useVelocity(cursorX);
+  const smoothVelocity = useSpring(velocityX, { damping: 15, stiffness: 200 });
+  // Map horizontal velocity (-2000 to 2000) to a rotation angle (45 to -45)
+  const physicsRotation = useTransform(smoothVelocity, [-2000, 2000], [45, -45]);
 
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const particlesRef = useRef<Particle[]>([]);
@@ -147,7 +153,7 @@ export default function CustomCursor() {
         }}
       />
 
-      {/* Wooden Stick Cursor */}
+      {/* Magic Wand Cursor */}
       <motion.div
         style={{
           position: 'fixed',
@@ -155,59 +161,43 @@ export default function CustomCursor() {
           top: cursorY,
           pointerEvents: 'none',
           zIndex: 9999,
-          // Shift so the tip of the stick is exactly at the cursor coordinate
-          marginLeft: -2,
-          marginTop: -2,
+          // Shift so the crystal tip is exactly at the cursor coordinate (4, 4)
+          marginLeft: -4,
+          marginTop: -4,
+          rotate: physicsRotation, // Apply physics drag
+          transformOrigin: '4px 4px', // Pivot EXACTLY around the mouse pointer
         }}
-        animate={{
-          scale: isHovering ? 1.2 : 1,
-          rotate: isHovering ? 15 : 0,
-        }}
-        transition={{ type: "spring", stiffness: 300, damping: 20 }}
       >
-        <svg 
-          width="32" 
-          height="32" 
-          viewBox="0 0 32 32" 
-          fill="none" 
-          xmlns="http://www.w3.org/2000/svg" 
-          style={{ filter: 'drop-shadow(2px 4px 6px rgba(0,0,0,0.4))' }}
+        <motion.div
+          animate={{
+            scale: isHovering ? 1.2 : 1,
+            rotate: isHovering ? 15 : 0,
+          }}
+          transition={{ type: "spring", stiffness: 300, damping: 20 }}
+          style={{ transformOrigin: '4px 4px' }}
         >
-          {/* Main Stick Shape */}
-          <path 
-            d="M2.5 2.5 L6 1 L30 25 L31 29 L29 31 L25 30 L1 6 Z" 
-            fill="#8B4513" 
-            stroke="#4A2500" 
-            strokeWidth="1.5" 
-            strokeLinejoin="round" 
-          />
-          {/* Wood Grain Detail 1 */}
-          <path 
-            d="M6 6 L26 26" 
-            stroke="#663300" 
-            strokeWidth="1" 
-            strokeLinecap="round" 
-            opacity="0.8"
-          />
-          {/* Wood Grain Detail 2 */}
-          <path 
-            d="M9 4 L29 24" 
-            stroke="#663300" 
-            strokeWidth="1" 
-            strokeLinecap="round" 
-            opacity="0.6"
-          />
-          {/* Wood Grain Detail 3 */}
-          <path 
-            d="M4 9 L24 29" 
-            stroke="#663300" 
-            strokeWidth="1" 
-            strokeLinecap="round" 
-            opacity="0.6"
-          />
-          {/* Wand Magic Tip Glow (optional, small dot at the top left) */}
-          <circle cx="3" cy="3" r="2" fill="#00C7FF" opacity="0.8" />
-        </svg>
+          <svg 
+            width="32" 
+            height="32" 
+            viewBox="0 0 32 32" 
+            fill="none" 
+            xmlns="http://www.w3.org/2000/svg" 
+            style={{ filter: 'drop-shadow(0px 0px 8px rgba(0, 199, 255, 0.8))' }}
+          >
+            {/* Dark slim staff */}
+            <path d="M4 4 L28 28" stroke="#1D1D1F" strokeWidth="4" strokeLinecap="round" />
+            
+            {/* Silver inner core */}
+            <path d="M5 5 L27 27" stroke="#E8E8ED" strokeWidth="1" strokeLinecap="round" />
+            
+            {/* Gold Handle Details */}
+            <path d="M18 18 L22 22 M20 16 L24 20 M22 14 L26 18 M24 12 L28 16" stroke="#FBBF24" strokeWidth="2" strokeLinecap="round" />
+            
+            {/* The Magic Crystal Tip centered precisely at (4,4) */}
+            <path d="M0 4 L4 0 L8 4 L4 8 Z" fill="#00C7FF" />
+            <path d="M2 4 L4 2 L6 4 L4 6 Z" fill="#FFFFFF" />
+          </svg>
+        </motion.div>
       </motion.div>
     </>
   );
