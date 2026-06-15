@@ -34,7 +34,7 @@ function QuizContent() {
         const newWarnings = fraudWarnings + 1;
         setFraudWarnings(newWarnings);
         
-        if (newWarnings >= 3) {
+        if (newWarnings > 3) {
           try {
             const { doc, updateDoc } = await import('firebase/firestore');
             const { db } = await import('@/lib/firebase');
@@ -458,7 +458,7 @@ function QuizContent() {
               </h3>
               <p style={{ fontSize: 15, color: 'rgba(255,255,255,0.8)', lineHeight: 1.5, marginBottom: 24 }}>
                 Please stay on this tab during the quiz! You have switched tabs {fraudWarnings} time(s). 
-                <strong> If you switch tabs 3 times, your current question will be marked wrong and a "Fraud Detected" badge will permanently appear on your public leaderboard profile.</strong>
+                <strong> If you switch tabs more than 3 times, your current question will be marked wrong and a "Fraud Detected" badge will permanently appear on your public leaderboard profile.</strong>
               </p>
               <button
                 className="btn-primary"

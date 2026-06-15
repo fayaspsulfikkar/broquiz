@@ -63,11 +63,38 @@ export default function AdminUsersPage() {
     a.href = url; a.download = 'broquiz_users.csv'; a.click();
   };
 
+  const resetAllFraudBadges = async () => {
+    if (!window.confirm("Are you sure you want to remove the fraud_detected badge from ALL users?")) return;
+    setLoading(true);
+    let count = 0;
+    try {
+      const { deleteField } = await import('firebase/firestore');
+      for (const u of users) {
+        if (u.fraud_detected === true) {
+          await updateDoc(doc(db, 'users', u.uid), { fraud_detected: deleteField() });
+          count++;
+        }
+      }
+      alert(`Cleared fraud badge from ${count} users.`);
+      fetchUsers();
+    } catch (e) {
+      console.error(e);
+      alert('Error clearing badges');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div style={{ padding: '32px 32px' }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 24, flexWrap: 'wrap', gap: 12 }}>
         <h1 style={{ fontSize: 28, fontWeight: 700, color: '#1D1D1F' }}>User Management</h1>
-        <button className="btn-secondary" onClick={exportCSV} style={{ fontSize: 13 }}>📥 Export CSV</button>
+        <div style={{ display: 'flex', gap: 12 }}>
+          <button className="btn-secondary" onClick={resetAllFraudBadges} style={{ fontSize: 13, color: '#FF3B30', borderColor: '#FF3B3015', background: '#FF3B3010' }}>
+            🧹 Reset All Fraud Badges
+          </button>
+          <button className="btn-secondary" onClick={exportCSV} style={{ fontSize: 13 }}>📥 Export CSV</button>
+        </div>
       </div>
 
       {/* Filters */}
